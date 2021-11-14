@@ -29,3 +29,6 @@ jre/*
 lib/*
 native/*
 scripts/*
+build.bat
+build_logs.txt
+test.bat
