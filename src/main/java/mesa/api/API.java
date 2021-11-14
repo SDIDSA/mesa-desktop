@@ -23,6 +23,8 @@ public class API {
 		public static final String VERIFY_EMAIL = PREFIX + "verify";
 
 		public static final String EDIT_USERNAME = PREFIX + "editUsername";
+
+		public static final String EDIT_EMAIL = PREFIX + "editEmail";
 	}
 
 	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {

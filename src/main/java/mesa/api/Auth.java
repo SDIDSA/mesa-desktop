@@ -36,6 +36,13 @@ public class Auth {
 				new Param("username", username),
 				new Param("password", hashPassword(password)));
 	}
+	
+	public static void editEmail(String user_id, String email, String password, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.EDIT_EMAIL, "change username", onResult, 
+				new Param("user_id", user_id),
+				new Param("email", email),
+				new Param("password", hashPassword(password)));
+	}
 
 	public static String hashPassword(String password) {
 		return DigestUtils.sha256Hex(password);
