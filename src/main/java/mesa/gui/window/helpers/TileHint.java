@@ -2,7 +2,6 @@ package mesa.gui.window.helpers;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-//import com.kieferlam.javafxblur.Blur;
 
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
@@ -48,7 +47,6 @@ public class TileHint extends Stage {
 
 		setOnShown(e -> {
 			owner.setAlwaysOnTop(true);
-			//Blur.applyBlur(this, Blur.BLUR_BEHIND);
 		});
 		
 		setOnHidden(e-> {
