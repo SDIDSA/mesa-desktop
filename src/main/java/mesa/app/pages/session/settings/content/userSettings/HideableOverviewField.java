@@ -1,5 +1,10 @@
 package mesa.app.pages.session.settings.content.userSettings;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.text.Text;
 import mesa.app.pages.session.settings.Settings;
 import mesa.gui.controls.Font;
@@ -10,32 +15,30 @@ import mesa.gui.style.Style;
 
 public class HideableOverviewField extends OverviewField {
 
-	private boolean hidden = true;
 	private Text value;
-	private String full;
 
-	public HideableOverviewField(Settings settings, String key, String value, TextTransform hide) {
+	private BooleanProperty hidden;
+	private StringProperty full;
+
+	public HideableOverviewField(Settings settings, String key, String fullText, TextTransform hide) {
 		super(settings, key);
 
-		this.full = value;
+		hidden = new SimpleBooleanProperty(true);
+		full = new SimpleStringProperty(fullText);
 
-		this.value = new Text(hide.apply(value));
+		this.value = new Text();
 		this.value.setFont(new Font(16).getFont());
 
 		Link reveal = new Link(settings.getSession().getWindow(), "overview_reveal");
 		reveal.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
 		reveal.setAction(() -> {
-			if (hidden) {
-				reveal.setKey("overview_hide");
-				this.value.setText(full);
-				hidden = false;
-			} else {
-				reveal.setKey("overview_reveal");
-				this.value.setText(hide.apply(full));
-				hidden = true;
-			}
+			hidden.set(!hidden.get());
 		});
+		
+		value.textProperty().bind(Bindings.createStringBinding(()-> {
+			return hidden.get() ? hide.apply(full.get()) : full.get();
+		}, hidden, full));
 
 		addToValue(this.value, new FixedHSpace(4), reveal);
 
@@ -43,7 +46,7 @@ public class HideableOverviewField extends OverviewField {
 	}
 
 	public void setFull(String full) {
-		this.full = full;
+		this.full.set(full);
 	}
 	
 	@Override

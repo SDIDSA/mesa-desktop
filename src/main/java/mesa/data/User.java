@@ -1,6 +1,9 @@
 package mesa.data;
 
 import org.json.JSONObject;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -12,6 +15,7 @@ public class User extends Bean {
 	private StringProperty phone;
 	private StringProperty avatar;
 	private StringProperty birthDate;
+	private BooleanProperty emailConfirmed;
 
 	public User(JSONObject obj) {
 		id = new SimpleStringProperty();
@@ -21,6 +25,7 @@ public class User extends Bean {
 		phone = new SimpleStringProperty();
 		avatar = new SimpleStringProperty();
 		birthDate = new SimpleStringProperty();
+		emailConfirmed = new SimpleBooleanProperty();
 		init(obj);
 	}
 
@@ -106,6 +111,18 @@ public class User extends Bean {
 
 	public void setBirthDate(String val) {
 		birthDate.set(val);
+	}
+	
+	public BooleanProperty emailConfirmedProperty() {
+		return emailConfirmed;
+	}
+
+	public boolean getEmailConfirmed() {
+		return emailConfirmed.get();
+	}
+
+	public void setEmailConfirmed(boolean val) {
+		emailConfirmed.set(val);
 	}
 
 	@Override

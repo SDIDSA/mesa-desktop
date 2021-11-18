@@ -46,14 +46,14 @@ public class FieldList extends VBox implements Styleable {
 		User user = settings.getSession().getUser();
 
 		OverviewField username = new OverviewField(settings, "username");
-		OverviewField email = new HideableOverviewField(settings, "email_address", user.getEmail(),
+		HideableOverviewField email = new HideableOverviewField(settings, "email_address", user.getEmail(),
 				TextTransform.HIDE_EMAIL);
 		OverviewField phone = new HideableOverviewField(settings, "phone", user.getPhone(),
 				TextTransform.HIDE_PHONE);
 
 		EditOverlay editUsername = new EditOverlay(settings, "username");
 
-		editUsername.addOnShown(()->editUsername.setValue(user.getUsername()));
+		editUsername.addOnShown(0, ()->editUsername.setValue(user.getUsername()));
 
 		edit_tag_separate = new Rectangle(1, 30);
 		edit_tag_separate.setOpacity(.1);
@@ -104,6 +104,27 @@ public class FieldList extends VBox implements Styleable {
 		});
 		
 		EditOverlay editEmail = new EditOverlay(settings, "email_address");
+
+		editEmail.doneDisabled().bind(editEmail.valueProperty().isEqualTo(user.emailProperty()));
+		
+		editEmail.setAction(()-> {
+			if(editEmail.checkForm()) {
+				editEmail.startLoading();
+				
+				String newEmail = editEmail.getValue();
+				Auth.editEmail(user.getId(), newEmail, editEmail.getPassword(), result -> {
+					if(result.has("err")) {
+						editEmail.applyErrors(result.getJSONArray("err"));
+					}else {
+						user.setEmail(newEmail);
+						email.setFull(newEmail);
+						editEmail.hide();
+					}
+					
+					editEmail.stopLoading();
+				});
+			}
+		});
 
 		username.setEditOver(editUsername);
 		email.setEditOver(editEmail);

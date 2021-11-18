@@ -43,7 +43,6 @@ public class Settings extends StackPane implements Styleable {
 		rightBack = new ExpandingHSpace();
 		back.getChildren().setAll(leftBack, rightBack);
 		getChildren().add(back);
-
 		root = new HBox();
 		root.setMinHeight(0);
 		root.maxHeightProperty().bind(heightProperty());
@@ -91,7 +90,6 @@ public class Settings extends StackPane implements Styleable {
 	
 	public void loadContent(SettingsContent content) {
 		this.content.getChildren().setAll(content);
-		content.requestFocus();
 	}
 
 	public SessionPage getSession() {

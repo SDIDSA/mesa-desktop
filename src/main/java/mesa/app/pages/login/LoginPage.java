@@ -83,8 +83,6 @@ public class LoginPage extends Page {
 			hideVerify.stop();
 			hideRegister.stop();
 			showRegister.playFromStart();
-
-			requestFocus();
 		});
 
 		register.setOnLogin((data) -> {
@@ -101,8 +99,6 @@ public class LoginPage extends Page {
 			if (data != null) {
 				login.loadData(data);
 			}
-
-			requestFocus();
 		});
 
 		login.setOnVerify(user -> {
@@ -118,8 +114,6 @@ public class LoginPage extends Page {
 			showVerify.playFromStart();
 
 			verify.loadData(user);
-
-			requestFocus();
 		});
 
 		verify.setOnLogout(() -> {
@@ -132,8 +126,6 @@ public class LoginPage extends Page {
 			showRegister.stop();
 			hideRegister.stop();
 			hideVerify.playFromStart();
-
-			requestFocus();
 		});
 
 		ParallelTransition pt = new ParallelTransition();

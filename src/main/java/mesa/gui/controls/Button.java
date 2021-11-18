@@ -75,7 +75,8 @@ public class Button extends StackPane {
 
 		setCursor(Cursor.HAND);
 		
-		load = new Loading(height / 4.5);
+		load = new Loading(height / 5);
+		load.setOpacity(.7);
 
 		setFontSize(16);
 		setFontWeight(FontWeight.BOLD);

@@ -66,6 +66,10 @@ public class Overlay extends StackPane {
 		this.onShown.add(onShown);
 	}
 	
+	public void addOnShown(int index, Runnable onShown) {
+		this.onShown.add(index, onShown);
+	}
+	
 	public void setContent(Node...cont) {
 		this.content.getChildren().setAll(cont);
 	}

@@ -58,18 +58,24 @@ public class ScrollBar extends StackPane {
 		track.setWidth(effectiveWidth);
 		setMinWidth(width);
 		setMaxWidth(width);
+		
+		setMaxHeight(USE_PREF_SIZE);
+		setMinHeight(USE_PREF_SIZE);
 		setCursor(Cursor.DEFAULT);
 	}
 
 	public void install(Region parent, Region child) {
 		thumb.heightProperty()
 				.bind(parent.heightProperty().divide(child.heightProperty()).multiply(track.heightProperty()));
+		
 		child.translateYProperty().bind(
 				positionProperty().multiply(child.heightProperty().subtract(parent.heightProperty())).multiply(-1));
 
 		child.addEventFilter(ScrollEvent.ANY, e-> {
 			scrollByPixels(e.getDeltaY(), child.getHeight());
 		});
+		
+		prefHeightProperty().bind(parent.heightProperty());
 		
 		visibleProperty().bind(thumb.heightProperty().lessThan(track.heightProperty()));
 	}

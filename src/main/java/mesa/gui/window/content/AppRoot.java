@@ -23,12 +23,15 @@ public class AppRoot extends BorderPane {
 
 	private Paint borderFill;
 	private double borderWidth;
-	
+
 	private AppBar bar;
+
 	public AppRoot(Window window, AppPreRoot parent) {
 		this.parent = parent;
 		DropShadow ds = new DropShadow(15, Color.gray(0, .25));
 		setEffect(ds);
+
+		setFocusTraversable(true);
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
 		setFill(window.getStyl().getBack3());
@@ -50,8 +53,8 @@ public class AppRoot extends BorderPane {
 		setOnMouseDragged(e -> {
 			helper.onDrag(e);
 		});
-		
-		setOnMouseClicked(e-> {
+
+		setOnMouseClicked(e -> {
 			helper.onClick(e);
 		});
 
@@ -73,11 +76,11 @@ public class AppRoot extends BorderPane {
 		borderWidth = width;
 		setBorder(Borders.make(fill, parent.isPadded() ? 10.0 : 1, parent.isPadded() ? width : 0));
 	}
-	
+
 	public void setContent(Page page) {
 		setCenter(page);
 	}
-	
+
 	public void applyTile(Tile tile) {
 		helper.applyTile(tile);
 	}
@@ -85,7 +88,7 @@ public class AppRoot extends BorderPane {
 	public void unTile() {
 		helper.unTile();
 	}
-	
+
 	public boolean isTiled() {
 		return helper.isTiled();
 	}
