@@ -82,7 +82,7 @@ public class EditOverlay extends Overlay implements Styleable {
 		bottom.setMaxWidth(440);
 		bottom.setPadding(new Insets(16));
 
-		cancel = new Button(settings.getWindow(), "cancel", 3, 96, 38);
+		cancel = new Button(settings.getWindow(), "cancel", 3, 24, 38);
 		cancel.setFont(new Font(14, FontWeight.BOLD));
 		cancel.setUlOnHover(true);
 		cancel.setAction(this::hide);
@@ -94,7 +94,7 @@ public class EditOverlay extends Overlay implements Styleable {
 		
 		preTop.getChildren().add(closeIcon);
 
-		done = new Button(settings.getWindow(), "done", 3, 96, 38);
+		done = new Button(settings.getWindow(), "done", 3, 24, 38);
 		done.setFont(new Font(14, FontWeight.BOLD));
 		
 		form.setDefaultButton(done);

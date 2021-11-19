@@ -44,7 +44,7 @@ public class OverviewField extends HBox implements Styleable {
 		preEdit = new HBox();
 		preEdit.setAlignment(Pos.CENTER);
 
-		edit = new Button(settings.getWindow(), "overview_edit", 3, 60, 32);
+		edit = new Button(settings.getWindow(), "overview_edit", 3, 16, 32);
 		edit.setFont(new Font(14, FontWeight.BOLD));
 
 		getChildren().addAll(left, new ExpandingHSpace(), preEdit, edit);

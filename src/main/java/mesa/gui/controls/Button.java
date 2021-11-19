@@ -34,26 +34,36 @@ public class Button extends StackPane {
 	private DoubleProperty radiusProperty;
 	private Timeline enter, exit;
 	private Runnable action;
-	
+
 	private boolean ulOnHover = false;
 	private Loading load;
-	
+
 	private BooleanProperty loading;
 
 	public Button(Window window, String key, double radius, int width, int height) {
 		this.radius = radius;
 		getStyleClass().addAll("butt", key);
-		
+
 		getStylesheets().clear();
-		
+
 		loading = new SimpleBooleanProperty(false);
-		
+
 		setFocusTraversable(true);
-		setMinSize(width, height);
-		setMaxSize(width, height);
+		setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
+		setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
+		setPrefHeight(height);
+
 		radiusProperty = new SimpleDoubleProperty(radius);
 
 		label = new Label(window, key);
+
+		if (width < 50) {
+			prefWidthProperty().bind(Bindings.createDoubleBinding(()-> {
+				return label.getBoundsInLocal().getWidth() + (width * 2);
+			}, label.textProperty(), label.fontProperty()));
+		} else {
+			setPrefWidth(width);
+		}
 
 		back = new Rectangle();
 		back.setFill(Color.TRANSPARENT);
@@ -61,20 +71,14 @@ public class Button extends StackPane {
 		back.arcWidthProperty().bind(radiusProperty.multiply(2));
 		back.arcHeightProperty().bind(radiusProperty.multiply(2));
 
-		back.widthProperty().bind(
-				widthProperty().subtract(
-						Bindings.when(focusedProperty())
-							.then(6).otherwise(0)));
-		back.heightProperty().bind(
-				heightProperty().subtract(
-						Bindings.when(focusedProperty())
-							.then(6).otherwise(0)));
+		back.widthProperty().bind(widthProperty().subtract(Bindings.when(focusedProperty()).then(6).otherwise(0)));
+		back.heightProperty().bind(heightProperty().subtract(Bindings.when(focusedProperty()).then(6).otherwise(0)));
 
 		borderProperty()
 				.bind(Bindings.when(focusedProperty()).then(Borders.make(Colors.LINK, radius)).otherwise(Border.EMPTY));
 
 		setCursor(Cursor.HAND);
-		
+
 		load = new Loading(height / 5);
 		load.setOpacity(.7);
 
@@ -84,7 +88,7 @@ public class Button extends StackPane {
 		setOnMouseEntered(e -> {
 			exit.stop();
 			enter.playFromStart();
-			if(ulOnHover) {
+			if (ulOnHover) {
 				label.setUnderline(true);
 			}
 		});
@@ -92,37 +96,37 @@ public class Button extends StackPane {
 		setOnMouseExited(e -> {
 			enter.stop();
 			exit.playFromStart();
-			if(ulOnHover) {
+			if (ulOnHover) {
 				label.setUnderline(false);
 			}
 		});
 
 		setOnMouseClicked(this::fire);
 		setOnKeyPressed(this::fire);
-		
+
 		ColorAdjust bw = new ColorAdjust();
 		bw.setSaturation(-.5);
 		ColorAdjust col = new ColorAdjust();
-		
+
 		effectProperty().bind(Bindings.when(disabledProperty()).then(bw).otherwise(col));
 		back.opacityProperty().bind(Bindings.when(disabledProperty()).then(.3).otherwise(1));
 		label.opacityProperty().bind(back.opacityProperty());
 
 		getChildren().addAll(back, label);
 	}
-	
+
 	public void setUlOnHover(boolean ulOnHover) {
 		this.ulOnHover = ulOnHover;
 	}
-	
+
 	public void show() {
 		Animator.show(this, 44);
 	}
-	
+
 	public void hide() {
 		Animator.hide(this);
 	}
-	
+
 	public void startLoading() {
 		loading.set(true);
 		getParent().requestFocus();
@@ -131,7 +135,7 @@ public class Button extends StackPane {
 		getChildren().setAll(back, load);
 		load.play();
 	}
-	
+
 	public void stopLoading() {
 		setMouseTransparent(false);
 		setFocusTraversable(true);
@@ -143,7 +147,7 @@ public class Button extends StackPane {
 	public BooleanProperty loadingProperty() {
 		return loading;
 	}
-	
+
 	public Button(Window window, String key, int width) {
 		this(window, key, 4.0, width, 44);
 	}
@@ -163,7 +167,7 @@ public class Button extends StackPane {
 	}
 
 	public void fire() {
-		if(isDisabled() || loading.get()) {
+		if (isDisabled() || loading.get()) {
 			return;
 		}
 		if (action != null) {

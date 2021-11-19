@@ -130,7 +130,7 @@ public class FieldList extends VBox implements Styleable {
 		username.setEditOver(editUsername);
 		email.setEditOver(editEmail);
 
-		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 80, 32);
+		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 16, 32);
 		removePhone.setFont(new Font(14, FontWeight.BOLD));
 		removePhone.setUlOnHover(true);
 		phone.addToPreEdit(removePhone, new FixedHSpace(8));

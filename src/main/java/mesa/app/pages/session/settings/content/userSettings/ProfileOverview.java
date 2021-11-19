@@ -90,7 +90,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 			menu.showPop(more, 15);
 		});
 
-		editUserProfile = new Button(settings.getSession().getWindow(), "edit_user_profile", 3.0, 127, 32);
+		editUserProfile = new Button(settings.getSession().getWindow(), "edit_user_profile", 3.0, 16, 32);
 		editUserProfile.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		editUserProfile.setTranslateY(9);
 
