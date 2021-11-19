@@ -11,6 +11,7 @@ import javafx.scene.text.Text;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.settings.content.SettingsContent;
 import mesa.app.pages.session.settings.menu.SettingsMenu;
+import mesa.data.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -19,6 +20,7 @@ import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
+import mesa.gui.window.Window;
 
 public class Settings extends StackPane implements Styleable {
 	private SessionPage session;
@@ -94,6 +96,14 @@ public class Settings extends StackPane implements Styleable {
 
 	public SessionPage getSession() {
 		return session;
+	}
+	
+	public Window getWindow() {
+		return session.getWindow();
+	}
+	
+	public User getUser() {
+		return session.getUser();
 	}
 
 	@Override

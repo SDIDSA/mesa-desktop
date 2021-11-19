@@ -32,6 +32,8 @@ public class AppRoot extends BorderPane {
 		setEffect(ds);
 
 		setFocusTraversable(true);
+		
+		addEventFilter(MouseEvent.MOUSE_PRESSED, e-> requestFocus());
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
 		setFill(window.getStyl().getBack3());

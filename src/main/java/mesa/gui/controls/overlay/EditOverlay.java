@@ -56,11 +56,11 @@ public class EditOverlay extends Overlay implements Styleable {
 
 		preTop.getChildren().add(top);
 
-		head = new Label(settings.getSession().getWindow(), "change_attr", new Font(24, FontWeight.BOLD));
+		head = new Label(settings.getWindow(), "change_attr", new Font(24, FontWeight.BOLD));
 		head.addParam(0, "&" + edit_what);
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
-		subHead = new Label(settings.getSession().getWindow(), "enter_attr", new Font(15));
+		subHead = new Label(settings.getWindow(), "enter_attr", new Font(15));
 		subHead.addParam(0, "&" + edit_what);
 		subHead.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
@@ -69,8 +69,8 @@ public class EditOverlay extends Overlay implements Styleable {
 		VBox center = new VBox(16);
 		center.setPadding(new Insets(0, 16, 16, 16));
 
-		field = new TextInputField(settings.getSession().getWindow(), edit_what, 408);
-		password = new TextInputField(settings.getSession().getWindow(), "current_password", 408, true);
+		field = new TextInputField(settings.getWindow(), edit_what, 408);
+		password = new TextInputField(settings.getWindow(), "current_password", 408, true);
 
 		center.getChildren().addAll(field, password);
 
@@ -82,19 +82,19 @@ public class EditOverlay extends Overlay implements Styleable {
 		bottom.setMaxWidth(440);
 		bottom.setPadding(new Insets(16));
 
-		cancel = new Button(settings.getSession().getWindow(), "cancel", 3, 96, 38);
+		cancel = new Button(settings.getWindow(), "cancel", 3, 96, 38);
 		cancel.setFont(new Font(14, FontWeight.BOLD));
 		cancel.setUlOnHover(true);
 		cancel.setAction(this::hide);
 
-		closeIcon = new ColorIcon(settings.getSession().getWindow(), "close", 16, true);
+		closeIcon = new ColorIcon(settings.getWindow(), "close", 16, true);
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
 		
 		preTop.getChildren().add(closeIcon);
 
-		done = new Button(settings.getSession().getWindow(), "done", 3, 96, 38);
+		done = new Button(settings.getWindow(), "done", 3, 96, 38);
 		done.setFont(new Font(14, FontWeight.BOLD));
 		
 		form.setDefaultButton(done);
@@ -105,7 +105,7 @@ public class EditOverlay extends Overlay implements Styleable {
 
 		addOnShown(field::requestFocus);
 
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 
 	public String getValue() {

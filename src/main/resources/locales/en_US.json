@@ -83,6 +83,9 @@
 	"copy_id": "Copy ID",
 	"edit_user_profile": "Edit User Profile",
 	
+	"unverified_email": "Unverified Email",
+	"email_verification_warning": "Please check your email and follow the instructions to verify your email. If you did not receive an email or if it expired, you can resend one.",
+	
 	"overview_hide": "Hide",
 	"overview_reveal": "Reveal",
 	"overview_edit": "Edit",

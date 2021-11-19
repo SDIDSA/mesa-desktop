@@ -29,7 +29,7 @@ public class OverviewField extends HBox implements Styleable {
 
 		VBox left = new VBox(4);
 
-		name = new Label(settings.getSession().getWindow(), key, new Font(12, FontWeight.BOLD));
+		name = new Label(settings.getWindow(), key, new Font(12, FontWeight.BOLD));
 		name.setTransform(TextTransform.UPPERCASE);
 
 		value = new HBox();
@@ -44,7 +44,7 @@ public class OverviewField extends HBox implements Styleable {
 		preEdit = new HBox();
 		preEdit.setAlignment(Pos.CENTER);
 
-		edit = new Button(settings.getSession().getWindow(), "overview_edit", 3, 60, 32);
+		edit = new Button(settings.getWindow(), "overview_edit", 3, 60, 32);
 		edit.setFont(new Font(14, FontWeight.BOLD));
 
 		getChildren().addAll(left, new ExpandingHSpace(), preEdit, edit);
@@ -55,7 +55,7 @@ public class OverviewField extends HBox implements Styleable {
 			}
 		});
 		
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 	
 	public void setEditOver(Overlay editOver) {

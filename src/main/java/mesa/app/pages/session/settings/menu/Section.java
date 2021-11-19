@@ -19,7 +19,7 @@ public class Section extends VBox implements Styleable {
 	private VBox items;
 
 	public Section(Settings settings, String titleKey, boolean first) {
-		title = new Label(settings.getSession().getWindow(), titleKey, new Font(12, FontWeight.BOLD));
+		title = new Label(settings.getWindow(), titleKey, new Font(12, FontWeight.BOLD));
 		title.setTransform(TextTransform.UPPERCASE);
 		StackPane titCont = new StackPane(title);
 		titCont.setAlignment(Pos.CENTER_LEFT);
@@ -29,7 +29,7 @@ public class Section extends VBox implements Styleable {
 		
 		getChildren().addAll(titCont, items);
 
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 	
 	public void addItem(SectionItem item) {

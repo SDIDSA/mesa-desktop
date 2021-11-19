@@ -43,7 +43,7 @@ public class FieldList extends VBox implements Styleable {
 		setPadding(new Insets(16));
 		setMinHeight(200);
 
-		User user = settings.getSession().getUser();
+		User user = settings.getUser();
 
 		OverviewField username = new OverviewField(settings, "username");
 		HideableOverviewField email = new HideableOverviewField(settings, "email_address", user.getEmail(),
@@ -72,12 +72,12 @@ public class FieldList extends VBox implements Styleable {
 		help_edit_tag.setFocusTraversable(true);
 		help_edit_tag.borderProperty().bind(Bindings.when(help_edit_tag.focusedProperty()).then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
 
-		Tooltip tip = new Tooltip(settings.getSession().getWindow(), "Get Black Mesa to modify your tag!",
+		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!",
 				Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		Tooltip.install(help_edit_tag, tip);
 
-		help_edit_tag_icon = new ColorIcon(settings.getSession().getWindow(), "question", 16);
+		help_edit_tag_icon = new ColorIcon(settings.getWindow(), "question", 16);
 
 		help_edit_tag.getChildren().add(help_edit_tag_icon);
 
@@ -117,6 +117,7 @@ public class FieldList extends VBox implements Styleable {
 						editEmail.applyErrors(result.getJSONArray("err"));
 					}else {
 						user.setEmail(newEmail);
+						user.setEmailConfirmed(false);
 						email.setFull(newEmail);
 						editEmail.hide();
 					}
@@ -129,7 +130,7 @@ public class FieldList extends VBox implements Styleable {
 		username.setEditOver(editUsername);
 		email.setEditOver(editEmail);
 
-		removePhone = new Button(settings.getSession().getWindow(), "overview_remove", 3, 80, 32);
+		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 80, 32);
 		removePhone.setFont(new Font(14, FontWeight.BOLD));
 		removePhone.setUlOnHover(true);
 		phone.addToPreEdit(removePhone, new FixedHSpace(8));
@@ -147,7 +148,7 @@ public class FieldList extends VBox implements Styleable {
 
 		getChildren().addAll(username, email, phone);
 
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 
 	@Override

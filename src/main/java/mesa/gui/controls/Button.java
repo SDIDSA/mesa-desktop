@@ -105,7 +105,8 @@ public class Button extends StackPane {
 		ColorAdjust col = new ColorAdjust();
 		
 		effectProperty().bind(Bindings.when(disabledProperty()).then(bw).otherwise(col));
-		opacityProperty().bind(Bindings.when(disabledProperty()).then(.3).otherwise(1));
+		back.opacityProperty().bind(Bindings.when(disabledProperty()).then(.3).otherwise(1));
+		label.opacityProperty().bind(back.opacityProperty());
 
 		getChildren().addAll(back, label);
 	}

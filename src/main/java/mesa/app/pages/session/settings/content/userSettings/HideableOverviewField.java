@@ -29,7 +29,7 @@ public class HideableOverviewField extends OverviewField {
 		this.value = new Text();
 		this.value.setFont(new Font(16).getFont());
 
-		Link reveal = new Link(settings.getSession().getWindow(), "overview_reveal");
+		Link reveal = new Link(settings.getWindow(), "overview_reveal");
 		reveal.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
 		reveal.setAction(() -> {
@@ -42,7 +42,7 @@ public class HideableOverviewField extends OverviewField {
 
 		addToValue(this.value, new FixedHSpace(4), reveal);
 
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 
 	public void setFull(String full) {

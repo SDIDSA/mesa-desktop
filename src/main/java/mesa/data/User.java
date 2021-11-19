@@ -117,11 +117,11 @@ public class User extends Bean {
 		return emailConfirmed;
 	}
 
-	public boolean getEmailConfirmed() {
+	public boolean isEmailConfirmed() {
 		return emailConfirmed.get();
 	}
 
-	public void setEmailConfirmed(boolean val) {
+	public void setEmailConfirmed(Boolean val) {
 		emailConfirmed.set(val);
 	}
 
@@ -135,6 +135,7 @@ public class User extends Bean {
 			+ "\tphone : " + phone.get()
 			+ "\tavatar : " + avatar.get()
 			+ "\tbirthDate : " + birthDate.get()
+			+ "\temailConfirmed : " + emailConfirmed.get()
 		+ "}";
 	}
 }

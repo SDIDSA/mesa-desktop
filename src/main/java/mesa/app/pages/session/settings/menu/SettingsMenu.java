@@ -40,7 +40,7 @@ public class SettingsMenu extends VBox implements Styleable {
 		app_settings.addItem(new SectionItem(settings, "shortcuts"));
 		app_settings.addItem(new SectionItem(settings, "language"));
 		SectionItem os = new SectionItem(settings, "os_settings");
-		os.getLab().addParam(0, settings.getSession().getWindow().getOsName());
+		os.getLab().addParam(0, settings.getWindow().getOsName());
 		app_settings.addItem(os);
 		app_settings.addItem(new SectionItem(settings, "advanced"));
 		
@@ -48,7 +48,7 @@ public class SettingsMenu extends VBox implements Styleable {
 		separate();
 		addSection(app_settings);
 		
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 	
 	public void addSection(Section section) {
@@ -60,7 +60,7 @@ public class SettingsMenu extends VBox implements Styleable {
 		
 		getChildren().addAll(new FixedVSpace(10), sep, new FixedVSpace(8));
 		
-		styleSeparator(settings.getSession().getWindow().getStyl(), sep);
+		styleSeparator(settings.getWindow().getStyl(), sep);
 	}
 
 	@Override

@@ -110,6 +110,7 @@ public class Verify extends LoginSubPage {
 					if(result.has("err")) {
 						form.applyErrors(result.getJSONArray("err"));
 					}else {
+						user.put("email_confirmed", true);
 						onSuccess.accept(user);
 					}
 					

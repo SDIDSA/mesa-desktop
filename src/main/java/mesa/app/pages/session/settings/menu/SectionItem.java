@@ -34,7 +34,7 @@ public class SectionItem extends StackPane implements Styleable {
 		setPadding(new Insets(6, 10, 6, 10));
 
 		selectedProperty = new SimpleBooleanProperty(false);
-		lab = new Label(settings.getSession().getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 16));
+		lab = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 16));
 
 		getChildren().add(lab);
 
@@ -66,7 +66,7 @@ public class SectionItem extends StackPane implements Styleable {
 			}
 		}
 
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 
 	public SectionItem(Settings settings, String key) {

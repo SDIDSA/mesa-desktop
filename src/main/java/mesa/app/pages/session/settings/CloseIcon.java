@@ -18,13 +18,13 @@ public class CloseIcon extends StackPane implements Styleable {
 		setMaxSize(36, 36);
 		setCursor(Cursor.HAND);
 		
-		icon = new ColorIcon(settings.getSession().getWindow(), "delete", 18);
+		icon = new ColorIcon(settings.getWindow(), "delete", 18);
 		
 		getChildren().add(icon);
 		
 		setOnMouseClicked(e-> settings.getSession().hideSettings());
 		
-		applyStyle(settings.getSession().getWindow().getStyl());
+		applyStyle(settings.getWindow().getStyl());
 	}
 
 	@Override
