@@ -13,23 +13,14 @@ import mesa.gui.window.helpers.State;
 import mesa.gui.window.helpers.TileHint;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
-
-import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
