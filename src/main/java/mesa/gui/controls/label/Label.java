@@ -27,12 +27,6 @@ public class Label extends Text implements Localized {
 		setFont(font);
 		applyLocale(window.getLocale());
 	}
-	
-	public Label(String key) {
-		super();
-		this.key = key;
-		applyLocale(window.getLocale());
-	}
 
 	public Label(Window window, String key) {
 		this(window, key, Font.DEFAULT);

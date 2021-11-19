@@ -50,7 +50,8 @@ public class FieldList extends VBox implements Styleable {
 		OverviewField phone = new HideableOverviewField(settings, "phone", user.getPhone(),
 				TextTransform.HIDE_PHONE);
 
-		EditOverlay editUsername = new EditOverlay(settings, "username");
+		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings, "username");
+		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings, "email_address");
 
 		editUsername.addOnShown(0, ()->editUsername.setValue(user.getUsername()));
 
@@ -102,8 +103,6 @@ public class FieldList extends VBox implements Styleable {
 			}
 		});
 		
-		EditOverlay editEmail = new EditOverlay(settings, "email_address");
-
 		editEmail.doneDisabled().bind(editEmail.valueProperty().isEqualTo(user.emailProperty()));
 		
 		editEmail.setAction(()-> {

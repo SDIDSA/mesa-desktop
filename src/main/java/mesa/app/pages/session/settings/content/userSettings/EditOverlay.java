@@ -1,24 +1,17 @@
 package mesa.app.pages.session.settings.content.userSettings;
 
-import org.json.JSONArray;
-
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
-import mesa.app.component.Form;
-import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.settings.Settings;
-import mesa.gui.NodeUtils;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.Overlay;
@@ -34,14 +27,11 @@ public class EditOverlay extends Overlay implements Styleable {
 	private VBox root;
 	private Label head, subHead;
 	private HBox bottom;
-
-	Button cancel, done;
-
-	private TextInputField field, password;
-
+	private Button cancel;
 	private ColorIcon closeIcon;
-
-	private Form form;
+	
+	protected Button done;
+	protected VBox center;
 
 	public EditOverlay(Settings settings, String edit_what) {
 		root = new VBox();
@@ -72,15 +62,8 @@ public class EditOverlay extends Overlay implements Styleable {
 
 		top.getChildren().addAll(head, subHead);
 
-		VBox center = new VBox(16);
+		center = new VBox(16);
 		center.setPadding(new Insets(0, 16, 16, 16));
-
-		field = new TextInputField(settings.getWindow(), edit_what, 408);
-		password = new TextInputField(settings.getWindow(), "current_password", 408, true);
-
-		center.getChildren().addAll(field, password);
-
-		form = NodeUtils.getForm(center);
 
 		root.getChildren().addAll(preTop, center);
 
@@ -95,28 +78,12 @@ public class EditOverlay extends Overlay implements Styleable {
 
 		done = new Button(settings.getWindow(), "done", 3, 24, 38);
 		done.setFont(new Font(14, FontWeight.BOLD));
-		
-		form.setDefaultButton(done);
 
 		bottom.getChildren().addAll(new ExpandingHSpace(), cancel, done);
 
 		setContent(root, bottom);
 
-		addOnShown(field::requestFocus);
-
 		applyStyle(settings.getWindow().getStyl());
-	}
-
-	public String getValue() {
-		return field.getValue();
-	}
-
-	public String getPassword() {
-		return password.getValue();
-	}
-
-	public StringProperty valueProperty() {
-		return field.valueProperty();
 	}
 
 	public BooleanProperty doneDisabled() {
@@ -127,35 +94,12 @@ public class EditOverlay extends Overlay implements Styleable {
 		done.setAction(run);
 	}
 
-	public boolean checkForm() {
-		return form.check();
-	}
-
-	public void applyErrors(JSONArray errors) {
-		form.applyErrors(errors);
-	}
-
 	public void startLoading() {
 		done.startLoading();
 	}
 
 	public void stopLoading() {
 		done.stopLoading();
-	}
-
-	public void addPostField(Node... nodes) {
-		field.addPostField(nodes);
-	}
-
-	public void setValue(String val) {
-		field.setValue(val);
-	}
-
-	@Override
-	public void hide() {
-		form.clearErrors();
-		password.clear();
-		super.hide();
 	}
 
 	@Override
