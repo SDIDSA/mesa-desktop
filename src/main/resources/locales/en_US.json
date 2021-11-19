@@ -85,6 +85,7 @@
 	
 	"unverified_email": "Unverified Email",
 	"email_verification_warning": "Please check your email and follow the instructions to verify your email. If you did not receive an email or if it expired, you can resend one.",
+	"resend_verification_email": "Resend Verification Email",
 	
 	"overview_hide": "Hide",
 	"overview_reveal": "Reveal",

@@ -7,6 +7,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextFlow;
 import mesa.app.pages.session.settings.Settings;
+import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.Label;
@@ -21,6 +22,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 	private HBox root;
 	private Label head;
 	private Label body;
+	private Button resend;
 
 	public UnverifiedEmail(Settings settings) {
 		root = new HBox(20);
@@ -38,7 +40,10 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		TextFlow preBody = new TextFlow();
 		preBody.getChildren().add(body);
 		
-		right.getChildren().addAll(head, new FixedVSpace(8), preBody);
+		resend = new Button(settings.getWindow(), "resend_verification_email", 3.0, 16, 32);
+		resend.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13));
+		
+		right.getChildren().addAll(head, new FixedVSpace(8), preBody, new FixedVSpace(18), resend);
 		
 		root.getChildren().addAll(icon, right);
 		
@@ -54,5 +59,8 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		
 		head.setFill(style.getInteractiveNormal());
 		body.setFill(style.getText2());
+		
+		resend.setTextFill(style.getText1());
+		resend.setFill(style == Style.DARK ? Color.web("#4f545c") : Color.TRANSPARENT);
 	}
 }
