@@ -60,20 +60,6 @@ public class Window extends Stage implements Styleable, Localized {
 		
 		Scene scene = new Scene(root, 500, 500);
 		
-		scene.addEventFilter(KeyEvent.KEY_PRESSED, e-> {
-			if(e.getCode().equals(KeyCode.PRINTSCREEN)) {
-				WritableImage img = root.getChildren().get(0).snapshot(null, null);
-				BufferedImage preRes = SwingFXUtils.fromFXImage(img, null);
-				BufferedImage res = new BufferedImage(preRes.getWidth(), preRes.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-				res.getGraphics().drawImage(preRes, 0, 0, null);
-				try {
-					System.out.println(ImageIO.write(res, "png", new File("snapshot.png")));
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		
 		setScene(scene);
 	}
 	
