@@ -94,11 +94,14 @@
 	"overview_remove": "Remove",
 	
 	"change_attr": "Change your {$0}",
+	
 	"enter_attr": "Enter a new {$0} and your existing password",
 	"current_password": "Current Password",
 	"cancel": "Cancel",
 	"done": "Done",
 	
-	"change_pass" : "Change Password"
+	"change_pass" : "Change Password",
+	"new_pass": "New Password",
+	"confirm_new_pass": "Confirm New Password"
 	
 }

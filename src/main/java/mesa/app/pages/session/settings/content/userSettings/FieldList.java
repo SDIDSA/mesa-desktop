@@ -18,7 +18,6 @@ import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.TextTransform;
-import mesa.gui.controls.overlay.EditOverlay;
 import mesa.gui.controls.popup.Direction;
 import mesa.gui.controls.popup.tooltip.Tooltip;
 import mesa.gui.controls.space.FixedHSpace;

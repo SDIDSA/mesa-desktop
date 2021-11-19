@@ -1,4 +1,4 @@
-package mesa.gui.controls.overlay;
+package mesa.gui.controls;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
-import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.factory.Backgrounds;
 
 public class Overlay extends StackPane {

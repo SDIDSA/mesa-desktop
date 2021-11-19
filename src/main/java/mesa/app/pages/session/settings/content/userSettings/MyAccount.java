@@ -29,8 +29,12 @@ public class MyAccount extends SettingsContent {
 		
 		passAuth = new Label(window, "pass_&_auth", header);
 		
+		ChangePassword changePassOver = new ChangePassword(settings);
+		
 		changePass = new Button(window, "change_pass", 3.0, 16, 32);
 		changePass.setFont(new Font(13, FontWeight.BOLD));
+		
+		changePass.setAction(() -> changePassOver.show(settings.getSession()));
 		
 		getChildren().addAll(myAccount, new FixedVSpace(20));
 		
