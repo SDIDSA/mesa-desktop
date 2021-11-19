@@ -112,11 +112,13 @@ public class SessionPage extends Page {
 	private void beforeTransition() {
 		prepareNode(root);
 		prepareNode(settings);
+		prepareNode(settings.getRoot());
 	}
 	
 	private void afterTransition() {
 		clearNode(root);
 		clearNode(settings);
+		clearNode(settings.getRoot());
 	}
 	
 	public void showSettings() {
