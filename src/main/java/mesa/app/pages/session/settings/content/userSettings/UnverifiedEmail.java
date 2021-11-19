@@ -41,7 +41,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		preBody.getChildren().add(body);
 		
 		resend = new Button(settings.getWindow(), "resend_verification_email", 3.0, 16, 32);
-		resend.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13));
+		resend.setFont(new Font(13, FontWeight.BOLD));
 		
 		right.getChildren().addAll(head, new FixedVSpace(8), preBody, new FixedVSpace(18), resend);
 		

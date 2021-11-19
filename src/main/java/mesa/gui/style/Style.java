@@ -5,7 +5,7 @@ import javafx.scene.paint.Color;
 public class Style {
 	public static final Style DARK = new Style(
 			//Color.web("#f26963").darker(),
-			Color.web("#4d58d3"),			// accent
+			Color.web("#5865f2"),			// accent
 			Color.web("#36393f"),			// background 1
 			Color.web("#2f3136"),			// background 2
 			Color.web("#202225"),			// background 3

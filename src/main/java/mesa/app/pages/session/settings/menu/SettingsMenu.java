@@ -62,13 +62,13 @@ public class SettingsMenu extends VBox implements Styleable {
 		
 		styleSeparator(settings.getWindow().getStyl(), sep);
 	}
+	
+	private void styleSeparator(Style style, Rectangle sep) {
+		sep.setFill(style.getBackAccent());
+	}
 
 	@Override
 	public void applyStyle(Style style) {
 		separators.forEach(sep -> styleSeparator(style, sep));
-	}
-	
-	private void styleSeparator(Style style, Rectangle sep) {
-		sep.setFill(style.getBackAccent());
 	}
 }

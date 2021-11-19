@@ -64,6 +64,7 @@
 	"app_settings": "App Settings",
 	
 	"my_account": "My Account",
+	"pass_&_auth": "Password and Authentication",
 	"user_profile": "User Profile",
 	"privacy_and_safety": "Privacy & Safety",
 	"authorized_apps" : "Authorized Apps",
@@ -96,6 +97,8 @@
 	"enter_attr": "Enter a new {$0} and your existing password",
 	"current_password": "Current Password",
 	"cancel": "Cancel",
-	"done": "Done"
+	"done": "Done",
+	
+	"change_pass" : "Change Password"
 	
 }

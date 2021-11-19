@@ -13,14 +13,23 @@ import mesa.gui.window.helpers.State;
 import mesa.gui.window.helpers.TileHint;
 
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+
+import javax.imageio.ImageIO;
 
 import org.json.JSONObject;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -49,7 +58,23 @@ public class Window extends Stage implements Styleable, Localized {
 		getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/icon_64.png")));
 		getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/icon_128.png")));
 		
-		setScene(new Scene(root, 500, 500));
+		Scene scene = new Scene(root, 500, 500);
+		
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, e-> {
+			if(e.getCode().equals(KeyCode.PRINTSCREEN)) {
+				WritableImage img = root.getChildren().get(0).snapshot(null, null);
+				BufferedImage preRes = SwingFXUtils.fromFXImage(img, null);
+				BufferedImage res = new BufferedImage(preRes.getWidth(), preRes.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+				res.getGraphics().drawImage(preRes, 0, 0, null);
+				try {
+					System.out.println(ImageIO.write(res, "png", new File("snapshot.png")));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		setScene(scene);
 	}
 	
 	public String getOsName() {

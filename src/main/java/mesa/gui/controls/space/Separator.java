@@ -3,6 +3,7 @@ package mesa.gui.controls.space;
 import javafx.geometry.Orientation;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import mesa.gui.factory.Backgrounds;
 
 public class Separator extends Region {
@@ -20,6 +21,10 @@ public class Separator extends Region {
 			break;
 		}
 		
-		setBackground(Backgrounds.make(Color.GRAY));
+		setFill(Color.GRAY);
+	}
+	
+	public void setFill(Paint fill) {
+		setBackground(Backgrounds.make(fill));
 	}
 }
