@@ -33,7 +33,7 @@ public abstract class Input extends StackPane implements Styleable {
 
 	public Input(Window window, Font font, String key) {
 		getStyleClass().addAll("input", key);
-		
+
 		value = new SimpleStringProperty("");
 
 		borderProperty = new SimpleObjectProperty<>();
@@ -67,17 +67,17 @@ public abstract class Input extends StackPane implements Styleable {
 		exit.stop();
 		enter.playFromStart();
 	}
-	
+
 	public void unhover() {
 		enter.stop();
 		exit.playFromStart();
 	}
-	
+
 	public void focus() {
 		unfocus.stop();
 		this.focus.playFromStart();
 	}
-	
+
 	public void unfocus() {
 		this.focus.stop();
 		unfocus.playFromStart();
@@ -152,5 +152,9 @@ public abstract class Input extends StackPane implements Styleable {
 
 	public abstract void setValue(String value);
 
+	/**
+	 * Clear the value of this input, note that this method is abstract and the
+	 * implementation of this method depends on the input type
+	 */
 	public abstract void clear();
 }

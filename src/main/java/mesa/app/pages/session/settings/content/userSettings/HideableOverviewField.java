@@ -3,7 +3,6 @@ package mesa.app.pages.session.settings.content.userSettings;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.text.Text;
 import mesa.app.pages.session.settings.Settings;
@@ -18,13 +17,11 @@ public class HideableOverviewField extends OverviewField {
 	private Text value;
 
 	private BooleanProperty hidden;
-	private StringProperty full;
 
-	public HideableOverviewField(Settings settings, String key, String fullText, TextTransform hide) {
+	public HideableOverviewField(Settings settings, String key, StringProperty full, TextTransform hide) {
 		super(settings, key);
 
 		hidden = new SimpleBooleanProperty(true);
-		full = new SimpleStringProperty(fullText);
 
 		this.value = new Text();
 		this.value.setFont(new Font(16).getFont());
@@ -43,10 +40,6 @@ public class HideableOverviewField extends OverviewField {
 		addToValue(this.value, new FixedHSpace(4), reveal);
 
 		applyStyle(settings.getWindow().getStyl());
-	}
-
-	public void setFull(String full) {
-		this.full.set(full);
 	}
 	
 	@Override

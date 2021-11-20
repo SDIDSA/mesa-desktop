@@ -159,6 +159,10 @@ public abstract class InputField extends VBox implements Styleable {
 
 	public abstract void setValue(String string);
 
+	/**
+     * Remove the error (if exists) from this field and clear the values of all children inputs using
+     * using {@link Input#clear()}
+     */
 	public void clear() {
 		removeError();
 		forEach(input -> {

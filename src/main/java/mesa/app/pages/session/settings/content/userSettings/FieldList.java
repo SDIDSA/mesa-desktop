@@ -45,9 +45,10 @@ public class FieldList extends VBox implements Styleable {
 		User user = settings.getUser();
 
 		OverviewField username = new OverviewField(settings, "username");
-		HideableOverviewField email = new HideableOverviewField(settings, "email_address", user.getEmail(),
+		HideableOverviewField email = new HideableOverviewField(settings, "email_address", user.emailProperty(),
 				TextTransform.HIDE_EMAIL);
-		OverviewField phone = new HideableOverviewField(settings, "phone", user.getPhone(), TextTransform.HIDE_PHONE);
+		HideableOverviewField phone = new HideableOverviewField(settings, "phone", user.phoneProperty(),
+				TextTransform.HIDE_PHONE);
 
 		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings, "username");
 		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings, "email_address");
@@ -109,7 +110,6 @@ public class FieldList extends VBox implements Styleable {
 				} else {
 					user.setEmail(newEmail);
 					user.setEmailConfirmed(false);
-					email.setFull(newEmail);
 					editEmail.hide();
 				}
 				editEmail.stopLoading();

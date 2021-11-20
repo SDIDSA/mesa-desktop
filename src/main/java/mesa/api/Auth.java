@@ -46,8 +46,8 @@ public class Auth {
 	public static void changePassword(String user_id, String current_pass, String new_pass, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.CHANGE_PASSWORD, "change password", onResult,
 				new Param("user_id", user_id),
-				new Param("current_pass", current_pass),
-				new Param("new_pass", new_pass));
+				new Param("curr_pass", hashPassword(current_pass)),
+				new Param("new_pass", hashPassword(new_pass)));
 	}
 
 	public static String hashPassword(String password) {

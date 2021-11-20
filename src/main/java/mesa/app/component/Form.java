@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javafx.animation.Interpolator;
 import javafx.scene.input.KeyCode;
 import mesa.app.component.input.InputField;
 import mesa.gui.controls.Button;
@@ -14,18 +13,12 @@ public class Form extends ArrayList<InputField> {
 	static final long serialVersionUID = 6846840;
 
 	private Button defaultButton;
-	
+
 	public Form(ArrayList<InputField> nodesOfType) {
 		super(nodesOfType);
-		
+
 		forEach(input -> {
-			input.addOnKeyPressed(pressed -> {
-				if(pressed.equals(KeyCode.ENTER)) {
-					if(defaultButton != null) {
-						defaultButton.fire();
-					}
-				}
-			});
+			prepareField(input);
 		});
 	}
 
@@ -33,30 +26,39 @@ public class Form extends ArrayList<InputField> {
 		super();
 	}
 	
-	public void addAll(InputField...fields) {
-		for(InputField field:fields) {
+	private void prepareField(InputField input) {
+		input.addOnKeyPressed(pressed -> {
+			if (pressed.equals(KeyCode.ENTER)) {
+				if (defaultButton != null) {
+					defaultButton.fire();
+				}
+			}
+		});
+	}
+
+	public void addAll(InputField... fields) {
+		for (InputField field : fields) {
 			add(field);
+			prepareField(field);
 		}
 	}
 
 	public boolean check() {
 		boolean success = true;
-		Interpolator.SPLINE(0, 0, 0, 0);
 		for (InputField field : this) {
-
 			if (field.getValue().isEmpty()) {
 				field.setError("field_required", null);
 				success = false;
+			} else if (field.getKey().equals("confirm_new_password") && !field.getValue().equals(get("new_password"))) {
+				field.setError("passwords_no_match", null);
+				success = false;
+			} else if (field.getKey().contains("password") && field.getValue().length() < 6) {
+				field.setError("password_short", null);
+				success = false;
 			} else {
-				if (field.getKey().contains("password") && field.getValue().length() < 6) {
-					field.setError("password_short", null);
-					success = false;
-				} else {
-					field.removeError();
-				}
+				field.removeError();
 			}
 		}
-
 		return success;
 	}
 
@@ -82,11 +84,11 @@ public class Form extends ArrayList<InputField> {
 			}
 		}
 	}
-	
+
 	public void clearErrors() {
 		forEach(InputField::removeError);
 	}
-	
+
 	public void setDefaultButton(Button button) {
 		defaultButton = button;
 	}
@@ -107,6 +109,20 @@ public class Form extends ArrayList<InputField> {
 		}
 	}
 
+	public String get(String key) {
+		for (InputField field : this) {
+			if (field.getKey().equals(key)) {
+				return field.getValue();
+			}
+		}
+
+		return null;
+	}
+
+	/**
+     * Clear the content of all the input fields in this form
+     * using {@link InputField#clear()}
+     */
 	public void clear() {
 		for (InputField field : this) {
 			field.clear();
