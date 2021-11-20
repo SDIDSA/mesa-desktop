@@ -12,8 +12,8 @@ public class PasswordEditOverlay extends EditOverlay {
 		currPass = new TextInputField(settings.getWindow(), "current_password", 408, true);
 		newPass = new TextInputField(settings.getWindow(), "new_pass", 408, true);
 		confNewPass = new TextInputField(settings.getWindow(), "confirm_new_pass", 408, true);
-
 		center.getChildren().addAll(currPass, newPass, confNewPass);
-
+		
+		form.addAll(currPass, newPass, confNewPass);
 	}
 }

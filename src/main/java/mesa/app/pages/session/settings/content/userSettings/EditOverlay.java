@@ -1,5 +1,7 @@
 package mesa.app.pages.session.settings.content.userSettings;
 
+import org.json.JSONArray;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.geometry.Insets;
@@ -11,6 +13,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
+import mesa.app.component.Form;
 import mesa.app.pages.session.settings.Settings;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
@@ -32,6 +35,8 @@ public class EditOverlay extends Overlay implements Styleable {
 	
 	protected Button done;
 	protected VBox center;
+	
+	protected Form form;
 
 	public EditOverlay(Settings settings, String edit_what) {
 		root = new VBox();
@@ -82,8 +87,19 @@ public class EditOverlay extends Overlay implements Styleable {
 		bottom.getChildren().addAll(new ExpandingHSpace(), cancel, done);
 
 		setContent(root, bottom);
+		
+		form = new Form();
+		form.setDefaultButton(done);
 
 		applyStyle(settings.getWindow().getStyl());
+	}
+
+	public boolean checkForm() {
+		return form.check();
+	}
+
+	public void applyErrors(JSONArray errors) {
+		form.applyErrors(errors);
 	}
 
 	public BooleanProperty doneDisabled() {
@@ -100,6 +116,12 @@ public class EditOverlay extends Overlay implements Styleable {
 
 	public void stopLoading() {
 		done.stopLoading();
+	}
+
+	@Override
+	public void hide() {
+		form.clearErrors();
+		super.hide();
 	}
 
 	@Override

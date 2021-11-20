@@ -20,8 +20,7 @@ public class Auth {
 				new Param("email", email),
 				new Param("username", username),
 				new Param("password", hashPassword(password)),
-				new Param("birth_date", birthDate));
-		
+				new Param("birth_date", birthDate));	
 	}
 	
 	public static void verifyEmail(String user_id, String code, Consumer<JSONObject> onResult) {
@@ -38,10 +37,17 @@ public class Auth {
 	}
 	
 	public static void editEmail(String user_id, String email, String password, Consumer<JSONObject> onResult) {
-		API.asyncPost(API.Auth.EDIT_EMAIL, "change username", onResult, 
+		API.asyncPost(API.Auth.EDIT_EMAIL, "change email", onResult, 
 				new Param("user_id", user_id),
 				new Param("email", email),
 				new Param("password", hashPassword(password)));
+	}
+	
+	public static void changePassword(String user_id, String current_pass, String new_pass, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.CHANGE_PASSWORD, "change password", onResult,
+				new Param("user_id", user_id),
+				new Param("current_pass", current_pass),
+				new Param("new_pass", new_pass));
 	}
 
 	public static String hashPassword(String password) {

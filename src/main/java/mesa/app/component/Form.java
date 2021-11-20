@@ -29,6 +29,16 @@ public class Form extends ArrayList<InputField> {
 		});
 	}
 
+	public Form() {
+		super();
+	}
+	
+	public void addAll(InputField...fields) {
+		for(InputField field:fields) {
+			add(field);
+		}
+	}
+
 	public boolean check() {
 		boolean success = true;
 		Interpolator.SPLINE(0, 0, 0, 0);
