@@ -47,13 +47,12 @@ public class FieldList extends VBox implements Styleable {
 		OverviewField username = new OverviewField(settings, "username");
 		HideableOverviewField email = new HideableOverviewField(settings, "email_address", user.getEmail(),
 				TextTransform.HIDE_EMAIL);
-		OverviewField phone = new HideableOverviewField(settings, "phone", user.getPhone(),
-				TextTransform.HIDE_PHONE);
+		OverviewField phone = new HideableOverviewField(settings, "phone", user.getPhone(), TextTransform.HIDE_PHONE);
 
 		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings, "username");
 		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings, "email_address");
 
-		editUsername.addOnShown(0, ()->editUsername.setValue(user.getUsername()));
+		editUsername.addOnShown(0, () -> editUsername.setValue(user.getUsername()));
 
 		edit_tag_separate = new Rectangle(1, 30);
 		edit_tag_separate.setOpacity(.1);
@@ -68,12 +67,12 @@ public class FieldList extends VBox implements Styleable {
 		help_edit_tag.setCursor(Cursor.HAND);
 		help_edit_tag.setMaxSize(32, 31);
 		help_edit_tag.setMinSize(32, 31);
-		
-		help_edit_tag.setFocusTraversable(true);
-		help_edit_tag.borderProperty().bind(Bindings.when(help_edit_tag.focusedProperty()).then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
 
-		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!",
-				Direction.LEFT);
+		help_edit_tag.setFocusTraversable(true);
+		help_edit_tag.borderProperty().bind(Bindings.when(help_edit_tag.focusedProperty())
+				.then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
+
+		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!", Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		Tooltip.install(help_edit_tag, tip);
 
@@ -83,46 +82,38 @@ public class FieldList extends VBox implements Styleable {
 
 		editUsername.addPostField(edit_tag_separate, new FixedHSpace(20), hash, tag, new FixedHSpace(20), help_edit_tag,
 				new FixedHSpace(4));
-		
-		editUsername.doneDisabled().bind(editUsername.valueProperty().isEqualTo(user.usernameProperty()));
-		editUsername.setAction(()-> {
-			if(editUsername.checkForm()) {
-				editUsername.startLoading();
 
-				String newUsername = editUsername.getValue();
-				Auth.editUsername(user.getId(), newUsername, editUsername.getPassword(), result -> {
-					if(result.has("err")) {
-						editUsername.applyErrors(result.getJSONArray("err"));
-					}else {
-						user.setUsername(newUsername);
-						editUsername.hide();
-					}
-					
-					editUsername.stopLoading();
-				});
-			}
+		editUsername.doneDisabled().bind(editUsername.valueProperty().isEqualTo(user.usernameProperty()));
+		editUsername.setAction(() -> {
+			editUsername.startLoading();
+			String newUsername = editUsername.getValue();
+			Auth.editUsername(user.getId(), newUsername, editUsername.getPassword(), result -> {
+				if (result.has("err")) {
+					editUsername.applyErrors(result.getJSONArray("err"));
+				} else {
+					user.setUsername(newUsername);
+					editUsername.hide();
+				}
+				editUsername.stopLoading();
+			});
 		});
-		
+
 		editEmail.doneDisabled().bind(editEmail.valueProperty().isEqualTo(user.emailProperty()));
-		
-		editEmail.setAction(()-> {
-			if(editEmail.checkForm()) {
-				editEmail.startLoading();
-				
-				String newEmail = editEmail.getValue();
-				Auth.editEmail(user.getId(), newEmail, editEmail.getPassword(), result -> {
-					if(result.has("err")) {
-						editEmail.applyErrors(result.getJSONArray("err"));
-					}else {
-						user.setEmail(newEmail);
-						user.setEmailConfirmed(false);
-						email.setFull(newEmail);
-						editEmail.hide();
-					}
-					
-					editEmail.stopLoading();
-				});
-			}
+
+		editEmail.setAction(() -> {
+			editEmail.startLoading();
+			String newEmail = editEmail.getValue();
+			Auth.editEmail(user.getId(), newEmail, editEmail.getPassword(), result -> {
+				if (result.has("err")) {
+					editEmail.applyErrors(result.getJSONArray("err"));
+				} else {
+					user.setEmail(newEmail);
+					user.setEmailConfirmed(false);
+					email.setFull(newEmail);
+					editEmail.hide();
+				}
+				editEmail.stopLoading();
+			});
 		});
 
 		username.setEditOver(editUsername);
@@ -165,7 +156,9 @@ public class FieldList extends VBox implements Styleable {
 		hash.setFill(style.getTextMuted());
 		tag.setFill(style.getText1());
 
-		help_edit_tag.backgroundProperty().bind(Bindings.when(help_edit_tag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0)).otherwise(Backgrounds.make(style.getAccent(), 2.0)));
+		help_edit_tag.backgroundProperty()
+				.bind(Bindings.when(help_edit_tag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
+						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
 		help_edit_tag_icon.setFill(style.getText1());
 	}
 }

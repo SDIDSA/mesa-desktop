@@ -32,10 +32,10 @@ public class EditOverlay extends Overlay implements Styleable {
 	private HBox bottom;
 	private Button cancel;
 	private ColorIcon closeIcon;
-	
+
 	protected Button done;
 	protected VBox center;
-	
+
 	protected Form form;
 
 	public EditOverlay(Settings settings, String edit_what) {
@@ -54,7 +54,7 @@ public class EditOverlay extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
-		
+
 		preTop.getChildren().addAll(top, closeIcon);
 
 		head = new Label(settings.getWindow(), "change_attr", new Font(24, FontWeight.BOLD));
@@ -87,15 +87,11 @@ public class EditOverlay extends Overlay implements Styleable {
 		bottom.getChildren().addAll(new ExpandingHSpace(), cancel, done);
 
 		setContent(root, bottom);
-		
+
 		form = new Form();
 		form.setDefaultButton(done);
 
 		applyStyle(settings.getWindow().getStyl());
-	}
-
-	public boolean checkForm() {
-		return form.check();
 	}
 
 	public void applyErrors(JSONArray errors) {
@@ -107,7 +103,10 @@ public class EditOverlay extends Overlay implements Styleable {
 	}
 
 	public void setAction(Runnable run) {
-		done.setAction(run);
+		done.setAction(() -> {
+			if (form.check())
+				run.run();
+		});
 	}
 
 	public void startLoading() {
@@ -137,6 +136,7 @@ public class EditOverlay extends Overlay implements Styleable {
 		done.setFill(style.getAccent());
 		done.setTextFill(style.getText1());
 
-		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getText1()).otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
+		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getText1())
+				.otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
 	}
 }
