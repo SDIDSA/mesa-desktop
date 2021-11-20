@@ -9,4 +9,8 @@ public class Colors {
 	public static final Color GREEN = Color.web("#3ba55d");
 	public static final Color YELLEOW = Color.web("#faa81a");
 	public static final Color INVISIBLE = Color.web("#747f8d");
+	
+	private Colors() {
+		
+	}
 }

@@ -20,7 +20,8 @@ import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class StatedPfp extends StackPane {
-	public static final PfpSize BIG = new PfpSize(80, 28, 16, 2), SMALL = new PfpSize(32, 16, 10, 3);
+	public static final PfpSize BIG = new PfpSize(80, 28, 16, 2);
+	public static final PfpSize SMALL = new PfpSize(32, 16, 10, 3);
 
 	private StackPane statusPane;
 
@@ -31,7 +32,7 @@ public class StatedPfp extends StackPane {
 	public StatedPfp(SessionPage session, String path, PfpSize size) {
 		setAlignment(Pos.BOTTOM_RIGHT);
 
-		status = new SimpleObjectProperty<PfpStatus>(null);
+		status = new SimpleObjectProperty<>(null);
 
 		pfp = null;
 		if (path != null) {
@@ -42,7 +43,7 @@ public class StatedPfp extends StackPane {
 		}
 
 		Rectangle keep = new Rectangle(size.size, size.size);
-		int offset = size.size - size.clip + size.offset;
+		double offset = size.size - size.clip + size.offset;
 		Rectangle remove = new Rectangle(offset, offset, size.clip, size.clip);
 		remove.setArcHeight(size.clip);
 		remove.setArcWidth(size.clip);
@@ -85,17 +86,17 @@ public class StatedPfp extends StackPane {
 		this.status.set(status);
 	}
 
-	public static enum PfpStatus {
+	public enum PfpStatus {
 		ONLINE((w,s) -> {
 			Circle res = new Circle(s.status / 2);
 			res.setFill(Colors.GREEN);
 			return res;
 		}), IDLE((w,s) -> {
-			ColorIcon res = new ColorIcon(w, "moon", s.status);
+			ColorIcon res = new ColorIcon("moon", s.status);
 			res.setFill(Colors.YELLEOW);
 			return res;
 		}), INVISIBLE((w,s) -> {
-			ColorIcon res = new ColorIcon(w, "invisible", s.status);
+			ColorIcon res = new ColorIcon("invisible", s.status);
 			res.setFill(Colors.INVISIBLE);
 			return res;
 		});
@@ -112,7 +113,10 @@ public class StatedPfp extends StackPane {
 	}
 	
 	static class PfpSize {
-		int size, clip, status, offset;
+		double size;
+		double clip;
+		double status;
+		double offset;
 
 		public PfpSize(int size, int clip, int status, int offset) {
 			this.size = size;

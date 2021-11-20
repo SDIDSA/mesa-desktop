@@ -14,18 +14,17 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import mesa.app.utils.Colors;
 import mesa.gui.factory.Borders;
-import mesa.gui.window.Window;
 
 public class ColorIcon extends StackPane {
 	private ImageView view;
 	private Rectangle overlay;
 
 	private String name;
-	private int size;
+	private double size;
 
 	private Runnable action;
 
-	public ColorIcon(Window window, String name, int size, boolean focusable) {
+	public ColorIcon(String name, double size, boolean focusable) {
 		view = new ImageView();
 		overlay = new Rectangle();
 		overlay.setClip(view);
@@ -66,8 +65,8 @@ public class ColorIcon extends StackPane {
 		this.action = action;
 	}
 
-	public ColorIcon(Window window, String name, int size) {
-		this(window, name, size, false);
+	public ColorIcon(String name, double size) {
+		this(name, size, false);
 	}
 
 	public void setName(String name) {
@@ -78,7 +77,7 @@ public class ColorIcon extends StackPane {
 		setImage(name, size);
 	}
 
-	public void setImage(String name, int size) {
+	public void setImage(String name, double size) {
 		this.name = name;
 		this.size = size;
 		Image img = ImageProxy.load(name, size);

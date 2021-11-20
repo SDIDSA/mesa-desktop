@@ -20,16 +20,14 @@ public class TextInput extends Input {
 	private HBox preField;
 
 	public TextInput(Window window, Font font, String key, boolean hidden) {
-		super(window, font, key);
+		super(key);
 
 		field = hidden ? new PasswordField() : new TextField();
 		field.setBackground(Background.EMPTY);
 		field.setBorder(Border.EMPTY);
 		field.setPadding(new Insets(10));
 
-		field.focusedProperty().addListener((obs, ov, nv) -> {
-			focus(nv);
-		});
+		field.focusedProperty().addListener((obs, ov, nv) -> focus(nv));
 
 		value.bind(field.textProperty());
 
@@ -51,10 +49,10 @@ public class TextInput extends Input {
 	}
 
 	public void align(Pos pos) {
-		if (field instanceof PasswordField) {
-			((PasswordField) field).setAlignment(pos);
-		} else if (field instanceof TextField) {
-			((TextField) field).setAlignment(pos);
+		if (field instanceof PasswordField passwordField) {
+			passwordField.setAlignment(pos);
+		} else if (field instanceof TextField textField) {
+			textField.setAlignment(pos);
 		}
 	}
 

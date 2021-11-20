@@ -26,7 +26,8 @@ public class Register extends LoginSubPage {
 
 	private Button contin;
 
-	private Label crec, haveAcc;
+	private Label crec;
+	private Label haveAcc;
 
 	private Consumer<JSONArray> onLogin;
 

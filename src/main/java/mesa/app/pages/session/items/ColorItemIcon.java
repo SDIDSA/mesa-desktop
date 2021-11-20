@@ -14,12 +14,13 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class ColorItemIcon extends ItemIcon implements Styleable {
-	
+
 	private Rectangle back;
 	private Color to;
 
 	private ColorIcon ic;
-	private Timeline do_col, undo_col;	
+	private Timeline doCol;
+	private Timeline undoCol;
 
 	public ColorItemIcon(SessionPage session, Color to, String icon, int size) {
 		super(session);
@@ -29,19 +30,19 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 		addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if (!isSelected()) {
-				undo_col.stop();
-				do_col.playFromStart();
+				undoCol.stop();
+				doCol.playFromStart();
 			}
 		});
 
 		addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
 			if (!isSelected()) {
-				do_col.stop();
-				undo_col.playFromStart();
+				doCol.stop();
+				undoCol.playFromStart();
 			}
 		});
 
-		ic = new ColorIcon(session.getWindow(), icon, size);
+		ic = new ColorIcon(icon, size);
 
 		getChildren().addAll(back, ic);
 
@@ -55,8 +56,8 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 	@Override
 	public void unselect() {
 		super.unselect();
-		do_col.stop();
-		undo_col.playFromStart();
+		doCol.stop();
+		undoCol.playFromStart();
 	}
 
 	public void setTo(Color to) {
@@ -69,11 +70,11 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 		back.setFill(style.getBack1());
 		ic.setFill(to);
 
-		if(to != null) {
-			do_col = new Timeline(
+		if (to != null) {
+			doCol = new Timeline(
 					new KeyFrame(Duration.seconds(.1), new KeyValue(back.fillProperty(), to, Interpolator.EASE_BOTH),
 							new KeyValue(ic.fillProperty(), Color.WHITE, Interpolator.EASE_BOTH)));
-			undo_col = new Timeline(new KeyFrame(Duration.seconds(.1),
+			undoCol = new Timeline(new KeyFrame(Duration.seconds(.1),
 					new KeyValue(back.fillProperty(), style.getBack1(), Interpolator.EASE_BOTH),
 					new KeyValue(ic.fillProperty(), to, Interpolator.EASE_BOTH)));
 		}

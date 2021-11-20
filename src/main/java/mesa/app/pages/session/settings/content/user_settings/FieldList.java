@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.userSettings;
+package mesa.app.pages.session.settings.content.user_settings;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -27,13 +27,15 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class FieldList extends VBox implements Styleable {
-	private Text usernameLab, idLab;
+	private Text usernameLab;
+	private Text idLab;
 
-	private Rectangle edit_tag_separate;
-	private StackPane help_edit_tag;
-	private ColorIcon help_edit_tag_icon;
+	private Rectangle editTagSeparate;
+	private StackPane helpEditTag;
+	private ColorIcon editTagIcon;
 
-	private Text hash, tag;
+	private Text hash;
+	private Text tag;
 
 	private Button removePhone;
 
@@ -55,8 +57,8 @@ public class FieldList extends VBox implements Styleable {
 
 		editUsername.addOnShown(0, () -> editUsername.setValue(user.getUsername()));
 
-		edit_tag_separate = new Rectangle(1, 30);
-		edit_tag_separate.setOpacity(.1);
+		editTagSeparate = new Rectangle(1, 30);
+		editTagSeparate.setOpacity(.1);
 
 		hash = new Text("#");
 		hash.setFont(new Font(15).getFont());
@@ -64,24 +66,24 @@ public class FieldList extends VBox implements Styleable {
 		tag.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 15).getFont());
 		tag.setOpacity(.5);
 
-		help_edit_tag = new StackPane();
-		help_edit_tag.setCursor(Cursor.HAND);
-		help_edit_tag.setMaxSize(32, 31);
-		help_edit_tag.setMinSize(32, 31);
+		helpEditTag = new StackPane();
+		helpEditTag.setCursor(Cursor.HAND);
+		helpEditTag.setMaxSize(32, 31);
+		helpEditTag.setMinSize(32, 31);
 
-		help_edit_tag.setFocusTraversable(true);
-		help_edit_tag.borderProperty().bind(Bindings.when(help_edit_tag.focusedProperty())
+		helpEditTag.setFocusTraversable(true);
+		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
 				.then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
 
 		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!", Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
-		Tooltip.install(help_edit_tag, tip);
+		Tooltip.install(helpEditTag, tip);
 
-		help_edit_tag_icon = new ColorIcon(settings.getWindow(), "question", 16);
+		editTagIcon = new ColorIcon("question", 16);
 
-		help_edit_tag.getChildren().add(help_edit_tag_icon);
+		helpEditTag.getChildren().add(editTagIcon);
 
-		editUsername.addPostField(edit_tag_separate, new FixedHSpace(20), hash, tag, new FixedHSpace(20), help_edit_tag,
+		editUsername.addPostField(editTagSeparate, new FixedHSpace(20), hash, tag, new FixedHSpace(20), helpEditTag,
 				new FixedHSpace(4));
 
 		editUsername.doneDisabled().bind(editUsername.valueProperty().isEqualTo(user.usernameProperty()));
@@ -151,14 +153,14 @@ public class FieldList extends VBox implements Styleable {
 		removePhone.setFill(Color.TRANSPARENT);
 		removePhone.setTextFill(style.getText1());
 
-		edit_tag_separate.setFill(style.getInteractiveNormal());
+		editTagSeparate.setFill(style.getInteractiveNormal());
 
 		hash.setFill(style.getTextMuted());
 		tag.setFill(style.getText1());
 
-		help_edit_tag.backgroundProperty()
-				.bind(Bindings.when(help_edit_tag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
+		helpEditTag.backgroundProperty()
+				.bind(Bindings.when(helpEditTag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
 						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
-		help_edit_tag_icon.setFill(style.getText1());
+		editTagIcon.setFill(style.getText1());
 	}
 }

@@ -11,8 +11,6 @@ public class TextItem extends ComboMenuItem implements Styleable {
 	private Text lab;
 	
 	public TextItem(Window window, String value) {
-		super(window);
-		
 		lab = new Text(value);
 		lab.setFont(new Font(16).getFont());
 		

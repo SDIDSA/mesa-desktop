@@ -8,6 +8,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Paint;
 
 public class Borders {
+	private Borders() {
+		
+	}
+	
 	public static Border make(Paint fill, BorderStrokeStyle style, CornerRadii radius, BorderWidths width) {
 		return new Border(new BorderStroke(fill, style, radius, width));
 	}

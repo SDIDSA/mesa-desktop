@@ -10,6 +10,10 @@ import javafx.scene.layout.Region;
 import javafx.util.Duration;
 
 public class Animator {
+	private Animator() {
+		
+	}
+	
 	public static void show(Region r, double to) {
 		r.setMouseTransparent(false);
 		double from = r.getHeight();
@@ -30,7 +34,7 @@ public class Animator {
 	}
 
 	public static void hide(Region r, double to) {
-		r.setMouseTransparent(to == 0 ? true : false);
+		r.setMouseTransparent(to == 0);
 		double from = r.getHeight();
 
 		DoubleProperty v = new SimpleDoubleProperty(from);

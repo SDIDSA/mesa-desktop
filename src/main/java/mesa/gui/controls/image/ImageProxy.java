@@ -11,11 +11,15 @@ import net.coobird.thumbnailator.resizers.DefaultResizerFactory;
 import net.coobird.thumbnailator.resizers.Resizer;
 
 public class ImageProxy {
-	private static HashMap<String, Image> cache = new HashMap<String, Image>();
+	private static HashMap<String, Image> cache = new HashMap<>();
 
-	public static Image load(String name, int size, boolean fullPath) {
+	private ImageProxy() {
+		
+	}
+	
+	public static Image load(String name, double size, boolean fullPath) {
 		String path = fullPath ? name
-				: new StringBuilder().append("/images/icons/").append(name).append('_').append(size).append(".png")
+				: new StringBuilder().append("/images/icons/").append(name).append('_').append((int) size).append(".png")
 						.toString();
 
 		Image found = cache.get(size + "_" + path);
@@ -36,7 +40,7 @@ public class ImageProxy {
 		return found;
 	}
 
-	public static Image load(String name, int size) {
+	public static Image load(String name, double size) {
 		return load(name, size, false);
 	}
 

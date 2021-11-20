@@ -26,38 +26,38 @@ import mesa.gui.window.Window;
 
 public abstract class InputField extends VBox implements Styleable {
 	private Window window;
-	
+
 	private Label lab;
 	private HBox input;
 
 	private Label err;
 	private HBox labs;
-	
+
 	private Text t;
-	
+
 	protected StringProperty value;
 
-	public InputField(Window window, String key, double width) {
+	protected InputField(Window window, String key, double width) {
 		super(8);
 		this.window = window;
 		getStyleClass().addAll("field", key);
-		
+
 		value = new SimpleStringProperty("");
-		
+
 		labs = new HBox();
 		labs.setAlignment(Pos.CENTER_LEFT);
 
 		Font e = new Font(12, FontPosture.ITALIC);
 		Font f = new Font(12, FontWeight.BOLD);
-		
+
 		err = new Label(window, null, e);
 		err.setFill(Colors.Error);
-		
+
 		t = new Text(" - ");
 		t.setFill(Colors.Error);
 		t.setFont(e.getFont());
 		t.setOpacity(0);
-		
+
 		lab = new Label(window, key, f);
 		lab.setTransform(TextTransform.UPPERCASE);
 		lab.setOpacity(.7);
@@ -71,48 +71,44 @@ public abstract class InputField extends VBox implements Styleable {
 
 		getChildren().addAll(labs, input);
 	}
-	
+
+	protected InputField(Window window, String key) {
+		this(window, key, 200);
+	}
+
 	public StringProperty valueProperty() {
 		return value;
 	}
-	
+
 	private void forEach(Consumer<Input> consumer) {
-		for(Node c : input.getChildren()) {
-			if(c instanceof Input)  {
-				consumer.accept((Input) c);
+		for (Node c : input.getChildren()) {
+			if (c instanceof Input in) {
+				consumer.accept(in);
 			}
 		}
 	}
-	
+
 	public void addOnKeyPressed(Consumer<KeyCode> consumer) {
-		forEach(input -> {
-			input.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-				consumer.accept(event.getCode());
-			});
-		});
+		forEach(in -> in.addEventFilter(KeyEvent.KEY_PRESSED, event -> consumer.accept(event.getCode())));
 	}
-	
+
 	public void setError(String error, String plus) {
 		t.setOpacity(1);
 		lab.setFill(Colors.Error);
-		if(plus != null) {
+		if (plus != null) {
 			err.addParam(0, plus);
 		}
 		err.setKey(error);
-		
-		forEach(input -> {
-			input.setBorder(Colors.Error, Colors.Error, Colors.Error);
-		});
+
+		forEach(in -> in.setBorder(Colors.Error, Colors.Error, Colors.Error));
 	}
-	
+
 	public void removeError() {
 		t.setOpacity(0);
 		err.setKey(null);
 		applyStyle(window.getStyl());
-		
-		forEach(input -> {
-			input.applyStyle(window.getStyl());
-		});
+
+		forEach(in -> in.applyStyle(window.getStyl()));
 	}
 
 	protected void addInput(Input in) {
@@ -131,17 +127,13 @@ public abstract class InputField extends VBox implements Styleable {
 			addInput(in);
 		}
 	}
-	
-	protected void addNode(Node n)  {
+
+	protected void addNode(Node n) {
 		input.getChildren().add(n);
 	}
-	
+
 	public void align(Pos alignment) {
 		input.setAlignment(alignment);
-	}
-
-	public InputField(Window window, String key) {
-		this(window, key, 200);
 	}
 
 	@Override
@@ -160,16 +152,14 @@ public abstract class InputField extends VBox implements Styleable {
 	public abstract void setValue(String string);
 
 	/**
-     * Remove the error (if exists) from this field and clear the values of all children inputs using
-     * using {@link Input#clear()}
-     */
+	 * Remove the error (if exists) from this field and clear the values of all
+	 * children inputs using using {@link Input#clear()}
+	 */
 	public void clear() {
 		removeError();
-		forEach(input -> {
-			input.clear();
-		});
+		forEach(Input::clear);
 	}
-	
+
 	public String getErrorKey() {
 		return err.getKey();
 	}

@@ -24,8 +24,10 @@ import mesa.gui.window.Window;
 
 public class Login extends LoginSubPage {
 
-	private Label web, etsya, needAcc;
-	private Button login;
+	private Label web;
+	private Label etsya;
+	private Label needAcc;
+	private Button loginButton;
 
 	private Runnable onRegister;
 	private Consumer<JSONObject> onVerify;
@@ -41,7 +43,7 @@ public class Login extends LoginSubPage {
 
 		VBox left = new VBox(0);
 
-		login = new Button(window, "login", 414);
+		loginButton = new Button(window, "login", 414);
 
 		web = new Label(window, "welcome_back", new Font(Font.DEFAULT_FAMILY_MEDIUM, 24));
 		etsya = new Label(window, "etsya", new Font(16));
@@ -63,7 +65,7 @@ public class Login extends LoginSubPage {
 		bottom.getChildren().addAll(needAcc, register);
 
 		left.getChildren().addAll(web, new FixedVSpace(8), etsya, new FixedVSpace(20), email, new FixedVSpace(20),
-				password, new FixedVSpace(4), recover, new FixedVSpace(20), login, new FixedVSpace(12), bottom);
+				password, new FixedVSpace(4), recover, new FixedVSpace(20), loginButton, new FixedVSpace(12), bottom);
 
 		VBox right = new VBox(0);
 		right.setMinWidth(240);
@@ -75,10 +77,10 @@ public class Login extends LoginSubPage {
 		form = NodeUtils.getForm(left);
 		form.setField("email_phone", "+213657693679");
 		form.setField("password", "a1b2.a1b2");
-		form.setDefaultButton(login);
-		login.setAction(() -> {
+		form.setDefaultButton(loginButton);
+		loginButton.setAction(() -> {
 			if (form.check()) {
-				login.startLoading();
+				loginButton.startLoading();
 				
 				Auth.auth(email.getValue(), password.getValue(), result -> {
 					if(result.has("err")) {
@@ -93,7 +95,7 @@ public class Login extends LoginSubPage {
 						}
 					}
 
-					login.stopLoading();
+					loginButton.stopLoading();
 				});
 			}
 		});
@@ -127,8 +129,8 @@ public class Login extends LoginSubPage {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 
-		login.setFill(style.getAccent());
-		login.setTextFill(style.getText1());
+		loginButton.setFill(style.getAccent());
+		loginButton.setTextFill(style.getText1());
 		web.setFill(style.getText1());
 		etsya.setFill(style.getText1());
 		needAcc.setFill(style.getText1());

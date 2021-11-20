@@ -20,20 +20,18 @@ import mesa.gui.factory.Borders;
 import mesa.gui.window.Window;
 
 public class TileHint extends Stage {
-	private static final int padding = 10;
-	private static Rectangle SS;
+	private static final double PADDING = 10;
+	private static Rectangle screenSize = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 
 	private DoubleProperty opac;
 
-	private Timeline show, hide;
+	private Timeline show;
+	private Timeline hide;
 
 	private Tile tile;
 
 	public TileHint(Window owner) {
 		initOwner(owner);
-		if (SS == null) {
-			SS = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		}
 
 		initStyle(StageStyle.TRANSPARENT);
 
@@ -45,18 +43,12 @@ public class TileHint extends Stage {
 		scene.setFill(Color.TRANSPARENT);
 		setScene(scene);
 
-		setOnShown(e -> {
-			owner.setAlwaysOnTop(true);
-		});
+		setOnShown(e -> owner.setAlwaysOnTop(true));
 		
-		setOnHidden(e-> {
-			owner.setAlwaysOnTop(false);
-		});
+		setOnHidden(e-> owner.setAlwaysOnTop(false));
 
 		opac = new SimpleDoubleProperty(0);
-		opac.addListener((obs, ov, nv) -> {
-			setOpacity(nv.doubleValue());
-		});
+		opac.addListener((obs, ov, nv) -> setOpacity(nv.doubleValue()));
 
 		show = new Timeline(60.0, new KeyFrame(Duration.seconds(.1), new KeyValue(opac, 1)));
 		hide = new Timeline(60.0, new KeyFrame(Duration.seconds(.1), new KeyValue(opac, 0)));
@@ -65,11 +57,11 @@ public class TileHint extends Stage {
 	public void show(State state) {
 		Runnable run = () -> {
 			tile = tileForState(state);
-			Rectangle rect = tile.tile;
-			setX(rect.x + padding);
-			setY(rect.y + padding);
-			setWidth(rect.width - padding * 2);
-			setHeight(rect.height - padding * 2);
+			Rectangle rect = tile.rect;
+			setX(rect.x + PADDING);
+			setY(rect.y + PADDING);
+			setWidth(rect.width - PADDING * 2);
+			setHeight(rect.height - PADDING * 2);
 
 			if (!isShowing())
 				super.show();
@@ -87,11 +79,14 @@ public class TileHint extends Stage {
 	}
 	
 	public static Tile tileForState(State state) {
-		double x = 0, y = 0, w = 0, h = 0;
-		double cx = SS.getCenterX();
-		double cy = SS.getCenterY();
-		double mw = SS.getWidth();
-		double mh = SS.getHeight();
+		double x = 0;
+		double y = 0;
+		double w = 0;
+		double h = 0;
+		double cx = screenSize.getCenterX();
+		double cy = screenSize.getCenterY();
+		double mw = screenSize.getWidth();
+		double mh = screenSize.getHeight();
 		switch (state) {
 		case N:
 			w = mw;
@@ -134,14 +129,13 @@ public class TileHint extends Stage {
 	}
 
 	public State getState(double x, double y) {
-		return State.StateForCoords(x, y, SS.getWidth(), SS.getHeight(), 100, 15);
+		return State.StateForCoords(x, y, screenSize.getWidth(), screenSize.getHeight(), 100, 15);
 	}
 
+	@Override
 	public void hide() {
 		tile = null;
-		hide.setOnFinished(e -> {
-			super.hide();
-		});
+		hide.setOnFinished(e -> super.hide());
 		if (!isShowing()) {
 			return;
 		}
@@ -156,11 +150,11 @@ public class TileHint extends Stage {
 	}
 	
 	public static class Tile {
-		Rectangle tile;
+		Rectangle rect;
 		boolean padded;
 		
 		public Tile(int x, int y, int w, int h, boolean padded) {
-			this.tile = new Rectangle(x, y, w, h);
+			this.rect = new Rectangle(x, y, w, h);
 			this.padded = padded;
 		}
 	}

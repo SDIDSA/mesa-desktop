@@ -14,7 +14,7 @@ public abstract class BarItem extends HBox {
 	
 	private Tooltip tip;
 
-	public BarItem(SessionPage session) {
+	protected BarItem(SessionPage session) {
 		super(4);
 		setMinHeight(48);
 		setAlignment(Pos.CENTER_LEFT);
@@ -34,7 +34,7 @@ public abstract class BarItem extends HBox {
 	}
 	
 	private static BarItem selected;
-	protected void setIcon(ItemIcon icon) {
+	protected synchronized void setIcon(ItemIcon icon) {
 		this.icon = icon;
 		icon.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if (!icon.isSelected()) {
@@ -53,11 +53,9 @@ public abstract class BarItem extends HBox {
 				action.run();
 			}
 			
-			if(selected != null) {
-				if(selected != this) {
-					selected.icon.unselect();
-					selected.pill.exit();
-				}
+			if(selected != null && selected != this) {
+				selected.icon.unselect();
+				selected.pill.exit();
 			}
 			
 

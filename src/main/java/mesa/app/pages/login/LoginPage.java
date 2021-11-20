@@ -26,7 +26,9 @@ public class LoginPage extends Page {
 
 	private Interpolator inter;
 
-	private double hideY = -100, hideScale = .7, duration = .4;
+	private double hideY = -100;
+	private double hideScale = .7;
+	private double duration = .4;
 
 	public LoginPage(Window window) {
 		super(window, new Dimension(970, 530));

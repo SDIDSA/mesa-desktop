@@ -32,7 +32,8 @@ public class Button extends StackPane {
 	private Label label;
 	private double radius;
 	private DoubleProperty radiusProperty;
-	private Timeline enter, exit;
+	private Timeline enter;
+	private Timeline exit;
 	private Runnable action;
 
 	private boolean ulOnHover = false;
@@ -40,7 +41,7 @@ public class Button extends StackPane {
 
 	private BooleanProperty loading;
 
-	public Button(Window window, String key, double radius, int width, int height) {
+	public Button(Window window, String key, double radius, double width, double height) {
 		this.radius = radius;
 		getStyleClass().addAll("butt", key);
 
@@ -58,9 +59,9 @@ public class Button extends StackPane {
 		label = new Label(window, key);
 
 		if (width < 50) {
-			prefWidthProperty().bind(Bindings.createDoubleBinding(()-> {
-				return label.getBoundsInLocal().getWidth() + (width * 2);
-			}, label.textProperty(), label.fontProperty()));
+			prefWidthProperty()
+					.bind(Bindings.createDoubleBinding(() -> label.getBoundsInLocal().getWidth() + (width * 2),
+							label.textProperty(), label.fontProperty()));
 		} else {
 			setPrefWidth(width);
 		}

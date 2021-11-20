@@ -33,7 +33,7 @@ public class ComboInput extends Input implements Localized {
 	private String acc = "";
 
 	public ComboInput(Window window, Font font, String key) {
-		super(window, font, key);
+		super(key);
 
 		this.key = key;
 
@@ -60,7 +60,7 @@ public class ComboInput extends Input implements Localized {
 
 		setFont(font);
 
-		items = new ArrayList<ComboMenuItem>();
+		items = new ArrayList<>();
 		popup = new ComboMenu(window, this);
 		setOnMouseClicked(e -> {
 			requestFocus();
@@ -69,7 +69,7 @@ public class ComboInput extends Input implements Localized {
 
 		focusedProperty().addListener((obs, ov, nv) -> {
 			focus(nv);
-			if (!nv) {
+			if (!nv.booleanValue()) {
 				popup.hide();
 			}
 		});

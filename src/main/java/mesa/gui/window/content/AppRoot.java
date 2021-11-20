@@ -12,7 +12,7 @@ import mesa.app.utils.Colors;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.window.Window;
-import mesa.gui.window.content.appBar.AppBar;
+import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.MoveResizeHelper;
 import mesa.gui.window.helpers.TileHint.Tile;
 
@@ -40,25 +40,15 @@ public class AppRoot extends BorderPane {
 
 		helper = new MoveResizeHelper(window, parent, 5);
 
-		addEventFilter(MouseEvent.MOUSE_MOVED, e -> {
-			helper.onMove(e);
-		});
+		addEventFilter(MouseEvent.MOUSE_MOVED, helper::onMove);
 
-		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
-			helper.onPress(e);
-		});
+		addEventFilter(MouseEvent.MOUSE_PRESSED, helper::onPress);
 
-		addEventFilter(MouseEvent.MOUSE_RELEASED, e -> {
-			helper.onRelease(e);
-		});
+		addEventFilter(MouseEvent.MOUSE_RELEASED, helper::onRelease);
 
-		setOnMouseDragged(e -> {
-			helper.onDrag(e);
-		});
+		setOnMouseDragged(helper::onDrag);
 
-		setOnMouseClicked(e -> {
-			helper.onClick(e);
-		});
+		setOnMouseClicked(helper::onClick);
 
 		parent.paddedProperty().addListener((obs, ov, nv) -> {
 			setFill(getBackground().getFills().get(0).getFill());

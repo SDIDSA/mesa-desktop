@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.userSettings;
+package mesa.app.pages.session.settings.content.user_settings;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -29,19 +29,16 @@ public class HideableOverviewField extends OverviewField {
 		Link reveal = new Link(settings.getWindow(), "overview_reveal");
 		reveal.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
-		reveal.setAction(() -> {
-			hidden.set(!hidden.get());
-		});
-		
-		value.textProperty().bind(Bindings.createStringBinding(()-> {
-			return hidden.get() ? hide.apply(full.get()) : full.get();
-		}, hidden, full));
+		reveal.setAction(() -> hidden.set(!hidden.get()));
+
+		value.textProperty().bind(
+				Bindings.createStringBinding(() -> hidden.get() ? hide.apply(full.get()) : full.get(), hidden, full));
 
 		addToValue(this.value, new FixedHSpace(4), reveal);
 
 		applyStyle(settings.getWindow().getStyl());
 	}
-	
+
 	@Override
 	public void applyStyle(Style style) {
 		if (value == null) {

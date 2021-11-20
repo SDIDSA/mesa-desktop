@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.userSettings;
+package mesa.app.pages.session.settings.content.user_settings;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,9 +28,11 @@ import mesa.gui.style.Styleable;
 
 public class ProfileOverview extends StackPane implements Styleable {
 
-	private StackPane back, pfpCont;
+	private StackPane back;
+	private StackPane pfpCont;
 	private VBox content;
-	private Text userName, id;
+	private Text userName;
+	private Text id;
 	private ColorIcon more;
 
 	private Button editUserProfile;
@@ -73,7 +75,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 		id.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 20).getFont());
 		id.setTranslateY(9);
 
-		more = new ColorIcon(settings.getSession().getWindow(), "more", 24, true);
+		more = new ColorIcon("more", 24);
 		more.setCursor(Cursor.HAND);
 		more.setTranslateY(11);
 		more.setPadding(4);
@@ -86,9 +88,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 			Clipboard.getSystemClipboard().setContent(cbc);
 		});
 
-		more.setAction(() -> {
-			menu.showPop(more, 15);
-		});
+		more.setAction(() -> menu.showPop(more, 15));
 
 		editUserProfile = new Button(settings.getSession().getWindow(), "edit_user_profile", 3.0, 16, 32);
 		editUserProfile.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));

@@ -8,7 +8,7 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.content.AppPreRoot;
 import mesa.gui.window.content.Scene;
-import mesa.gui.window.content.appBar.AppBar;
+import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.State;
 import mesa.gui.window.helpers.TileHint;
 

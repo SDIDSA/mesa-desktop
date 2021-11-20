@@ -18,7 +18,7 @@ public abstract class Page extends StackPane implements Styleable {
 	protected Window window;
 	protected Dimension minSize;
 
-	public Page(Window window, Dimension minSize) {
+	protected Page(Window window, Dimension minSize) {
 		this.window = window;
 		this.minSize = minSize;
 
@@ -45,7 +45,7 @@ public abstract class Page extends StackPane implements Styleable {
 		});
 
 		window.paddedProperty().addListener((obs, ov, nv) -> {
-			if (nv) {
+			if (nv.booleanValue()) {
 				clipBottom.setArcHeight(arc);
 				clipBottom.setArcWidth(arc);
 			} else {
@@ -57,7 +57,7 @@ public abstract class Page extends StackPane implements Styleable {
 		});
 
 		DoubleExpression height = window.heightProperty()
-				.subtract(Bindings.when(window.getRoot().paddedProperty()).then(AppPreRoot.PADDING * 2).otherwise(0))
+				.subtract(Bindings.when(window.getRoot().paddedProperty()).then(AppPreRoot.DEFAULT_PADDING * 2).otherwise(0))
 				.subtract(window.getAppBar().heightProperty()).subtract(window.getBorderWidth().multiply(2));
 
 		setMinHeight(0);
@@ -65,7 +65,7 @@ public abstract class Page extends StackPane implements Styleable {
 		maxHeightProperty().bind(height);
 	}
 
-	public Page(Window window) {
+	protected Page(Window window) {
 		this(window, Dimensions.DEFAULT_WINDOW_MINSIZE);
 	}
 

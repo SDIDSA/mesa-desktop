@@ -1,4 +1,4 @@
-package mesa.gui.window.content.appBar;
+package mesa.gui.window.content.app_bar;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,38 +18,28 @@ public class AppBar extends HBox implements Styleable {
 		setMinHeight(28);
 		setAlignment(Pos.CENTER);
 
-		icon = new ColorIcon(window, "mesa", 10);
+		icon = new ColorIcon("mesa", 10);
 		icon.setMouseTransparent(true);
 
 		HBox buttons = new HBox(4);
 		buttons.setAlignment(Pos.CENTER);
 
 		AppBarButton minimize = new AppBarButton(window, "minimize");
-		minimize.setOnMouseClicked(e -> {
-			window.setIconified(true);
-		});
+		minimize.setOnMouseClicked(e -> window.setIconified(true));
 
-		AppBarButton max_rest = new AppBarButton(window, "maximize");
-		max_rest.setOnMouseClicked(e -> {
-			window.maxRestore();
-		});
+		AppBarButton maxRest = new AppBarButton(window, "maximize");
+		maxRest.setOnMouseClicked(e -> window.maxRestore());
 
 		AppBarButton exit = new AppBarButton(window, "close");
-		exit.setOnMouseClicked(e -> {
-			window.close();
-		});
+		exit.setOnMouseClicked(e -> window.close());
 
-		buttons.getChildren().addAll(minimize, max_rest, exit);
+		buttons.getChildren().addAll(minimize, maxRest, exit);
 
 		getChildren().addAll(icon, new ExpandingHSpace(), buttons);
 
-		helper.addOnTile(() -> {
-			max_rest.setIcon("restore");
-		});
+		helper.addOnTile(() -> maxRest.setIcon("restore"));
 
-		helper.addOnUnTile(() -> {
-			max_rest.setIcon("maximize");
-		});
+		helper.addOnUnTile(() -> maxRest.setIcon("maximize"));
 		
 		applyStyle(window.getStyl());
 	}

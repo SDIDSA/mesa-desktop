@@ -16,7 +16,7 @@ public class Locale {
 	
 	private Locale(String name) {
 		this.name = name;
-		values = new HashMap<String, String>();
+		values = new HashMap<>();
 		String file = FileUtils.readFile("/locales/" + name + ".json");
 		JSONObject obj = new JSONObject(file);
 		

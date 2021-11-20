@@ -7,11 +7,17 @@ import org.json.JSONObject;
 
 public class Auth {
 	public static final JSONObject netErr = new JSONObject("{\"err\":[{\"key\":\"global\",\"value\":\"net_err\"}]}");
+	private static final String USER_ID = "user_id";
+	private static final String PASSWORD = "password";
+	
+	private Auth() {
+		
+	}
 	
 	public static void auth(String email, String password, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.LOGIN, "login with credentials", onResult,
 				new Param("email_phone", email),
-				new Param("password", hashPassword(password)));
+				new Param(PASSWORD, hashPassword(password)));
 	}
 
 	public static void register(String email, String username, String password, String birthDate,
@@ -19,35 +25,35 @@ public class Auth {
 		API.asyncPost(API.Auth.REGISTER, "create account", onResult,
 				new Param("email", email),
 				new Param("username", username),
-				new Param("password", hashPassword(password)),
+				new Param(PASSWORD, hashPassword(password)),
 				new Param("birth_date", birthDate));	
 	}
 	
-	public static void verifyEmail(String user_id, String code, Consumer<JSONObject> onResult) {
+	public static void verifyEmail(String userId, String code, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.VERIFY_EMAIL,  "verify email", onResult,
-				new Param("user_id", user_id),
+				new Param(USER_ID, userId),
 				new Param("verification_code", code));
 	}
 	
-	public static void editUsername(String user_id, String username, String password, Consumer<JSONObject> onResult) {
+	public static void editUsername(String userId, String username, String password, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.EDIT_USERNAME, "change username", onResult, 
-				new Param("user_id", user_id),
+				new Param(USER_ID, userId),
 				new Param("username", username),
-				new Param("password", hashPassword(password)));
+				new Param(PASSWORD, hashPassword(password)));
 	}
 	
-	public static void editEmail(String user_id, String email, String password, Consumer<JSONObject> onResult) {
+	public static void editEmail(String userId, String email, String password, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.EDIT_EMAIL, "change email", onResult, 
-				new Param("user_id", user_id),
+				new Param(USER_ID, userId),
 				new Param("email", email),
-				new Param("password", hashPassword(password)));
+				new Param(PASSWORD, hashPassword(password)));
 	}
 	
-	public static void changePassword(String user_id, String current_pass, String new_pass, Consumer<JSONObject> onResult) {
+	public static void changePassword(String userId, String currentPass, String newPass, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.CHANGE_PASSWORD, "change password", onResult,
-				new Param("user_id", user_id),
-				new Param("curr_pass", hashPassword(current_pass)),
-				new Param("new_pass", hashPassword(new_pass)));
+				new Param(USER_ID, userId),
+				new Param("curr_pass", hashPassword(currentPass)),
+				new Param("new_pass", hashPassword(newPass)));
 	}
 
 	public static String hashPassword(String password) {

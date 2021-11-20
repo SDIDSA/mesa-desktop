@@ -19,7 +19,6 @@ import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
-import mesa.gui.window.Window;
 
 public abstract class Input extends StackPane implements Styleable {
 
@@ -27,20 +26,21 @@ public abstract class Input extends StackPane implements Styleable {
 
 	private ObjectProperty<Color> borderProperty;
 
-	private Timeline focus, unfocus, enter, exit;
+	private Timeline focus;
+	private Timeline unfocus;
+	private Timeline enter;
+	private Timeline exit;
 
 	protected StringProperty value;
 
-	public Input(Window window, Font font, String key) {
+	protected Input(String key) {
 		getStyleClass().addAll("input", key);
 
 		value = new SimpleStringProperty("");
 
 		borderProperty = new SimpleObjectProperty<>();
 
-		borderProperty.addListener((obs, ov, nv) -> {
-			applyBorder(nv);
-		});
+		borderProperty.addListener((obs, ov, nv) -> applyBorder(nv));
 
 		setMinHeight(40);
 

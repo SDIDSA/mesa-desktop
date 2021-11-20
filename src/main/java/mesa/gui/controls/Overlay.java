@@ -19,7 +19,8 @@ public class Overlay extends StackPane {
 	private StackPane back;
 	private VBox content;
 	
-	private Timeline show, hide;
+	private Timeline show;
+	private Timeline hide;
 	
 	private ArrayList<Runnable> onShown;
 	

@@ -13,11 +13,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import mesa.app.pages.Page;
 import mesa.gui.window.Window;
-import mesa.gui.window.content.appBar.AppBar;
+import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.TileHint.Tile;
 
 public class AppPreRoot extends StackPane {
-	public static double PADDING = 15;
+	public static final double DEFAULT_PADDING = 15;
 
 	private BooleanProperty padded;
 	private DoubleProperty padding;
@@ -27,13 +27,11 @@ public class AppPreRoot extends StackPane {
 	public AppPreRoot(Window window) {
 		setBackground(Background.EMPTY);
 		padded = new SimpleBooleanProperty(true);
-		padding = new SimpleDoubleProperty(PADDING);
+		padding = new SimpleDoubleProperty(DEFAULT_PADDING);
 		
-		padding.bind(Bindings.when(padded).then(PADDING).otherwise(0));
+		padding.bind(Bindings.when(padded).then(DEFAULT_PADDING).otherwise(0));
 		
-		paddingProperty().bind(Bindings.createObjectBinding(()-> {
-			return new Insets(padding.get());
-		}, padding));
+		paddingProperty().bind(Bindings.createObjectBinding(()-> new Insets(padding.get()), padding));
 		
 		root = new AppRoot(window, this);
 		getChildren().setAll(root);

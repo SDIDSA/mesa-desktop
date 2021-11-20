@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.userSettings;
+package mesa.app.pages.session.settings.content.user_settings;
 
 import org.json.JSONArray;
 
@@ -28,7 +28,8 @@ import mesa.gui.style.Styleable;
 
 public class EditOverlay extends Overlay implements Styleable {
 	private VBox root;
-	private Label head, subHead;
+	private Label head;
+	private Label subHead;
 	private HBox bottom;
 	private Button cancel;
 	private ColorIcon closeIcon;
@@ -38,7 +39,7 @@ public class EditOverlay extends Overlay implements Styleable {
 
 	protected Form form;
 
-	public EditOverlay(Settings settings, String edit_what) {
+	public EditOverlay(Settings settings, String editWhat) {
 		root = new VBox();
 		root.setMaxWidth(440);
 
@@ -50,7 +51,7 @@ public class EditOverlay extends Overlay implements Styleable {
 		top.setPadding(new Insets(8, 0, 12, 0));
 		top.setAlignment(Pos.CENTER);
 
-		closeIcon = new ColorIcon(settings.getWindow(), "close", 16, true);
+		closeIcon = new ColorIcon("close", 16, true);
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
@@ -58,11 +59,11 @@ public class EditOverlay extends Overlay implements Styleable {
 		preTop.getChildren().addAll(top, closeIcon);
 
 		head = new Label(settings.getWindow(), "change_attr", new Font(24, FontWeight.BOLD));
-		head.addParam(0, "&" + edit_what);
+		head.addParam(0, "&" + editWhat);
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
 		subHead = new Label(settings.getWindow(), "enter_attr", new Font(15));
-		subHead.addParam(0, "&" + edit_what);
+		subHead.addParam(0, "&" + editWhat);
 		subHead.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
 		top.getChildren().addAll(head, subHead);

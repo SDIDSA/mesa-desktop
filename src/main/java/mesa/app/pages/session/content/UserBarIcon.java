@@ -22,7 +22,7 @@ public class UserBarIcon extends StackPane implements Styleable {
 		setPadding(new Insets(6));
 		setCursor(Cursor.HAND);
 	
-		icon = new ColorIcon(session.getWindow(), name, 20);
+		icon = new ColorIcon(name, 20);
 		icon.setMouseTransparent(true);
 		icon.setScaleX(.8);
 		icon.setScaleY(.8);

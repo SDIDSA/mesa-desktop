@@ -1,4 +1,4 @@
-package mesa.gui.window.content.appBar;
+package mesa.gui.window.content.app_bar;
 
 import javafx.beans.binding.Bindings;
 import javafx.scene.Cursor;
@@ -9,7 +9,7 @@ import mesa.gui.window.Window;
 
 public class AppBarButton extends ColorIcon implements Styleable {
 	public AppBarButton(Window window, String name) {
-		super(window, "window_" + name, 14);
+		super("window_" + name, 14);
 
 		setPickOnBounds(true);
 		setCursor(Cursor.HAND);

@@ -35,8 +35,8 @@ public class ContextMenu extends PopupControl implements Styleable, Localized {
 
 	public ContextMenu(Window window) {
 		this.owner = window;
-		items = new ArrayList<ContextMenuItem>();
-		separators = new ArrayList<StackPane>();
+		items = new ArrayList<>();
+		separators = new ArrayList<>();
 
 		root = new VBox(3);
 		root.setPadding(new Insets(8));
@@ -114,13 +114,9 @@ public class ContextMenu extends PopupControl implements Styleable, Localized {
 		ContextMenuItem i = new ContextMenuItem(this, item, fill);
 		i.setAction(onAction);
 
-		i.setOnMouseClicked(e -> {
-			i.fire();
-		});
+		i.setOnMouseClicked(e -> i.fire());
 
-		i.setOnMouseEntered(e -> {
-			select(i);
-		});
+		i.setOnMouseEntered(e -> select(i));
 		root.getChildren().add(i);
 		items.add(i);
 	}

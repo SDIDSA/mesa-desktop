@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import javafx.scene.input.MouseEvent;
 import mesa.gui.window.Window;
 import mesa.gui.window.content.AppPreRoot;
-import mesa.gui.window.content.appBar.AppBar;
+import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.TileHint.Tile;
 
 public class MoveResizeHelper {
@@ -99,10 +99,10 @@ public class MoveResizeHelper {
 			preTile();
 		}
 
-		win.setX(tile.tile.getX() - (tile.padded ? padding : 0));
-		win.setY(tile.tile.getY() - (tile.padded ? padding : 0));
-		win.setWidth(tile.tile.getWidth() + (tile.padded ? padding * 2 : 0));
-		win.setHeight(tile.tile.getHeight() + (tile.padded ? padding * 2 : 0));
+		win.setX(tile.rect.getX() - (tile.padded ? padding : 0));
+		win.setY(tile.rect.getY() - (tile.padded ? padding : 0));
+		win.setWidth(tile.rect.getWidth() + (tile.padded ? padding * 2 : 0));
+		win.setHeight(tile.rect.getHeight() + (tile.padded ? padding * 2 : 0));
 		parent.setPadded(tile.padded);
 		tiled = true;
 	}

@@ -27,7 +27,7 @@ public class Home extends Content implements Styleable {
 		UserBar sideBot = new UserBar(session);
 
 		sideTop.setAction(() -> {
-			//TODO
+			//TODO search for users, servers... etc
 		});
 
 		getSide().setTop(sideTop);

@@ -9,11 +9,10 @@ import javafx.scene.layout.StackPane;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
-import mesa.gui.window.Window;
 
 public abstract class ComboMenuItem extends StackPane implements Styleable {
 	
-	public ComboMenuItem(Window window) {
+	protected ComboMenuItem() {
 		setAlignment(Pos.CENTER_LEFT);
 		
 		setPadding(new Insets(15));

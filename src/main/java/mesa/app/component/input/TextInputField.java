@@ -3,7 +3,6 @@ package mesa.app.component.input;
 import javafx.scene.Node;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.TextInput;
-import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class TextInputField extends InputField {
@@ -35,10 +34,6 @@ public class TextInputField extends InputField {
 	
 	public void addPostField(Node...nodes) {
 		input.addPostField(nodes);
-	}
-
-	public void applyStyle(Style style) {
-		super.applyStyle(style);
 	}
 
 	@Override

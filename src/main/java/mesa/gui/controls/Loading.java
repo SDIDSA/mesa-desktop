@@ -10,7 +10,10 @@ import javafx.util.Duration;
 import javafx.scene.shape.Circle;
 
 public class Loading extends Pane {
-	private Circle c0, c1, c2, c3;
+	private Circle c0;
+	private Circle c1;
+	private Circle c2;
+	private Circle c3;
 	private Runnable init;
 	private Timeline animation;
 	

@@ -11,12 +11,12 @@ public class Icon extends ImageView implements Styleable {
 	private Window window;
 
 	private String name;
-	private int size;
+	private double size;
 	private boolean fullPath;
 
 	private ColorAdjust ca;
 
-	public Icon(Window window, String name, int size, boolean fullPath) {
+	public Icon(Window window, String name, double size, boolean fullPath) {
 		setPreserveRatio(true);
 		this.window = window;
 		this.name = name;
@@ -30,7 +30,7 @@ public class Icon extends ImageView implements Styleable {
 		applyStyle(window.getStyl());
 	}
 
-	public Icon(Window window, String name, int size) {
+	public Icon(Window window, String name, double size) {
 		this(window, name, size, false);
 	}
 

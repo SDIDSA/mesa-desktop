@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import mesa.api.Auth;
 import mesa.app.component.Form;
-import mesa.app.component.input.Conf_Code;
+import mesa.app.component.input.ConfCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Button;
@@ -29,7 +29,7 @@ public class Verify extends LoginSubPage {
 
 	private Label info;
 	private Button verify_now, later, verify;
-	private Conf_Code code;
+	private ConfCode code;
 
 	private Form form;
 	
@@ -45,7 +45,7 @@ public class Verify extends LoginSubPage {
 		VBox buttons = new VBox(10);
 		buttons.setAlignment(Pos.CENTER_RIGHT);
 
-		code = new Conf_Code(window, "verification_code", 500);
+		code = new ConfCode(window, "verification_code", 500);
 		
 		HBox bottom = new HBox();
 		Link resend = new Link(window, "resend_code", new Font(14));

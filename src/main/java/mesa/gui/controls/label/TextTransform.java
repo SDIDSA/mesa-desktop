@@ -85,6 +85,4 @@ public abstract class TextTransform implements Function<String, String> {
 			return sb.toString();
 		}
 	};
-
-	public abstract String apply(String param);
 }

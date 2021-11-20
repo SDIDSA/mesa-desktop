@@ -23,9 +23,9 @@ public class ScrollBar extends StackPane {
 	private double initPos;
 	private double initY;
 
-	public ScrollBar(int width, int padding) {
+	public ScrollBar(double width, double padding) {
 		setAlignment(Pos.TOP_CENTER);
-		int effectiveWidth = width - padding * 2;
+		double effectiveWidth = width - padding * 2;
 		
 		setPadding(new Insets(padding));
 		position = new SimpleDoubleProperty(0);
@@ -71,9 +71,7 @@ public class ScrollBar extends StackPane {
 		child.translateYProperty().bind(
 				positionProperty().multiply(child.heightProperty().subtract(parent.heightProperty())).multiply(-1));
 
-		child.addEventFilter(ScrollEvent.ANY, e-> {
-			scrollByPixels(e.getDeltaY(), child.getHeight());
-		});
+		child.addEventFilter(ScrollEvent.ANY, e-> scrollByPixels(e.getDeltaY(), child.getHeight()));
 		
 		prefHeightProperty().bind(parent.heightProperty());
 		

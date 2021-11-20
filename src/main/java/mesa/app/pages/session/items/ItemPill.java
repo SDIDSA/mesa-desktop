@@ -11,7 +11,9 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class ItemPill extends Rectangle implements Styleable {
-	private Timeline enter, exit, select;
+	private Timeline enter;
+	private Timeline exit;
+	private Timeline select;
 
 	public ItemPill(SessionPage session) {
 		setWidth(8);

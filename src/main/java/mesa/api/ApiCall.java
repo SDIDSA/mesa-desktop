@@ -1,5 +1,6 @@
 package mesa.api;
 
+import java.io.IOException;
 import java.util.function.Consumer;
 
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -14,32 +15,28 @@ import org.json.JSONObject;
 import javafx.application.Platform;
 
 public class ApiCall {
-	private static CloseableHttpClient client;
+	private static CloseableHttpClient client = HttpClients.createDefault();
 
 	private String path;
 	private Param[] params;
 
 	public ApiCall(String path, Param... params) {
-		if (client == null) {
-			client = HttpClients.createDefault();
-		}
-
 		this.path = path;
 		this.params = params;
 	}
 
-	public void execute(Consumer<JSONObject> onResult) throws Exception {
+	public void execute(Consumer<JSONObject> onResult) throws IOException  {
 		long start = System.currentTimeMillis();
 		
 		HttpPost httpPost = new HttpPost(path);
 		httpPost.addHeader("Accept", "application/json");
 
-		JSONObject params = new JSONObject();
+		JSONObject paramsToSend = new JSONObject();
 		for (Param param : ApiCall.this.params) {
-			params.put(param.getKey(), param.getValue());
+			paramsToSend.put(param.getKey(), param.getValue());
 		}
 
-		StringEntity requestEntity = new StringEntity(params.toString(), ContentType.APPLICATION_JSON);
+		StringEntity requestEntity = new StringEntity(paramsToSend.toString(), ContentType.APPLICATION_JSON);
 
 		httpPost.setEntity(requestEntity);
 
@@ -50,7 +47,7 @@ public class ApiCall {
 		long dur = System.currentTimeMillis() - start;
 		
 		if(dur < 600) {
-			//Thread.sleep(600 - dur);
+			//do nothing
 		}
 		
 		Platform.runLater(() -> onResult.accept(res));

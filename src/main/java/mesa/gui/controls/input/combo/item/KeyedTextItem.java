@@ -13,8 +13,7 @@ public abstract class KeyedTextItem extends ComboMenuItem implements Styleable, 
 	protected String key;
 	private Text lab;
 	
-	public KeyedTextItem(Window window, String key) {
-		super(window);
+	protected KeyedTextItem(Window window, String key) {
 		this.key = key;
 		
 		lab = new Text();

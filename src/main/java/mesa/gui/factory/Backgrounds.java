@@ -7,7 +7,10 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Paint;
 
 public class Backgrounds {
-
+	private Backgrounds() {
+		
+	}
+	
 	public static Background make(Paint fill, CornerRadii radius, Insets insets) {
 		return new Background(new BackgroundFill(fill, radius, insets));
 	}

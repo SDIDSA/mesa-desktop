@@ -7,7 +7,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import mesa.app.pages.session.settings.Settings;
-import mesa.app.pages.session.settings.content.userSettings.MyAccount;
+import mesa.app.pages.session.settings.content.user_settings.MyAccount;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
@@ -22,31 +22,31 @@ public class SettingsMenu extends VBox implements Styleable {
 		setMinWidth(218);
 		setAlignment(Pos.TOP_CENTER);
 		
-		separators = new ArrayList<Rectangle>();
+		separators = new ArrayList<>();
 		
-		Section user_settings = new Section(settings, "user_settings", true);
-		user_settings.addItem(new SectionItem(settings, "my_account", MyAccount.class));
-		user_settings.addItem(new SectionItem(settings, "user_profile"));
-		user_settings.addItem(new SectionItem(settings, "privacy_and_safety"));
-		user_settings.addItem(new SectionItem(settings, "authorized_apps"));
-		user_settings.addItem(new SectionItem(settings, "connections"));
+		Section userSettings = new Section(settings, "user_settings", true);
+		userSettings.addItem(new SectionItem(settings, "my_account", MyAccount.class));
+		userSettings.addItem(new SectionItem(settings, "user_profile"));
+		userSettings.addItem(new SectionItem(settings, "privacy_and_safety"));
+		userSettings.addItem(new SectionItem(settings, "authorized_apps"));
+		userSettings.addItem(new SectionItem(settings, "connections"));
 		
-		Section app_settings = new Section(settings, "app_settings");
-		app_settings.addItem(new SectionItem(settings, "appearance"));
-		app_settings.addItem(new SectionItem(settings, "accessibility"));
-		app_settings.addItem(new SectionItem(settings, "voice_and_video"));
-		app_settings.addItem(new SectionItem(settings, "text_and_images"));
-		app_settings.addItem(new SectionItem(settings, "notifications"));
-		app_settings.addItem(new SectionItem(settings, "shortcuts"));
-		app_settings.addItem(new SectionItem(settings, "language"));
+		Section appSettings = new Section(settings, "app_settings");
+		appSettings.addItem(new SectionItem(settings, "appearance"));
+		appSettings.addItem(new SectionItem(settings, "accessibility"));
+		appSettings.addItem(new SectionItem(settings, "voice_and_video"));
+		appSettings.addItem(new SectionItem(settings, "text_and_images"));
+		appSettings.addItem(new SectionItem(settings, "notifications"));
+		appSettings.addItem(new SectionItem(settings, "shortcuts"));
+		appSettings.addItem(new SectionItem(settings, "language"));
 		SectionItem os = new SectionItem(settings, "os_settings");
 		os.getLab().addParam(0, settings.getWindow().getOsName());
-		app_settings.addItem(os);
-		app_settings.addItem(new SectionItem(settings, "advanced"));
+		appSettings.addItem(os);
+		appSettings.addItem(new SectionItem(settings, "advanced"));
 		
-		addSection(user_settings);
+		addSection(userSettings);
 		separate();
-		addSection(app_settings);
+		addSection(appSettings);
 		
 		applyStyle(settings.getWindow().getStyl());
 	}

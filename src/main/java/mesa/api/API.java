@@ -27,10 +27,15 @@ public class API {
 		public static final String EDIT_EMAIL = PREFIX + "editEmail";
 
 		public static final String CHANGE_PASSWORD = PREFIX + "changePassword";
+		
+		private Auth() {
+			
+		}
 	}
 
 	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
 		new Thread() {
+			@Override
 			public void run() {
 				try {
 					new ApiCall(path, params).execute(result -> {
@@ -43,5 +48,9 @@ public class API {
 				}
 			}
 		}.start();
+	}
+
+	private API() {
+
 	}
 }

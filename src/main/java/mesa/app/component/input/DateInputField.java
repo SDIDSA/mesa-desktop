@@ -12,7 +12,9 @@ import mesa.gui.window.Window;
 public class DateInputField extends InputField implements Localized {
 	private Window window;
 	
-	private ComboInput month, day, year;
+	private ComboInput month;
+	private ComboInput day;
+	private ComboInput year;
 
 	public DateInputField(Window window, String key, double width) {
 		super(window, key, width);

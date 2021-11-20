@@ -10,7 +10,7 @@ public abstract class Content {
 	private ContentSide side;
 	private ContentMain main;
 	
-	public Content(SessionPage session) {
+	protected Content(SessionPage session) {
 		this.session = session;
 		
 		side = new ContentSide();
@@ -20,9 +20,7 @@ public abstract class Content {
 	public void setItem(BarItem item) {
 		this.item = item;
 		
-		item.setAction(()-> {
-			session.load(this);
-		});
+		item.setAction(()-> session.load(this));
 	}
 	
 	public BarItem getItem() {

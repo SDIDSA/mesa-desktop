@@ -1,6 +1,7 @@
 package mesa.app.component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -9,43 +10,41 @@ import javafx.scene.input.KeyCode;
 import mesa.app.component.input.InputField;
 import mesa.gui.controls.Button;
 
-public class Form extends ArrayList<InputField> {
-	static final long serialVersionUID = 6846840;
+public class Form {
+	private ArrayList<InputField> fields;
 
 	private Button defaultButton;
 
-	public Form(ArrayList<InputField> nodesOfType) {
-		super(nodesOfType);
-
-		forEach(input -> {
-			prepareField(input);
-		});
-	}
-
 	public Form() {
 		super();
+
+		fields = new ArrayList<>();
 	}
-	
+
+	public Form(List<InputField> nodesOfType) {
+		this();
+		fields.addAll(nodesOfType);
+		nodesOfType.forEach(this::prepareField);
+	}
+
 	private void prepareField(InputField input) {
 		input.addOnKeyPressed(pressed -> {
-			if (pressed.equals(KeyCode.ENTER)) {
-				if (defaultButton != null) {
-					defaultButton.fire();
-				}
+			if (pressed.equals(KeyCode.ENTER) && defaultButton != null) {
+				defaultButton.fire();
 			}
 		});
 	}
 
 	public void addAll(InputField... fields) {
 		for (InputField field : fields) {
-			add(field);
+			this.fields.add(field);
 			prepareField(field);
 		}
 	}
 
 	public boolean check() {
 		boolean success = true;
-		for (InputField field : this) {
+		for (InputField field : fields) {
 			if (field.getValue().isEmpty()) {
 				field.setError("field_required", null);
 				success = false;
@@ -68,15 +67,13 @@ public class Form extends ArrayList<InputField> {
 
 			String key = err.getString("key");
 
-			for (InputField field : this) {
+			for (InputField field : fields) {
 				if (field.getKey().equals(key)) {
 					String val = err.getString("value");
 					String plus = err.has("plus") ? err.getString("plus") : null;
 
-					if (plus != null) {
-						if (val.equals("username_invalid_char")) {
-							plus = " " + plus + "  " + Character.getName(plus.charAt(0));
-						}
+					if (plus != null && val.equals("username_invalid_char")) {
+						plus = " " + plus + "  " + Character.getName(plus.charAt(0));
 					}
 
 					field.setError(val, plus);
@@ -86,7 +83,7 @@ public class Form extends ArrayList<InputField> {
 	}
 
 	public void clearErrors() {
-		forEach(InputField::removeError);
+		fields.forEach(InputField::removeError);
 	}
 
 	public void setDefaultButton(Button button) {
@@ -101,7 +98,7 @@ public class Form extends ArrayList<InputField> {
 	}
 
 	public void setField(String key, String value) {
-		for (InputField field : this) {
+		for (InputField field : fields) {
 			if (field.getKey().equals(key)) {
 				field.setValue(value);
 				field.removeError();
@@ -110,7 +107,7 @@ public class Form extends ArrayList<InputField> {
 	}
 
 	public String get(String key) {
-		for (InputField field : this) {
+		for (InputField field : fields) {
 			if (field.getKey().equals(key)) {
 				return field.getValue();
 			}
@@ -120,12 +117,10 @@ public class Form extends ArrayList<InputField> {
 	}
 
 	/**
-     * Clear the content of all the input fields in this form
-     * using {@link InputField#clear()}
-     */
+	 * Clear the content of all the input fields in this form using
+	 * {@link InputField#clear()}
+	 */
 	public void clear() {
-		for (InputField field : this) {
-			field.clear();
-		}
+		fields.forEach(InputField::clear);
 	}
 }

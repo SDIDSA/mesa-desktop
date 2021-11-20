@@ -30,10 +30,12 @@ import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class Tooltip extends PopupControl implements Styleable {
-	public static final Direction UP = Direction.UP, RIGHT = Direction.RIGHT, DOWN = Direction.DOWN,
-			LEFT = Direction.LEFT;
+	public static final Direction UP = Direction.UP;
+	public static final Direction RIGHT = Direction.RIGHT;
+	public static final Direction DOWN = Direction.DOWN;
+	public static final Direction LEFT = Direction.LEFT;
 
-	private static DropShadow ds;
+	private static DropShadow ds = new DropShadow(15, Color.gray(0, .25));
 
 	protected Window owner;
 	private Pane root;
@@ -44,7 +46,8 @@ public class Tooltip extends PopupControl implements Styleable {
 	private StackPane content;
 	private Triangle arr;
 
-	private Timeline fadeIn, fadeOut;
+	private Timeline fadeIn;
+	private Timeline fadeOut;
 
 	private double offset;
 
@@ -52,10 +55,6 @@ public class Tooltip extends PopupControl implements Styleable {
 		this.owner = window;
 		this.direction = direction;
 		this.offset = offset;
-
-		if (ds == null) {
-			ds = new DropShadow(15, Color.gray(0, .25));
-		}
 
 		StackPane preroot = new StackPane();
 		preroot.setPadding(new Insets(15));
@@ -107,9 +106,7 @@ public class Tooltip extends PopupControl implements Styleable {
 						new KeyValue(root.scaleXProperty(), .7, Interpolator.EASE_BOTH),
 						new KeyValue(root.scaleYProperty(), .7, Interpolator.EASE_BOTH)));
 
-		fadeOut.setOnFinished(e -> {
-			hide();
-		});
+		fadeOut.setOnFinished(e -> hide());
 
 		preroot.getChildren().add(root);
 		
@@ -134,37 +131,49 @@ public class Tooltip extends PopupControl implements Styleable {
 		text.setText(txt);
 	}
 
-	private void showPop(Node node) {
+	protected void showPop(Node node) {
 		fadeOut.stop();
 		Runnable adjust = () -> {
 			Bounds bounds = node.getBoundsInLocal();
 			Bounds screenBounds = node.localToScreen(bounds);
+			
+			double[] pos = calcPos(screenBounds);
 
-			double x = direction.isHorizontal()
-					? (direction.isArrowFirst() ? (screenBounds.getMaxX() + offset) : (screenBounds.getMinX() - offset))
-					: screenBounds.getCenterX();
-
-			double y = direction.isVertical()
-					? (direction.isArrowFirst() ? (screenBounds.getMaxY() + offset) : (screenBounds.getMinY() - offset))
-					: screenBounds.getCenterY();
-
-			double px = x - (direction.isHorizontal() ? (direction.isArrowFirst() ? 0 : getWidth()) : getWidth() / 2);
-			double py = y - (direction.isVertical() ? (direction.isArrowFirst() ? 0 : getHeight()) : getHeight() / 2);
+			double px = pos[0];
+			double py = pos[1];
 
 			setX(px);
 			setY(py);
 			fadeIn.playFromStart();
 		};
-
 		if (isShowing()) {
 			adjust.run();
 		} else {
-			setOnShown(e -> {
-				adjust.run();
-			});
+			setOnShown(e -> adjust.run());
 			this.show(owner);
 		}
+	}
+	
+	private double[] calcPos(Bounds screenBounds) {
+		double[] res = new double[2];
+		
+		double xHor = (direction.isArrowFirst() ? (screenBounds.getMaxX() + offset) : (screenBounds.getMinX() - offset));
+		double x = direction.isHorizontal()
+				? xHor
+				: screenBounds.getCenterX();
 
+		double yVer = (direction.isArrowFirst() ? (screenBounds.getMaxY() + offset) : (screenBounds.getMinY() - offset));
+		double y = direction.isVertical()
+				? yVer
+				: screenBounds.getCenterY();
+
+		double pxHor = (direction.isArrowFirst() ? 0 : getWidth());
+		double pyVer = (direction.isArrowFirst() ? 0 : getHeight());
+		
+		res[0] = x - (direction.isHorizontal() ? pxHor : getWidth() / 2);
+		res[1] = y - (direction.isVertical() ? pyVer : getHeight() / 2);
+
+		return res;
 	}
 
 	public void fadeOut() {
@@ -172,7 +181,7 @@ public class Tooltip extends PopupControl implements Styleable {
 		fadeOut.playFromStart();
 	}
 
-	private static HashMap<Node, Installation> registered = new HashMap<Node, Installation>();
+	private static HashMap<Node, Installation> registered = new HashMap<>();
 
 	public static void install(Node node, Tooltip tooltip) {
 		Installation evs = registered.get(node);
@@ -218,17 +227,14 @@ public class Tooltip extends PopupControl implements Styleable {
 	}
 
 	static class Installation {
-		EventHandler<MouseEvent> onEnter, onExit;
+		EventHandler<MouseEvent> onEnter;
+		EventHandler<MouseEvent> onExit;
 		Node node;
 
 		public Installation(Node node, Tooltip tip) {
 			this.node = node;
-			this.onEnter = e -> {
-				tip.showPop(node);
-			};
-			this.onExit = e -> {
-				tip.fadeOut();
-			};
+			this.onEnter = e -> tip.showPop(node);
+			this.onExit = e -> tip.fadeOut();
 		}
 
 		public void install() {
