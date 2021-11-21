@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -17,7 +18,6 @@ import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.Link;
-import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.controls.space.Separator;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -34,7 +34,7 @@ public class Login extends LoginSubPage {
 	private Consumer<JSONObject> onSuccess;
 
 	private Form form;
-	
+
 	public Login(Window window) {
 		HBox root = new HBox(32);
 		setRoot(root);
@@ -42,19 +42,25 @@ public class Login extends LoginSubPage {
 		VBox left = new VBox(0);
 
 		loginButton = new Button(window, "login", 414);
+		VBox.setMargin(loginButton, new Insets(0, 0, 12, 0));
 
 		web = new Label(window, "welcome_back", new Font(Font.DEFAULT_FAMILY_MEDIUM, 24));
+		VBox.setMargin(web, new Insets(0, 0, 8, 0));
 		etsya = new Label(window, "etsya", new Font(16));
 		etsya.setOpacity(.7);
+		VBox.setMargin(etsya, new Insets(0, 0, 20, 0));
 
 		TextInputField email = new TextInputField(window, "email_phone", 414);
+		VBox.setMargin(email, new Insets(0, 0, 20, 0));
 		TextInputField password = new TextInputField(window, "password", 414, true);
+		VBox.setMargin(password, new Insets(0, 0, 4, 0));
 
 		Link recover = new Link(window, "recover", new Font(14));
+		VBox.setMargin(recover, new Insets(0, 0, 20, 0));
 
 		HBox bottom = new HBox(5);
 		bottom.setAlignment(Pos.CENTER_LEFT);
-		
+
 		needAcc = new Label(window, "need_account", new Font(14));
 		needAcc.setOpacity(.5);
 
@@ -62,8 +68,7 @@ public class Login extends LoginSubPage {
 
 		bottom.getChildren().addAll(needAcc, register);
 
-		left.getChildren().addAll(web, new FixedVSpace(8), etsya, new FixedVSpace(20), email, new FixedVSpace(20),
-				password, new FixedVSpace(4), recover, new FixedVSpace(20), loginButton, new FixedVSpace(12), bottom);
+		left.getChildren().addAll(web, etsya, email, password, recover, loginButton, bottom);
 
 		VBox right = new VBox(0);
 		right.setMinWidth(240);
@@ -79,16 +84,16 @@ public class Login extends LoginSubPage {
 		loginButton.setAction(() -> {
 			if (form.check()) {
 				loginButton.startLoading();
-				
+
 				Auth.auth(email.getValue(), password.getValue(), result -> {
-					if(result.has("err")) {
+					if (result.has("err")) {
 						form.applyErrors(result.getJSONArray("err"));
-					}else {
+					} else {
 						JSONObject user = result.getJSONObject("user");
 						String next = result.getString("next");
-						if(next.equals("verify")) {
+						if (next.equals("verify")) {
 							onVerify.accept(user);
-						}else if(next.equals("success")) {
+						} else if (next.equals("success")) {
 							onSuccess.accept(user);
 						}
 					}
@@ -106,7 +111,7 @@ public class Login extends LoginSubPage {
 
 		applyStyle(window.getStyl());
 	}
-	
+
 	public void loadData(JSONArray data) {
 		form.loadData(data);
 	}
@@ -114,11 +119,11 @@ public class Login extends LoginSubPage {
 	public void setOnRegister(Runnable onRegister) {
 		this.onRegister = onRegister;
 	}
-	
+
 	public void setOnVerify(Consumer<JSONObject> onVerify) {
 		this.onVerify = onVerify;
 	}
-	
+
 	public void setOnSuccess(Consumer<JSONObject> onSuccess) {
 		this.onSuccess = onSuccess;
 	}

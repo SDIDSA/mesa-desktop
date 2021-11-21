@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings;
+package mesa.app.pages.session.settings.content.user_settings.overview;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;

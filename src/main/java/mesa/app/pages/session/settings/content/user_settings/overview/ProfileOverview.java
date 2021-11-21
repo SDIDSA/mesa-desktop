@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings;
+package mesa.app.pages.session.settings.content.user_settings.overview;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import mesa.app.component.StatedPfp;
 import mesa.app.component.StatedPfp.PfpStatus;
 import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.settings.content.user_settings.FieldList;
 import mesa.data.User;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;

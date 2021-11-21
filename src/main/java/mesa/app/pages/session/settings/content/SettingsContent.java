@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content;
 
 import java.util.ArrayList;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -14,27 +15,28 @@ import mesa.gui.style.Styleable;
 public class SettingsContent extends VBox implements Styleable {
 	protected Font header = new Font(Font.DEFAULT_FAMILY, 20, FontWeight.BOLD);
 	private Settings settings;
-	
+
 	private ArrayList<Separator> separators;
-	
+
 	public SettingsContent(Settings settings) {
 		this.settings = settings;
-		
+
 		separators = new ArrayList<>();
 	}
-	
-	public void separate() {
+
+	public void separate(double margin) {
 		Separator sep = new Separator(Orientation.HORIZONTAL);
-		
+		setMargin(sep, new Insets(margin, 0, margin, 0));
+
 		getChildren().add(sep);
-		
+
 		styleSeparator(settings.getWindow().getStyl(), sep);
 	}
-	
+
 	private void styleSeparator(Style style, Separator sep) {
 		sep.setFill(style.getBackAccent());
 	}
-	
+
 	private void styleSeparators(Style style) {
 		separators.forEach(sep -> styleSeparator(style, sep));
 	}

@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings;
+package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import org.json.JSONArray;
 
@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.component.Form;
-import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.Overlay;
@@ -26,22 +26,23 @@ import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class EditOverlay extends Overlay implements Styleable {
+public class BasicOverlay extends Overlay implements Styleable {
 	private VBox root;
-	private Label head;
-	private Label subHead;
 	private HBox bottom;
 	private Button cancel;
 	private ColorIcon closeIcon;
 
+	protected Label head;
+	protected Label subHead;
+	
 	protected Button done;
 	protected VBox center;
 
 	protected Form form;
 
-	public EditOverlay(Settings settings, String editWhat) {
+	public BasicOverlay(SessionPage session, double width) {
 		root = new VBox();
-		root.setMaxWidth(440);
+		root.setMaxWidth(width);
 
 		StackPane preTop = new StackPane();
 		preTop.setAlignment(Pos.TOP_RIGHT);
@@ -58,12 +59,10 @@ public class EditOverlay extends Overlay implements Styleable {
 
 		preTop.getChildren().addAll(top, closeIcon);
 
-		head = new Label(settings.getWindow(), "change_attr", new Font(24, FontWeight.BOLD));
-		head.addParam(0, "&" + editWhat);
+		head = new Label(session.getWindow(), "", new Font(24, FontWeight.BOLD));
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
-		subHead = new Label(settings.getWindow(), "enter_attr", new Font(15));
-		subHead.addParam(0, "&" + editWhat);
+		subHead = new Label(session.getWindow(), "", new Font(15));
 		subHead.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
 		top.getChildren().addAll(head, subHead);
@@ -74,15 +73,15 @@ public class EditOverlay extends Overlay implements Styleable {
 		root.getChildren().addAll(preTop, center);
 
 		bottom = new HBox(8);
-		bottom.setMaxWidth(440);
+		bottom.setMaxWidth(width);
 		bottom.setPadding(new Insets(16));
 
-		cancel = new Button(settings.getWindow(), "cancel", 3, 24, 38);
+		cancel = new Button(session.getWindow(), "cancel", 3, 24, 38);
 		cancel.setFont(new Font(14, FontWeight.BOLD));
 		cancel.setUlOnHover(true);
 		cancel.setAction(this::hide);
 
-		done = new Button(settings.getWindow(), "done", 3, 24, 38);
+		done = new Button(session.getWindow(), "done", 3, 24, 38);
 		done.setFont(new Font(14, FontWeight.BOLD));
 
 		bottom.getChildren().addAll(new ExpandingHSpace(), cancel, done);
@@ -92,7 +91,11 @@ public class EditOverlay extends Overlay implements Styleable {
 		form = new Form();
 		form.setDefaultButton(done);
 
-		applyStyle(settings.getWindow().getStyl());
+		applyStyle(session.getWindow().getStyl());
+	}
+	
+	public BasicOverlay(SessionPage session) {
+		this(session, 440);
 	}
 
 	public void applyErrors(JSONArray errors) {

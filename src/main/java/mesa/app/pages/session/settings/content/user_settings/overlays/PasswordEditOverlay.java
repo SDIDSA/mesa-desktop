@@ -1,7 +1,7 @@
-package mesa.app.pages.session.settings.content.user_settings;
+package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import mesa.app.component.input.TextInputField;
-import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.SessionPage;
 
 public class PasswordEditOverlay extends EditOverlay {
 
@@ -9,11 +9,11 @@ public class PasswordEditOverlay extends EditOverlay {
 	private TextInputField newPass;
 	private TextInputField confNewPass;
 
-	public PasswordEditOverlay(Settings settings) {
-		super(settings, "password");
-		currPass = new TextInputField(settings.getWindow(), "current_password", 408, true);
-		newPass = new TextInputField(settings.getWindow(), "new_password", 408, true);
-		confNewPass = new TextInputField(settings.getWindow(), "confirm_new_password", 408, true);
+	public PasswordEditOverlay(SessionPage session) {
+		super(session, "password");
+		currPass = new TextInputField(session.getWindow(), "current_password", 408, true);
+		newPass = new TextInputField(session.getWindow(), "new_password", 408, true);
+		confNewPass = new TextInputField(session.getWindow(), "confirm_new_password", 408, true);
 		center.getChildren().addAll(currPass, newPass, confNewPass);
 		
 		form.addAll(currPass, newPass, confNewPass);

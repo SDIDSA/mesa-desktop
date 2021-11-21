@@ -16,6 +16,7 @@ import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.Link;
+import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.style.Style;
@@ -134,19 +135,7 @@ public class Verify extends LoginSubPage {
 	}
 
 	private String hideMail(String email) {
-		String[] parts = email.split("@");
-
-		StringBuilder res = new StringBuilder();
-
-		for (int i = 0; i < parts[0].length(); i++) {
-			if (i == 0 || i == parts[0].length() - 1) {
-				res.append(parts[0].charAt(i));
-			} else {
-				res.append('*');
-			}
-		}
-
-		return res.toString() + "@" + parts[1];
+		return TextTransform.HIDE_EMAIL.apply(email);
 	}
 
 	@Override

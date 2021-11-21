@@ -50,6 +50,10 @@ public abstract class TextTransform implements UnaryOperator<String> {
 		public String apply(String param) {
 			StringBuilder res = new StringBuilder();
 
+			if(param.isEmpty()) {
+				return param;
+			}
+			
 			res.append(Character.toUpperCase(param.charAt(0)));
 
 			res.append(param.substring(1).toLowerCase());

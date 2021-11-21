@@ -106,6 +106,8 @@
 	
 	"2_fact_auth": "Two-factor authentication",
 	"2_fact_auth_verify_account": "You must verify your account before you can enable two-factor authentication.",
+	"2_fact_auth_note": "Protect your Discord account with an extra layer of security. Once configured, you'll be required to enter both your password and an authentication code from your mobile phone in order to sign in.",
+	"2_fact_auth_enable": "Enable Two-Factor Auth",
 	
 	"account_removal": "Account Removal",
 	"disable_note": "Disabling your account means you can recover it at any time after taking this action.",

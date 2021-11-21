@@ -6,7 +6,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextFlow;
+import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.settings.content.user_settings.overlays.VerifyEmailOverlay;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
@@ -23,6 +25,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 	private Label head;
 	private Label body;
 	private Button resend;
+	private Button verify;
 
 	public UnverifiedEmail(Settings settings) {
 		root = new HBox(20);
@@ -43,7 +46,33 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		resend = new Button(settings.getWindow(), "resend_verification_email", 3.0, 16, 32);
 		resend.setFont(new Font(13, FontWeight.BOLD));
 
-		right.getChildren().addAll(head, new FixedVSpace(8), preBody, new FixedVSpace(18), resend);
+		verify = new Button(settings.getWindow(), "verify_now", 3.0, 16, 32);
+		verify.setFont(new Font(13, FontWeight.BOLD));
+
+		VerifyEmailOverlay verifyOverlay = new VerifyEmailOverlay(settings.getSession());
+		
+		verifyOverlay.setAction(() -> {
+			verifyOverlay.startLoading();
+			
+			Auth.verifyEmail(settings.getUser().getId(), verifyOverlay.getValue(), result-> {
+				if(result.has("err")) {
+					verifyOverlay.applyErrors(result.getJSONArray("err"));
+				}else {
+					settings.getUser().setEmailConfirmed(true);
+					verifyOverlay.hide();
+				}
+				
+				verifyOverlay.stopLoading();
+			});
+		});
+		
+		verify.setAction(() -> verifyOverlay.show(settings.getSession()));
+		
+		HBox buttons = new HBox(16);
+		
+		buttons.getChildren().addAll(resend, verify);
+		
+		right.getChildren().addAll(head, new FixedVSpace(8), preBody, new FixedVSpace(18), buttons);
 
 		root.getChildren().addAll(icon, right);
 
@@ -62,5 +91,8 @@ public class UnverifiedEmail extends VBox implements Styleable {
 
 		resend.setTextFill(style.getText1());
 		resend.setFill(style == Style.DARK ? Color.web("#4f545c") : Color.TRANSPARENT);
+		
+		verify.setTextFill(style.getText1());
+		verify.setFill(style.getAccent());
 	}
 }

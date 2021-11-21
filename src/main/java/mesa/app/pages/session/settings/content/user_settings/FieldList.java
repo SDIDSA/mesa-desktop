@@ -12,6 +12,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.settings.content.user_settings.overlays.KeyValueEditOverlay;
+import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
+import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
 import mesa.app.utils.Colors;
 import mesa.data.User;
 import mesa.gui.controls.Button;
@@ -52,8 +55,8 @@ public class FieldList extends VBox implements Styleable {
 		HideableOverviewField phone = new HideableOverviewField(settings, "phone", user.phoneProperty(),
 				TextTransform.HIDE_PHONE);
 
-		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings, "username");
-		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings, "email_address");
+		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings.getSession(), "username");
+		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings.getSession(), "email_address");
 
 		editUsername.addOnShown(0, () -> editUsername.setValue(user.getUsername()));
 
