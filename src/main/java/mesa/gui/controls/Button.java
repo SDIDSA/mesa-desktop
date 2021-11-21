@@ -19,6 +19,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.StrokeType;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
@@ -68,6 +69,7 @@ public class Button extends StackPane {
 
 		back = new Rectangle();
 		back.setFill(Color.TRANSPARENT);
+		back.setStrokeType(StrokeType.INSIDE);
 
 		back.arcWidthProperty().bind(radiusProperty.multiply(2));
 		back.arcHeightProperty().bind(radiusProperty.multiply(2));
@@ -216,6 +218,10 @@ public class Button extends StackPane {
 
 		exit = new Timeline(
 				new KeyFrame(Duration.seconds(.15), new KeyValue(back.fillProperty(), fill, Interpolator.EASE_BOTH)));
+	}
+	
+	public void setStroke(Color fill) {
+		back.setStroke(fill);
 	}
 
 	public void setRadius(double radius) {

@@ -94,7 +94,6 @@
 	"overview_remove": "Remove",
 	
 	"change_attr": "Change your {$0}",
-	
 	"enter_attr": "Enter a new {$0} and your existing password",
 	"current_password": "Current Password",
 	"cancel": "Cancel",
@@ -103,6 +102,14 @@
 	"change_pass" : "Change Password",
 	"new_password": "New Password",
 	"confirm_new_password": "Confirm New Password",
-	"passwords_no_match": "Passwords do not match!"
+	"passwords_no_match": "Passwords do not match!",
 	
+	"2_fact_auth": "Two-factor authentication",
+	"2_fact_auth_verify_account": "You must verify your account before you can enable two-factor authentication.",
+	
+	"account_removal": "Account Removal",
+	"disable_note": "Disabling your account means you can recover it at any time after taking this action.",
+	
+	"disable_account": "Disable Account",
+	"delete_account": "Delete Account"
 }
