@@ -28,7 +28,7 @@ import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 @ExtendWith(ApplicationExtension.class)
-public class RegisterTest {
+class RegisterTest {
 
 	@Init
 	private void init() throws TimeoutException {
@@ -121,8 +121,6 @@ public class RegisterTest {
 			assertThatErrorIs(field, null);
 		}
 
-		sleep(200);
-
 		Assertions.assertThat(robot.lookup(".butt.login").queryAllAs(Button.class).size()).isEqualTo(1);
 	}
 	
@@ -137,16 +135,13 @@ public class RegisterTest {
 
 	private void clickLink(FxRobot robot, String name) {
 		robot.clickOn(".link." + name, MouseButton.PRIMARY);
-		sleep(200);
 	}
 
 	private void contin(FxRobot robot) {
 		Button contin = robot.lookup(".butt.continue").query();
 		robot.clickOn(contin, MouseButton.PRIMARY);
-		sleep(50);
 
 		waitFor(contin.loadingProperty(), false);
-		sleep(50);
 	}
 
 	private void assertThatErrorIs(FxRobot robot, String query, String expectedError) {
@@ -193,14 +188,6 @@ public class RegisterTest {
 				}
 			});
 		} catch (TimeoutException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void sleep(long dur) {
-		try {
-			Thread.sleep(dur);
-		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}

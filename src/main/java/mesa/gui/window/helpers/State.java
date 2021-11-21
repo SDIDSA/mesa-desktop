@@ -12,13 +12,22 @@ public enum State {
 		this.curs = curs;
 	}
 
-	public static State StateForCoords(double x, double y, double w, double h, double min, double max) {
+	public static State stateForCoords(double x, double y, double w, double h, double min, double max) {
 		boolean north = y <= max && y >= -min;
 		boolean west = x <= max && x >= -min;
 		boolean south = y <= h + min && y >= h - max;
 		boolean east = x <= w + min && x >= w - max;
+		
+		State westState = west ? State.W : State.D;
+		State eastState = east ? State.E : westState;
+		
+		State southEastState = east ? State.SE : State.S;
+		State southWestState = west ? State.SW : southEastState;
+		State southState = south ? southWestState : eastState;
 
-		return north ? west ? State.NW : east ? State.NE : State.N
-				: south ? west ? State.SW : east ? State.SE : State.S : east ? State.E : west ? State.W : State.D;
+		State northEastState = east ? State.NE : State.N;
+		State northWestState = west ? State.NW : northEastState;
+				
+		return north ? northWestState : southState;
 	}
 }

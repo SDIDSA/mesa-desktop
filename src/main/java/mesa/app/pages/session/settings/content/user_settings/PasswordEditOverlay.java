@@ -5,7 +5,9 @@ import mesa.app.pages.session.settings.Settings;
 
 public class PasswordEditOverlay extends EditOverlay {
 
-	private TextInputField currPass, newPass, confNewPass;
+	private TextInputField currPass;
+	private TextInputField newPass;
+	private TextInputField confNewPass;
 
 	public PasswordEditOverlay(Settings settings) {
 		super(settings, "password");

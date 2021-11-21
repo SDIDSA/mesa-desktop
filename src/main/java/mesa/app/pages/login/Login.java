@@ -36,8 +36,6 @@ public class Login extends LoginSubPage {
 	private Form form;
 	
 	public Login(Window window) {
-		super(window);
-
 		HBox root = new HBox(32);
 		setRoot(root);
 

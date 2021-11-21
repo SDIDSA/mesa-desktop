@@ -9,7 +9,6 @@ import javafx.animation.Timeline;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -133,11 +132,8 @@ public class Tooltip extends PopupControl implements Styleable {
 
 	protected void showPop(Node node) {
 		fadeOut.stop();
-		Runnable adjust = () -> {
-			Bounds bounds = node.getBoundsInLocal();
-			Bounds screenBounds = node.localToScreen(bounds);
-			
-			double[] pos = calcPos(screenBounds);
+		Runnable adjust = () -> {			
+			double[] pos = direction.calcPos(this, node, offset);
 
 			double px = pos[0];
 			double py = pos[1];
@@ -152,28 +148,6 @@ public class Tooltip extends PopupControl implements Styleable {
 			setOnShown(e -> adjust.run());
 			this.show(owner);
 		}
-	}
-	
-	private double[] calcPos(Bounds screenBounds) {
-		double[] res = new double[2];
-		
-		double xHor = (direction.isArrowFirst() ? (screenBounds.getMaxX() + offset) : (screenBounds.getMinX() - offset));
-		double x = direction.isHorizontal()
-				? xHor
-				: screenBounds.getCenterX();
-
-		double yVer = (direction.isArrowFirst() ? (screenBounds.getMaxY() + offset) : (screenBounds.getMinY() - offset));
-		double y = direction.isVertical()
-				? yVer
-				: screenBounds.getCenterY();
-
-		double pxHor = (direction.isArrowFirst() ? 0 : getWidth());
-		double pyVer = (direction.isArrowFirst() ? 0 : getHeight());
-		
-		res[0] = x - (direction.isHorizontal() ? pxHor : getWidth() / 2);
-		res[1] = y - (direction.isVertical() ? pyVer : getHeight() / 2);
-
-		return res;
 	}
 
 	public void fadeOut() {

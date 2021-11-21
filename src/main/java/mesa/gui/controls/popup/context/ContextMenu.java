@@ -166,20 +166,17 @@ public class ContextMenu extends PopupControl implements Styleable, Localized {
 		setOnShown(e -> {
 			Bounds bounds = node.getBoundsInLocal();
 			Bounds screenBounds = node.localToScreen(bounds);
-			double px = 0, py = 0;
+			double px = 0;
+			double py = 0;
 
 			if (direction == null) {
 				px = screenBounds.getMaxX() - 15 + offset;
 				py = screenBounds.getMinY() - 15;
 			} else {
-				double x = direction.isHorizontal() ? (direction.isArrowFirst() ? (screenBounds.getMaxX() + offset)
-						: (screenBounds.getMinX() - offset)) : screenBounds.getCenterX();
+				double[] pos = direction.calcPos(this, node, offset);
 
-				double y = direction.isVertical() ? (direction.isArrowFirst() ? (screenBounds.getMaxY() + offset)
-						: (screenBounds.getMinY() - offset)) : screenBounds.getCenterY();
-
-				px = x - (direction.isHorizontal() ? (direction.isArrowFirst() ? 0 : getWidth()) : getWidth() / 2);
-				py = y - (direction.isVertical() ? (direction.isArrowFirst() ? 0 : getHeight()) : getHeight() / 2);
+				px = pos[0];
+				py = pos[1];
 			}
 
 			setX(px);

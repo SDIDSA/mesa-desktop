@@ -19,7 +19,8 @@ public class ItemIcon extends StackPane {
 
 	private boolean selected = false;
 	
-	private Timeline do_rad, undo_rad;
+	private Timeline doRad;
+	private Timeline undoRad;
 	public ItemIcon(SessionPage session) {
 		this.session = session;
 		setMinSize(SIZE, SIZE);
@@ -31,25 +32,25 @@ public class ItemIcon extends StackPane {
 		clip.setArcHeight(SIZE);
 		clip.setArcWidth(SIZE);
 
-		do_rad = new Timeline(new KeyFrame(Duration.seconds(.1),
+		doRad = new Timeline(new KeyFrame(Duration.seconds(.1),
 				new KeyValue(clip.arcHeightProperty(), HOV_RAD, Interpolator.EASE_BOTH),
 				new KeyValue(clip.arcWidthProperty(), HOV_RAD, Interpolator.EASE_BOTH)));
 		
-		undo_rad = new Timeline(new KeyFrame(Duration.seconds(.1),
+		undoRad = new Timeline(new KeyFrame(Duration.seconds(.1),
 				new KeyValue(clip.arcHeightProperty(), SIZE, Interpolator.EASE_BOTH),
 				new KeyValue(clip.arcWidthProperty(), SIZE, Interpolator.EASE_BOTH)));
 
 		addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if(!selected) {
-				undo_rad.stop();
-				do_rad.playFromStart();
+				undoRad.stop();
+				doRad.playFromStart();
 			}
 		});
 		
 		addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
 			if(!selected) {
-				do_rad.stop();
-				undo_rad.playFromStart();
+				doRad.stop();
+				undoRad.playFromStart();
 			}
 		});
 		
@@ -62,8 +63,8 @@ public class ItemIcon extends StackPane {
 	
 	public void unselect() {
 		selected = false;
-		do_rad.stop();
-		undo_rad.playFromStart();
+		doRad.stop();
+		undoRad.playFromStart();
 	}
 	
 	public boolean isSelected() {

@@ -18,7 +18,7 @@ public class Label extends Text implements Localized {
 	private String key;
 	private Font font;
 
-	private ArrayList<String> params = new ArrayList<String>();
+	private ArrayList<String> params = new ArrayList<>();
 
 	public Label(Window window, String key, Font font) {
 		super();

@@ -9,11 +9,10 @@ import javafx.scene.paint.Color;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
-import mesa.gui.window.Window;
 
 public class LoginSubPage extends StackPane implements Styleable {
 
-	public LoginSubPage(Window window) {
+	public LoginSubPage() {
 		setPadding(new Insets(32));
 		setEffect(new DropShadow(8, Color.gray(0, .25)));
 	}

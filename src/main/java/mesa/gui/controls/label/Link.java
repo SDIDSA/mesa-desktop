@@ -28,13 +28,12 @@ public class Link extends StackPane {
 		label.underlineProperty().bind(hoverProperty());
 		getChildren().add(label);
 
-		prefWidthProperty().bind(Bindings.createDoubleBinding(() -> {
-			return label.getBoundsInLocal().getWidth() + (isFocused() ? 8 : 0);
-		}, label.boundsInLocalProperty(), focusedProperty()));
+		prefWidthProperty()
+				.bind(Bindings.createDoubleBinding(() -> label.getBoundsInLocal().getWidth() + (isFocused() ? 8 : 0),
+						label.boundsInLocalProperty(), focusedProperty()));
 
-		prefHeightProperty().bind(Bindings.createDoubleBinding(() -> {
-			return label.getBoundsInLocal().getHeight() + 4;
-		}, label.boundsInLocalProperty(), focusedProperty()));
+		prefHeightProperty().bind(Bindings.createDoubleBinding(() -> label.getBoundsInLocal().getHeight() + 4,
+				label.boundsInLocalProperty(), focusedProperty()));
 
 		setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);

@@ -3,6 +3,7 @@ package mesa.gui.controls;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
+
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import mesa.gui.exception.ErrorHandler;
@@ -95,7 +96,7 @@ public class Font {
 	private static void loadFont(String name) {
 		try {
 			File parent = new File(URLDecoder.decode(Font.class
-					.getResource("/fonts/" + name + "/" + name + "-Regular.ttf").getFile(),
+					.getResource(String.join("/", "/fonts", DEFAULT_FAMILY, DEFAULT_FAMILY + "-Regular.ttf")).getFile(),
 					"utf-8")).getParentFile();
 			for (File font : parent.listFiles()) {
 				javafx.scene.text.Font.loadFont(new FileInputStream(font), 14);

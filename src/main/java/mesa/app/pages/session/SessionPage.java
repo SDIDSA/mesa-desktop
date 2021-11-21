@@ -29,19 +29,19 @@ public class SessionPage extends Page {
 
 	private double duration = .4;
 
-	private StackPane side, main;
+	private StackPane side;
+	private StackPane main;
 	
 	private HBox root;
 	private Settings settings;
 	
-	private Timeline showSettings, hideSettings;
+	private Timeline showSettings;
+	private Timeline hideSettings;
 	
-	private Interpolator inter;
+	private Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
 	
 	public SessionPage(Window window) {
 		super(window, new Dimension(970, 530));
-
-		inter = new SplineInterpolator(0.68, -0.6, 0.32, 1.6);
 		
 		user = new User(window.getJsonData("user"));
 		

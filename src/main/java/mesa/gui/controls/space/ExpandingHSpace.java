@@ -5,7 +5,7 @@ import javafx.scene.layout.Priority;
 
 public class ExpandingHSpace extends ExpandingSpace {
 	public ExpandingHSpace(Priority priority) {
-		super(Orientation.HORIZONTAL);
+		super(Orientation.HORIZONTAL, priority);
 	}
 	
 

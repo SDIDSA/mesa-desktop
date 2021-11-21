@@ -7,7 +7,7 @@ import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.content.AppPreRoot;
-import mesa.gui.window.content.Scene;
+import mesa.gui.window.content.TransparentScene;
 import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.State;
 import mesa.gui.window.helpers.TileHint;
@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Window extends Stage implements Styleable, Localized {
-	private HashMap<String, Object> data = new HashMap<String, Object>();
+	private HashMap<String, Object> data = new HashMap<>();
 	
 	private DoubleProperty borderWidth;
 	
@@ -49,7 +49,7 @@ public class Window extends Stage implements Styleable, Localized {
 		getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/icon_64.png")));
 		getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/icon_128.png")));
 		
-		Scene scene = new Scene(root, 500, 500);
+		TransparentScene scene = new TransparentScene(root, 500, 500);
 		
 		setScene(scene);
 	}
@@ -64,7 +64,6 @@ public class Window extends Stage implements Styleable, Localized {
 	}
 
 	public void loadPage(Page page) {
-		System.gc();
 		page.setup(this);
 		root.setContent(page);
 	}
@@ -149,10 +148,10 @@ public class Window extends Stage implements Styleable, Localized {
 	public JSONObject getJsonData(String key) {
 		Object obj = data.get(key);
 		
-		if(obj != null && obj instanceof JSONObject) {
-			return (JSONObject) obj;
+		if(obj instanceof JSONObject jsonObject) {
+			return jsonObject;
 		}else {
-			throw new RuntimeException("no json data was found at key " + key);
+			throw new IllegalStateException("no json data was found at key " + key);
 		}
 	}
 	

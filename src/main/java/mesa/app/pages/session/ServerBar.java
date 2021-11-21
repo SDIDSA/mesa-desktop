@@ -23,7 +23,7 @@ public class ServerBar extends VBox implements Styleable {
 		setPadding(new Insets(4, 0, 0, 0));
 		setMinWidth(72);
 
-		seps = new ArrayList<Rectangle>();
+		seps = new ArrayList<>();
 		Home home = new Home(session);
 		addContent(home);
 		separate();
@@ -50,8 +50,6 @@ public class ServerBar extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		seps.forEach(sep -> {
-			sep.setFill(style.getBack2());
-		});
+		seps.forEach(sep -> sep.setFill(style.getBack2()));
 	}
 }

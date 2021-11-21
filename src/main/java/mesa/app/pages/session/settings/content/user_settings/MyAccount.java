@@ -15,7 +15,8 @@ import mesa.gui.window.Window;
 
 public class MyAccount extends SettingsContent {
 
-	private Label myAccount, passAuth;
+	private Label myAccountLab;
+	private Label passAuth;
 
 	private Button changePass;
 
@@ -28,7 +29,7 @@ public class MyAccount extends SettingsContent {
 
 			UnverifiedEmail unverifiedEmail = new UnverifiedEmail(settings);
 
-			myAccount = new Label(window, "my_account", header);
+			myAccountLab = new Label(window, "my_account", header);
 
 			passAuth = new Label(window, "pass_&_auth", header);
 
@@ -53,16 +54,16 @@ public class MyAccount extends SettingsContent {
 						});
 			});
 
-			getChildren().addAll(myAccount, new FixedVSpace(20));
+			getChildren().addAll(myAccountLab, new FixedVSpace(20));
 
 			if (!user.isEmailConfirmed()) {
 				getChildren().add(unverifiedEmail);
 			}
 
 			user.emailConfirmedProperty().addListener((obs, ov, nv) -> {
-				if (nv && getChildren().contains(unverifiedEmail)) {
+				if (nv.booleanValue() && getChildren().contains(unverifiedEmail)) {
 					getChildren().remove(unverifiedEmail);
-				} else if (!nv && !getChildren().contains(unverifiedEmail)) {
+				} else if (!nv.booleanValue() && !getChildren().contains(unverifiedEmail)) {
 					getChildren().add(2, unverifiedEmail);
 				}
 			});
@@ -82,7 +83,7 @@ public class MyAccount extends SettingsContent {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 
-		myAccount.setFill(style.getText1());
+		myAccountLab.setFill(style.getText1());
 		passAuth.setFill(style.getText1());
 
 		changePass.setTextFill(style.getText1());

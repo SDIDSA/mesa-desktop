@@ -25,15 +25,17 @@ import mesa.gui.window.Window;
 public class Settings extends StackPane implements Styleable {
 	private SessionPage session;
 
-	private ExpandingHSpace leftBack, rightBack;
+	private ExpandingHSpace leftBack;
+	private ExpandingHSpace rightBack;
 
 	private StackPane content;
 	private SettingsMenu sideBar;
 
-	private ScrollBar sideSb, mainSb;
+	private ScrollBar sideSb;
+	private ScrollBar mainSb;
 	private HBox root;
 	
-	private Text ESC;
+	private Text esc;
 
 	public Settings(SessionPage session) {
 		this.session = session;
@@ -68,10 +70,10 @@ public class Settings extends StackPane implements Styleable {
 
 		CloseIcon close = new CloseIcon(this);
 		
-		ESC = new Text("ESC");
-		ESC.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13).getFont());
+		esc = new Text("ESC");
+		esc.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13).getFont());
 		
-		exitCont.getChildren().addAll(new FixedVSpace(60), close, new FixedVSpace(8), ESC);
+		exitCont.getChildren().addAll(new FixedVSpace(60), close, new FixedVSpace(8), esc);
 
 		mainSb = new ScrollBar(16, 4);
 		mainSb.install(root, content);
@@ -116,6 +118,6 @@ public class Settings extends StackPane implements Styleable {
 
 		content.setBackground(rightBack.getBackground());
 		
-		ESC.setFill(style == Style.DARK ? Color.web("#72767d"):null);
+		esc.setFill(style == Style.DARK ? Color.web("#72767d"):null);
 	}
 }

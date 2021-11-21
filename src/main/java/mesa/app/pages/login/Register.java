@@ -32,8 +32,6 @@ public class Register extends LoginSubPage {
 	private Consumer<JSONArray> onLogin;
 
 	public Register(Window window) {
-		super(window);
-
 		VBox root = new VBox(20);
 		root.setAlignment(Pos.CENTER);
 		setRoot(root);

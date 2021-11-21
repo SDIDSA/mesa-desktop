@@ -10,15 +10,22 @@ import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.TileHint.Tile;
 
 public class MoveResizeHelper {
-	private double minH, minW;
+	private double minH;
+	private double minW;
 
-	private double initwX, initwY;
-	private double initX, initY;
-	private double initW, initH;
+	private double initwX;
+	private double initwY;
+	private double initX;
+	private double initY;
+	private double initW;
+	private double initH;
 
 	private TileHint hint;
 	private boolean tiled = false;
-	private double tiledW, tiledH, tiledX, tiledY;
+	private double tiledW;
+	private double tiledH;
+	private double tiledX;
+	private double tiledY;
 
 	private int range;
 	private double padding;
@@ -28,8 +35,8 @@ public class MoveResizeHelper {
 	private Window win;
 	private AppPreRoot parent;
 
-	private ArrayList<Runnable> onTile = new ArrayList<Runnable>();
-	private ArrayList<Runnable> onUnTile = new ArrayList<Runnable>();
+	private ArrayList<Runnable> onTile = new ArrayList<>();
+	private ArrayList<Runnable> onUnTile = new ArrayList<>();
 	
 	private boolean pressed = false;
 
@@ -40,16 +47,13 @@ public class MoveResizeHelper {
 		hint = new TileHint(win);
 
 		this.range = range;
-		this.parent = parent;
 		padding = parent.paddingProp().get();
-		parent.paddingProp().addListener((obs, ov, nv) -> {
-			padding = nv.doubleValue();
-		});
+		parent.paddingProp().addListener((obs, ov, nv) -> padding = nv.doubleValue());
 	}
 
 	public void onMove(MouseEvent e) {
 		if (parent.isPadded()) {
-			state = State.StateForCoords(e.getSceneX() - padding, e.getSceneY() - padding, win.getWidth() - padding * 2,
+			state = State.stateForCoords(e.getSceneX() - padding, e.getSceneY() - padding, win.getWidth() - padding * 2,
 					win.getHeight() - padding * 2, range, range);
 
 			parent.setCursor(state.curs);
@@ -107,7 +111,7 @@ public class MoveResizeHelper {
 		tiled = true;
 	}
 
-	public void onRelease(MouseEvent e) {
+	public void onRelease() {
 		if (hint.getTile() != null) {
 			applyTile(hint.getTile());
 		}

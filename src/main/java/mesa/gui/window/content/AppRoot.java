@@ -44,7 +44,7 @@ public class AppRoot extends BorderPane {
 
 		addEventFilter(MouseEvent.MOUSE_PRESSED, helper::onPress);
 
-		addEventFilter(MouseEvent.MOUSE_RELEASED, helper::onRelease);
+		addEventFilter(MouseEvent.MOUSE_RELEASED, e -> helper.onRelease());
 
 		setOnMouseDragged(helper::onDrag);
 

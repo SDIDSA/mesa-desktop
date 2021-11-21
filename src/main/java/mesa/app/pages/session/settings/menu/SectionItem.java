@@ -38,23 +38,7 @@ public class SectionItem extends StackPane implements Styleable {
 
 		getChildren().add(lab);
 
-		setOnMouseClicked(e -> {
-			boolean select = selected != this;
-			boolean deselect = select && selected != null;
-
-			if (deselect) {
-				selected.setSelected(false);
-			}
-
-			if (select) {
-				setSelected(true);
-				selected = this;
-
-				if (onSelected != null) {
-					onSelected.run();
-				}
-			}
-		});
+		setOnMouseClicked(e -> selectMe(this));
 
 		if (contentClass != null) {
 			try {
@@ -69,6 +53,24 @@ public class SectionItem extends StackPane implements Styleable {
 		applyStyle(settings.getWindow().getStyl());
 	}
 
+	private static synchronized void selectMe(SectionItem item) {
+		boolean select = selected != item;
+		boolean deselect = select && selected != null;
+
+		if (deselect) {
+			selected.setSelected(false);
+		}
+
+		if (select) {
+			item.setSelected(true);
+			selected = item;
+
+			if (item.onSelected != null) {
+				item.onSelected.run();
+			}
+		}
+	}
+	
 	public SectionItem(Settings settings, String key) {
 		this(settings, key, null);
 	}
@@ -93,11 +95,11 @@ public class SectionItem extends StackPane implements Styleable {
 	public void applyStyle(Style style) {
 		Background hover = Backgrounds.make(style.getBackHover(), 4.0);
 		Background active = Backgrounds.make(style.getBackActive(), 4.0);
-		Background selected = Backgrounds.make(style.getBackSelected(), 4.0);
+		Background selectedBack = Backgrounds.make(style.getBackSelected(), 4.0);
 
 		backgroundProperty().bind(Bindings.createObjectBinding(() -> {
 			if (isSelected()) {
-				return selected;
+				return selectedBack;
 			} else if (isPressed()) {
 				return active;
 			} else if (isHover()) {

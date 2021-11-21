@@ -6,11 +6,12 @@ import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.settings.Settings;
 
 public class KeyValueEditOverlay extends EditOverlay {
-	private TextInputField field, password;
+	private TextInputField field;
+	private TextInputField password;
 
-	public KeyValueEditOverlay(Settings settings, String edit_what) {
-		super(settings, edit_what);
-		field = new TextInputField(settings.getWindow(), edit_what, 408);
+	public KeyValueEditOverlay(Settings settings, String key) {
+		super(settings, key);
+		field = new TextInputField(settings.getWindow(), key, 408);
 		password = new TextInputField(settings.getWindow(), "current_password", 408, true);
 		center.getChildren().addAll(field, password);
 		

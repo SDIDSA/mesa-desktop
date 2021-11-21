@@ -31,9 +31,9 @@ public class UserBar extends HBox implements Styleable {
 		pfp = new StatedPfp(session, user.getAvatar() == null ? null : user.getAvatar(), StatedPfp.SMALL);
 		pfp.setStatus(PfpStatus.ONLINE);
 
-		VBox name_id = new VBox();
-		name_id.setAlignment(Pos.CENTER_LEFT);
-		HBox.setHgrow(name_id, Priority.ALWAYS);
+		VBox nameId = new VBox();
+		nameId.setAlignment(Pos.CENTER_LEFT);
+		HBox.setHgrow(nameId, Priority.ALWAYS);
 		
 		Font f1 = new Font(Font.DEFAULT_FAMILY_MEDIUM, 14);
 		Font f2 = new Font(12);
@@ -45,7 +45,7 @@ public class UserBar extends HBox implements Styleable {
 		userid = new Text("#" + user.getId());
 		userid.setFont(f2.getFont());
 
-		name_id.getChildren().addAll(username, userid);
+		nameId.getChildren().addAll(username, userid);
 		
 		UserBarIcon mute =  new UserBarIcon(session, "microphone", "mute_mic");
 		UserBarIcon deafen =  new UserBarIcon(session, "headset", "deafen");
@@ -53,7 +53,7 @@ public class UserBar extends HBox implements Styleable {
 		
 		settings.setAction(session::showSettings);
 		
-		getChildren().addAll(pfp, new FixedHSpace(8), name_id,mute, deafen, settings);
+		getChildren().addAll(pfp, new FixedHSpace(8), nameId,mute, deafen, settings);
 
 		setMinHeight(52);
 

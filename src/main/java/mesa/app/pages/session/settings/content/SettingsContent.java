@@ -20,7 +20,7 @@ public class SettingsContent extends VBox implements Styleable {
 	public SettingsContent(Settings settings) {
 		this.settings = settings;
 		
-		separators = new ArrayList<Separator>();
+		separators = new ArrayList<>();
 	}
 	
 	public void separate() {

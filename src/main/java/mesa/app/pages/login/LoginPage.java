@@ -22,9 +22,9 @@ import mesa.gui.window.Window;
 
 public class LoginPage extends Page {
 
-	private ArrayList<LoginSubPage> subs = new ArrayList<LoginSubPage>();;
+	private ArrayList<LoginSubPage> subs = new ArrayList<>();
 
-	private Interpolator inter;
+	private Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
 
 	private double hideY = -100;
 	private double hideScale = .7;
@@ -32,8 +32,6 @@ public class LoginPage extends Page {
 
 	public LoginPage(Window window) {
 		super(window, new Dimension(970, 530));
-
-		inter = new SplineInterpolator(0.68, -0.6, 0.32, 1.6);
 
 		Register register = new Register(window);
 		Login login = new Login(window);
@@ -87,7 +85,7 @@ public class LoginPage extends Page {
 			showRegister.playFromStart();
 		});
 
-		register.setOnLogin((data) -> {
+		register.setOnLogin(data -> {
 			register.preTransition();
 			login.preTransition();
 			getChildren().add(login);
@@ -133,11 +131,9 @@ public class LoginPage extends Page {
 		ParallelTransition pt = new ParallelTransition();
 		pt.getChildren().addAll(hide(login), hide(verify));
 
-		Consumer<JSONObject> onSuccess = (user) -> {
+		Consumer<JSONObject> onSuccess = user -> {
 			window.putData("user", user);
-			pt.setOnFinished(e -> {
-				window.loadPage(new SessionPage(window));
-			});
+			pt.setOnFinished(e -> window.loadPage(new SessionPage(window)));
 			pt.playFromStart();
 		};
 

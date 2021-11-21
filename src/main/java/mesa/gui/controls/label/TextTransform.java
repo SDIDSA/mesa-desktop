@@ -1,8 +1,12 @@
 package mesa.gui.controls.label;
 
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
-public abstract class TextTransform implements Function<String, String> {
+public abstract class TextTransform implements UnaryOperator<String> {
+
+	private TextTransform() {
+
+	}
 
 	public static final TextTransform NONE = new TextTransform() {
 		@Override
@@ -47,7 +51,7 @@ public abstract class TextTransform implements Function<String, String> {
 			StringBuilder res = new StringBuilder();
 
 			res.append(Character.toUpperCase(param.charAt(0)));
-			
+
 			res.append(param.substring(1).toLowerCase());
 
 			return res.toString();

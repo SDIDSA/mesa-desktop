@@ -51,7 +51,6 @@ public class Home extends Content implements Styleable {
 		
 		menu.install(menuTest);
 		
-		
 		menuTest.setFont(new Font(16).getFont());
 		menuTest.setFill(Color.WHITE);
 		menuTest.setCursor(Cursor.HAND);

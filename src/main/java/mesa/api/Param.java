@@ -4,7 +4,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 public class Param {
-	private String key, value;
+	private String key;
+	private String value;
 
 	public Param(String key, String value) {
 		this.key = key;

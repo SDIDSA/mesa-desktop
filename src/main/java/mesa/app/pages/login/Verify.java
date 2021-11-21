@@ -28,15 +28,15 @@ public class Verify extends LoginSubPage {
 	private Consumer<JSONObject> onSuccess;
 
 	private Label info;
-	private Button verify_now, later, verify;
+	private Button verifyNow;
+	private Button later;
+	private Button verifyButton;
 	private ConfCode code;
 
 	private Form form;
 	
 	private JSONObject user;
 	public Verify(Window window) {
-		super(window);
-
 		VBox root = new VBox();
 		root.setAlignment(Pos.CENTER);
 
@@ -53,7 +53,7 @@ public class Verify extends LoginSubPage {
 		
 		bottom.getChildren().addAll(resend, new ExpandingHSpace(), hide);
 		
-		verify = new Button(window, "verify", 500);
+		verifyButton = new Button(window, "verify", 500);
 		
 		VBox now = new VBox(15);
 
@@ -62,14 +62,14 @@ public class Verify extends LoginSubPage {
 		now.setOpacity(0);
 		now.setMouseTransparent(true);
 		
-		now.getChildren().addAll(code, bottom, verify);
+		now.getChildren().addAll(code, bottom, verifyButton);
 		
-		verify_now = new Button(window, "verify_now", 500);
+		verifyNow = new Button(window, "verify_now", 500);
 		later = new Button(window, "verify_later", 500);
 
 		Link logout = new Link(window, "logout", new Font(14));
 		
-		buttons.getChildren().addAll(verify_now, later, logout);
+		buttons.getChildren().addAll(verifyNow, later, logout);
 
 		root.getChildren().addAll(info, new FixedVSpace(32), now, buttons);
 
@@ -84,27 +84,25 @@ public class Verify extends LoginSubPage {
 			}
 		});
 
-		verify_now.setAction(()-> {
+		verifyNow.setAction(()-> {
 			Animator.show(now, 163);
 			Animator.show(root, 307);
-			verify_now.hide();
+			verifyNow.hide();
 		});
 		
-		later.setAction(()-> {
-			onSuccess.accept(user);
-		});
+		later.setAction(()-> onSuccess.accept(user));
 		
 		hide.setAction(()-> {
 			Animator.hide(now);
 			Animator.hide(root, 188);
-			verify_now.show();
+			verifyNow.show();
 		});
 		
 		form = NodeUtils.getForm(code);
-		form.setDefaultButton(verify);
-		verify.setAction(()-> {
+		form.setDefaultButton(verifyButton);
+		verifyButton.setAction(()-> {
 			if(form.check()) {
-				verify.startLoading();
+				verifyButton.startLoading();
 				
 				Auth.verifyEmail(user.getString("id"), code.getValue(), result-> {
 					if(result.has("err")) {
@@ -114,7 +112,7 @@ public class Verify extends LoginSubPage {
 						onSuccess.accept(user);
 					}
 					
-					verify.stopLoading();
+					verifyButton.stopLoading();
 				});
 			}
 		});
@@ -156,10 +154,10 @@ public class Verify extends LoginSubPage {
 		super.applyStyle(style);
 
 		info.setFill(style.getText1());
-		verify.setTextFill(style.getText1());
-		verify.setFill(style.getAccent());
-		verify_now.setTextFill(style.getText1());
-		verify_now.setFill(style.getAccent());
+		verifyButton.setTextFill(style.getText1());
+		verifyButton.setFill(style.getAccent());
+		verifyNow.setTextFill(style.getText1());
+		verifyNow.setFill(style.getAccent());
 		later.setTextFill(style.getText1());
 		later.setFill(style.getBack4());
 	}

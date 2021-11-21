@@ -46,7 +46,7 @@ public abstract class Input extends StackPane implements Styleable {
 
 		hoverProperty().addListener((obs, ov, nv) -> {
 			if (!isFocus()) {
-				if (nv) {
+				if (nv.booleanValue()) {
 					hover();
 				} else {
 					unhover();

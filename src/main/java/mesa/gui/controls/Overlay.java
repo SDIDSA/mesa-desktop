@@ -25,7 +25,7 @@ public class Overlay extends StackPane {
 	private ArrayList<Runnable> onShown;
 	
 	public Overlay() {
-		onShown = new ArrayList<Runnable>();
+		onShown = new ArrayList<>();
 		back = new StackPane();
 		back.setBackground(Backgrounds.make(Color.gray(0, .8)));
 		
@@ -45,9 +45,7 @@ public class Overlay extends StackPane {
 				new KeyValue(content.scaleXProperty(), 1, SplineInterpolator.OVERSHOOT), 
 				new KeyValue(content.scaleYProperty(), 1, SplineInterpolator.OVERSHOOT)));
 		
-		show.setOnFinished(e-> {
-			onShown.forEach(Runnable::run);
-		});
+		show.setOnFinished(e-> onShown.forEach(Runnable::run));
 		
 		hide = new Timeline(new KeyFrame(Duration.seconds(.15), 
 				new KeyValue(back.opacityProperty(), 0, SplineInterpolator.ANTICIPATE), 
@@ -55,9 +53,7 @@ public class Overlay extends StackPane {
 				new KeyValue(content.scaleXProperty(), .7, SplineInterpolator.ANTICIPATE), 
 				new KeyValue(content.scaleYProperty(), .7, SplineInterpolator.ANTICIPATE)));
 		
-		back.setOnMouseClicked(e-> {
-			hide();
-		});
+		back.setOnMouseClicked(e-> hide());
 		
 		getChildren().addAll(back, content);
 	}

@@ -9,52 +9,55 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javafx.scene.Node;
 
 public class NodeUtils {
-	
+	private NodeUtils() {
+
+	}
+
 	public static void applyStyle(Node node, Style style) {
-		if(node instanceof Parent) {
-			for(Node child:((Parent) node).getChildrenUnmodifiable()) {
+		if (node instanceof Parent parent) {
+			for (Node child : parent.getChildrenUnmodifiable()) {
 				applyStyle(child, style);
 			}
 		}
-		
-		if(node instanceof Styleable) {
-			((Styleable) node).applyStyle(style);
+
+		if (node instanceof Styleable styleable) {
+			styleable.applyStyle(style);
 		}
 	}
-	
+
 	public static void applyLocale(Node node, Locale locale) {
-		if(node instanceof Parent) {
-			for(Node child:((Parent) node).getChildrenUnmodifiable()) {
+		if (node instanceof Parent parent) {
+			for (Node child : parent.getChildrenUnmodifiable()) {
 				applyLocale(child, locale);
 			}
 		}
-		
-		if(node instanceof Localized) {
-			((Localized) node).applyLocale(locale);
+
+		if (node instanceof Localized localized) {
+			localized.applyLocale(locale);
 		}
 	}
-	
-	
-	public static <T> ArrayList<T> getNodesOfType(Node node, Class<T> type) {
-		ArrayList<T> res = new ArrayList<T>();
-		
-		if(node instanceof Parent) {
-			for(Node n:((Parent) node).getChildrenUnmodifiable()) {
+
+	public static <T> List<T> getNodesOfType(Node node, Class<T> type) {
+		ArrayList<T> res = new ArrayList<>();
+
+		if (node instanceof Parent parent) {
+			for (Node n : parent.getChildrenUnmodifiable()) {
 				res.addAll(getNodesOfType(n, type));
 			}
 		}
-		
-		if(type.isInstance(node)) {
+
+		if (type.isInstance(node)) {
 			res.add(type.cast(node));
 		}
-		
+
 		return res;
 	}
-	
+
 	public static Form getForm(Node node) {
 		return new Form(getNodesOfType(node, InputField.class));
 	}

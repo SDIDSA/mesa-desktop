@@ -129,7 +129,7 @@ public class TileHint extends Stage {
 	}
 
 	public State getState(double x, double y) {
-		return State.StateForCoords(x, y, screenSize.getWidth(), screenSize.getHeight(), 100, 15);
+		return State.stateForCoords(x, y, screenSize.getWidth(), screenSize.getHeight(), 100, 15);
 	}
 
 	@Override
