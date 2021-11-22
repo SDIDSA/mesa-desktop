@@ -9,10 +9,14 @@ public class LayerIcon extends StackPane {
 	private ArrayList<ColorIcon> layers;
 	private double size;
 	
-	public LayerIcon(double size) {
+	public LayerIcon(double size, String...layers) {
 		this.size = size;
 		
-		layers = new ArrayList<>();
+		this.layers = new ArrayList<>();
+		
+		for(String layer:layers) {
+			addLayer(layer);
+		}
 	}
 	
 	public void addLayer(String name) {

@@ -100,9 +100,7 @@ public class MyAccount extends SettingsContent {
 			twoFactAuthRight.setMinHeight(61);
 			twoFactAuthRight.setMinWidth(200);
 
-			twoFactAuthIcon = new LayerIcon(80);
-			twoFactAuthIcon.addLayer("2faover");
-			twoFactAuthIcon.addLayer("2fa");
+			twoFactAuthIcon = new LayerIcon(80, "2faover", "2fa");
 
 			twoFactAuthIconUnder = new Rectangle(160, 100);
 			twoFactAuthIconUnder.setArcHeight(20);
