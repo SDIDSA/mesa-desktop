@@ -19,7 +19,7 @@ import mesa.app.utils.Colors;
 import mesa.data.User;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.image.ColorIcon;
+import mesa.gui.controls.image.LayerIcon;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.FixedVSpace;
@@ -28,7 +28,6 @@ import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class MyAccount extends SettingsContent {
-
 	private Label myAccountLab;
 	private Label passAuth;
 	private Label twoFactAuthHead;
@@ -39,8 +38,7 @@ public class MyAccount extends SettingsContent {
 	private Button changePass;
 	private Button enable2fa;
 
-	private ColorIcon twoFactAuthIcon;
-	private ColorIcon twoFactAuthIconOver;
+	private LayerIcon twoFactAuthIcon;
 	private Rectangle twoFactAuthIconUnder;
 
 	private Button disable;
@@ -98,19 +96,20 @@ public class MyAccount extends SettingsContent {
 
 			StackPane twoFactAuthRight = new StackPane();
 			twoFactAuthRight.setAlignment(Pos.BOTTOM_CENTER);
-			twoFactAuthRight.setMaxHeight(46);
-			twoFactAuthRight.setMinHeight(46);
+			twoFactAuthRight.setMaxHeight(61);
+			twoFactAuthRight.setMinHeight(61);
 			twoFactAuthRight.setMinWidth(200);
 
-			twoFactAuthIcon = new ColorIcon("2fa", 60);
-			twoFactAuthIconOver = new ColorIcon("2faover", 60);
+			twoFactAuthIcon = new LayerIcon(80);
+			twoFactAuthIcon.addLayer("2faover");
+			twoFactAuthIcon.addLayer("2fa");
 
-			twoFactAuthIconUnder = new Rectangle(140, 80);
+			twoFactAuthIconUnder = new Rectangle(160, 100);
 			twoFactAuthIconUnder.setArcHeight(20);
 			twoFactAuthIconUnder.setArcWidth(20);
-			twoFactAuthIconUnder.setTranslateY(5);
+			twoFactAuthIconUnder.setTranslateY(7);
 
-			twoFactAuthRight.getChildren().addAll(twoFactAuthIconUnder, twoFactAuthIconOver, twoFactAuthIcon);
+			twoFactAuthRight.getChildren().addAll(twoFactAuthIconUnder, twoFactAuthIcon);
 
 			twoFactAuth.getChildren().addAll(twoFactAuthLeft, twoFactAuthRight);
 
@@ -157,16 +156,16 @@ public class MyAccount extends SettingsContent {
 			getChildren().addAll(twoFactAuth);
 
 			separate(40);
-			getChildren().addAll(accountRemovalHead, new FixedVSpace(12), accountRemovalBody,
-					new FixedVSpace(16), accountButtons);
+			getChildren().addAll(accountRemovalHead, new FixedVSpace(12), accountRemovalBody, new FixedVSpace(16),
+					accountButtons);
 
 			user.emailConfirmedProperty().addListener((obs, ov, nv) -> {
 				if (nv.booleanValue()) {
 					if (getChildren().contains(unverifiedEmail)) {
 						getChildren().remove(unverifiedEmail);
 					}
-					
-					if(!twoFactAuthLeft.getChildren().contains(enable2fa)) {
+
+					if (!twoFactAuthLeft.getChildren().contains(enable2fa)) {
 						twoFactAuthLeft.getChildren().add(enable2fa);
 					}
 
@@ -207,8 +206,8 @@ public class MyAccount extends SettingsContent {
 		enable2fa.setTextFill(style.getText1());
 		enable2fa.setFill(style.getAccent());
 
-		twoFactAuthIcon.setFill(style.getAccent());
-		twoFactAuthIconOver.setFill(style.getBack3());
+		twoFactAuthIcon.setFill(0, style.getBack3());
+		twoFactAuthIcon.setFill(1, style.getAccent());
 		twoFactAuthIconUnder.setFill(style.getBack4());
 
 		accountRemovalHead.setFill(style.getInteractiveNormal());

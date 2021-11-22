@@ -18,8 +18,6 @@ public class KeyValueEditOverlay extends EditOverlay {
 		form.addAll(field, password);
 		
 		addOnShown(field::requestFocus);
-		
-		applyStyle(session.getWindow().getStyl());
 	}
 
 	public String getValue() {
