@@ -13,6 +13,7 @@ import javafx.scene.text.TextFlow;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.SettingsContent;
+import mesa.app.pages.session.settings.content.user_settings.overlays.CriticalOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordEditOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.ProfileOverview;
 import mesa.app.utils.Colors;
@@ -67,7 +68,7 @@ public class MyAccount extends SettingsContent {
 			changePass.setFont(new Font(13, FontWeight.BOLD));
 			setMargin(changePass, new Insets(0, 0, 28, 0));
 
-			changePass.setAction(() -> changePassOver.show(settings.getSession()));
+			changePass.setAction(changePassOver::show);
 
 			HBox twoFactAuth = new HBox(20);
 			twoFactAuth.setAlignment(Pos.CENTER);
@@ -126,6 +127,12 @@ public class MyAccount extends SettingsContent {
 			delete = new Button(window, "delete_account", 3.0, 16, 32);
 			delete.setFont(new Font(13, FontWeight.BOLD));
 
+			CriticalOverlay disableOverlay = new CriticalOverlay(settings.getSession(), "disable_account", "disable_warning");
+			CriticalOverlay deleteOverlay = new CriticalOverlay(settings.getSession(), "delete_account", "delete_warning");
+			
+			disable.setAction(disableOverlay::show);
+			delete.setAction(deleteOverlay::show);
+			
 			accountButtons.getChildren().addAll(disable, delete);
 
 			changePassOver.setAction(() -> {

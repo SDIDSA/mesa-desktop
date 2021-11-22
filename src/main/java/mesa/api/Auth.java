@@ -55,6 +55,12 @@ public class Auth {
 				new Param("curr_pass", hashPassword(currentPass)),
 				new Param("new_pass", hashPassword(newPass)));
 	}
+	
+	public static void deleteAccount(String userId, String password, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.DELETE_ACCOUNT, "delete account", onResult,
+				new Param(USER_ID, userId),
+				new Param(PASSWORD, password));
+	}
 
 	public static String hashPassword(String password) {
 		return DigestUtils.sha256Hex(password);

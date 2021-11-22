@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
@@ -18,6 +19,8 @@ public class BasicOverlay extends AbstractOverlay {
 	public BasicOverlay(SessionPage session, double width) {
 		super(session, width);
 
+		StackPane.setMargin(closeIcon, new Insets(16));
+		
 		VBox top = new VBox(8);
 		top.setPadding(new Insets(26, 16, 26, 16));
 		top.setAlignment(Pos.CENTER);

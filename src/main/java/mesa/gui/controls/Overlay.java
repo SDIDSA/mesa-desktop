@@ -70,7 +70,7 @@ public class Overlay extends StackPane {
 		this.content.getChildren().setAll(cont);
 	}
 	
-	public void show(Page page) {
+	protected void show(Page page) {
 		hide.stop();
 		back.setOpacity(0);
 		content.setScaleX(.7);

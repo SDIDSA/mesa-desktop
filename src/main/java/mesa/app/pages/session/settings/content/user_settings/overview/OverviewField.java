@@ -7,9 +7,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.settings.content.user_settings.overlays.AbstractOverlay;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.Overlay;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -21,8 +21,6 @@ public class OverviewField extends HBox implements Styleable {
 	private HBox value;
 	private HBox preEdit;
 	private Button edit;
-	
-	private Overlay editOver;
 
 	public OverviewField(Settings settings, String key) {
 		setAlignment(Pos.CENTER);
@@ -49,17 +47,11 @@ public class OverviewField extends HBox implements Styleable {
 
 		getChildren().addAll(left, new ExpandingHSpace(), preEdit, edit);
 		
-		edit.setAction(()-> {
-			if(editOver != null) {
-				editOver.show(settings.getSession());
-			}
-		});
-		
 		applyStyle(settings.getWindow().getStyl());
 	}
 	
-	public void setEditOver(Overlay editOver) {
-		this.editOver = editOver;
+	public void setEditOver(AbstractOverlay editOver) {
+		edit.setAction(editOver::show);
 	}
 
 	public void addToValue(Node... node) {

@@ -70,6 +70,9 @@ public class AppRoot extends BorderPane {
 	}
 
 	public void setContent(Page page) {
+		if(getCenter() instanceof Page old) {
+			old.destroy();
+		}
 		setCenter(page);
 	}
 

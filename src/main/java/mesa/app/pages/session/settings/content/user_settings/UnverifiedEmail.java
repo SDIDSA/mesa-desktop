@@ -66,7 +66,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 			});
 		});
 		
-		verify.setAction(() -> verifyOverlay.show(settings.getSession()));
+		verify.setAction(verifyOverlay::show);
 		
 		HBox buttons = new HBox(16);
 		

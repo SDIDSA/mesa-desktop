@@ -113,5 +113,8 @@
 	"disable_note": "Disabling your account means you can recover it at any time after taking this action.",
 	
 	"disable_account": "Disable Account",
-	"delete_account": "Delete Account"
+	"delete_account": "Delete Account",
+	
+	"disable_warning": "Are you sure that you want to disable your account? This will immediately log you out and make your account inaccessible to anyone.",
+	"delete_warning": "Are you sure that you want to delete your account? This will immediately log you out of your account and you will not be able to log in again."
 }

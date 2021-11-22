@@ -25,11 +25,13 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class AbstractOverlay extends Overlay implements Styleable {
+	private SessionPage session;
+	
 	private StackPane preRoot;
 	private HBox bottom;
 	private Button cancel;
-	private ColorIcon closeIcon;
 
+	protected ColorIcon closeIcon;
 	protected VBox root;
 	protected Button done;
 	protected VBox center;
@@ -37,6 +39,8 @@ public class AbstractOverlay extends Overlay implements Styleable {
 	protected Form form;
 
 	public AbstractOverlay(SessionPage session, double width) {
+		this.session = session;
+		
 		root = new VBox();
 
 		preRoot = new StackPane();
@@ -47,7 +51,6 @@ public class AbstractOverlay extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
-		StackPane.setMargin(closeIcon, new Insets(16));
 
 		center = new VBox(16);
 		center.setPadding(new Insets(0, 16, 16, 16));
@@ -76,6 +79,10 @@ public class AbstractOverlay extends Overlay implements Styleable {
 		form.setDefaultButton(done);
 	}
 
+	public void show() {
+		show(session);
+	}
+	
 	public AbstractOverlay(SessionPage session) {
 		this(session, 440);
 	}

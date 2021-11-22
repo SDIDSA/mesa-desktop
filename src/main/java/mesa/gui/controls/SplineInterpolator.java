@@ -35,47 +35,6 @@ public class SplineInterpolator extends Interpolator {
 		}
 	}
 
-	public double getX1() {
-		return x1;
-	}
-
-	public double getY1() {
-		return y1;
-	}
-
-	public double getX2() {
-		return x2;
-	}
-
-	public double getY2() {
-		return y2;
-	}
-
-	@Override
-	public int hashCode() {
-		int hash = 7;
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.x1) ^ (Double.doubleToLongBits(this.x1) >>> 32));
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.y1) ^ (Double.doubleToLongBits(this.y1) >>> 32));
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.x2) ^ (Double.doubleToLongBits(this.x2) >>> 32));
-		hash = 19 * hash + (int) (Double.doubleToLongBits(this.y2) ^ (Double.doubleToLongBits(this.y2) >>> 32));
-		return hash;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final SplineInterpolator other = (SplineInterpolator) obj;
-		return !(Double.doubleToLongBits(this.x1) != Double.doubleToLongBits(other.x1)
-				|| Double.doubleToLongBits(this.y1) != Double.doubleToLongBits(other.y1)
-				|| Double.doubleToLongBits(this.x2) != Double.doubleToLongBits(other.x2)
-				|| Double.doubleToLongBits(this.y2) != Double.doubleToLongBits(other.y2));
-	}
-
 	@Override
 	public double curve(double x) {
 		if (x < 0 || x > 1) {

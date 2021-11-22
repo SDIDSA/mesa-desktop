@@ -206,6 +206,10 @@ public class Button extends StackPane {
 		label.setFill(fill);
 		load.setFill(fill);
 	}
+	
+	public void setKey(String key) {
+		label.setKey(key);
+	}
 
 	public double getRadius() {
 		return radius;
