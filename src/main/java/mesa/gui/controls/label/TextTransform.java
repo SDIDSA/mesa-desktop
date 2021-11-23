@@ -80,6 +80,9 @@ public abstract class TextTransform implements UnaryOperator<String> {
 	public static final TextTransform HIDE_PHONE = new TextTransform() {
 		@Override
 		public String apply(String param) {
+			if(param == null) {
+				return "";
+			}
 			boolean found = false;
 			StringBuilder sb = new StringBuilder();
 

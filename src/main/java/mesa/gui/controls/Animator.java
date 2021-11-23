@@ -23,7 +23,7 @@ public class Animator {
 		r.maxHeightProperty().bind(v);
 
 		Timeline an = new Timeline(60.0,
-				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, SplineInterpolator.OVERSHOOT),
+				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
 						new KeyValue(r.opacityProperty(), 1, Interpolator.EASE_BOTH)));
 		an.setOnFinished(e -> {
 			r.maxHeightProperty().unbind();
@@ -42,7 +42,7 @@ public class Animator {
 		r.maxHeightProperty().bind(v);
 
 		Timeline an = new Timeline(60.0,
-				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, SplineInterpolator.ANTICIPATE),
+				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
 						new KeyValue(r.opacityProperty(), to == 0 ? 0 : 1, Interpolator.EASE_BOTH)));
 		an.setOnFinished(e -> {
 			r.maxHeightProperty().unbind();

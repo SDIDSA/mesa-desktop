@@ -84,7 +84,6 @@
 	"os_settings": "{$0} Settings",
 	"advanced": "Advanced",
 	
-	
 	"copy_id": "Copy ID",
 	"edit_user_profile": "Edit User Profile",
 	
@@ -104,6 +103,11 @@
 	"current_password": "Current Password",
 	"cancel": "Cancel",
 	"done": "Done",
+	"enter_phone": "Enter a Phone Number",
+	"sms_code_note": "You will receive a text message with a verification code.",
+	"phone_use_pre": "Your phone number can be used to verify ",
+	"one_account": "one Mesa account",
+	"phone_use_post": " at a time and is only used for verification and login.",
 	
 	"change_pass" : "Change Password",
 	"new_password": "New Password",

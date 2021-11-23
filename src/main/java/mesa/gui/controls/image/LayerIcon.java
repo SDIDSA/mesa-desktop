@@ -22,7 +22,6 @@ public class LayerIcon extends StackPane {
 	public void addLayer(String name) {
 		ColorIcon layer = new ColorIcon(name, size);
 		
-		setMinSize(layer.getMinWidth(), layer.getMinHeight());
 		setMaxSize(layer.getMaxWidth(), layer.getMaxHeight());
 		
 		layers.add(layer);

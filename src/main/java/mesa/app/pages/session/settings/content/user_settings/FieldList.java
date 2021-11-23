@@ -13,6 +13,7 @@ import javafx.scene.text.Text;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.user_settings.overlays.KeyValueEditOverlay;
+import mesa.app.pages.session.settings.content.user_settings.overlays.PhoneOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
 import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
 import mesa.app.utils.Colors;
@@ -127,12 +128,14 @@ public class FieldList extends VBox implements Styleable {
 		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 16, 32);
 		removePhone.setFont(new Font(14, FontWeight.BOLD));
 		removePhone.setUlOnHover(true);
-		phone.addToPreEdit(removePhone, new FixedHSpace(8));
 		
+		phone.addToPreEdit(removePhone, new FixedHSpace(8));
 		phone.emptyProperty().bind(user.phoneProperty().isEmpty());
 		
 		removePhone.visibleProperty().bind(user.phoneProperty().isEmpty().not());
 
+		phone.setOverlay(new PhoneOverlay(settings.getSession()));
+		
 		Font font = new Font(16);
 
 		usernameLab = new Text();

@@ -72,14 +72,15 @@ public class Login extends LoginSubPage {
 
 		VBox right = new VBox(0);
 		right.setMinWidth(240);
+		
 
 		root.getChildren().addAll(left, new Separator(Orientation.VERTICAL), right);
 
 		getChildren().add(root);
 
 		form = NodeUtils.getForm(left);
-//		form.setField("email_phone", "+213657693679");
-//		form.setField("password", "a1b2.a1b2");
+		form.setField("email_phone", "zinou.teyar@gmail.com");
+		form.setField("password", "a1b2.a1b2");
 		form.setDefaultButton(loginButton);
 		loginButton.setAction(() -> {
 			if (form.check()) {

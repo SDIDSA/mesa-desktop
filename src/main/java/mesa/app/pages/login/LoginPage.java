@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
 import mesa.app.pages.session.SessionPage;
+import mesa.gui.controls.Loading;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -191,7 +192,20 @@ public class LoginPage extends Page {
 	public void setup(Window window) {
 		super.setup(window);
 
-		show(login).playFromStart();
+		Loading loading = new Loading(10);
+		loading.setFill(window.getStyl().getBack3());
+		getChildren().add(0, loading);
+		loading.play();
+		
+		Timeline showLogin = show(login);
+		showLogin.setDelay(Duration.seconds(2));
+		login.preTransition();
+		showLogin.playFromStart();
+		showLogin.setOnFinished(e-> {
+			login.postTransition();
+			loading.stop();
+			getChildren().remove(loading);
+		});
 		login.setMouseTransparent(false);
 	}
 

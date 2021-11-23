@@ -14,9 +14,11 @@ public class Mesa extends Application {
 		System.setProperty("prism.lcdtext", "false");
 		Window window = new Window(Style.DARK, Locale.EN_US);
 		window.setTitle("mesa");
+		window.setOnShown(e-> {
+			window.loadPage(new LoginPage(window));
+			window.centerOnScreen();
+		});
 		window.show();
-		window.loadPage(new LoginPage(window));
-		window.centerOnScreen();
 	}
 	
 }
