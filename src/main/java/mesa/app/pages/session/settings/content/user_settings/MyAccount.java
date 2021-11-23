@@ -53,7 +53,7 @@ public class MyAccount extends SettingsContent {
 			User user = settings.getUser();
 
 			myAccountLab = new Label(window, "my_account", header);
-			setMargin(myAccountLab, new Insets(0, 0, 20, 0));
+			setMargin(myAccountLab, new Insets(0, 0, 25, 0));
 
 			ProfileOverview profileOverview = new ProfileOverview(settings);
 
@@ -129,6 +129,25 @@ public class MyAccount extends SettingsContent {
 
 			CriticalOverlay disableOverlay = new CriticalOverlay(settings.getSession(), "disable_account", "disable_warning");
 			CriticalOverlay deleteOverlay = new CriticalOverlay(settings.getSession(), "delete_account", "delete_warning");
+			
+			disableOverlay.setAction(() -> {
+				disableOverlay.startLoading();
+				//TODO disable account
+			});
+			
+			deleteOverlay.setAction(() -> {
+				deleteOverlay.startLoading();
+				Auth.deleteAccount(user.getId(), deleteOverlay.getPassword(), result -> {
+					if (result.has("err")) {
+						deleteOverlay.applyErrors(result.getJSONArray("err"));
+					} else {
+						deleteOverlay.hide();
+						//Logout
+					}
+					
+					deleteOverlay.stopLoading();
+				});
+			});
 			
 			disable.setAction(disableOverlay::show);
 			delete.setAction(deleteOverlay::show);

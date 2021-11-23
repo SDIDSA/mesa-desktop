@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.menu;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -10,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.SettingsContent;
 import mesa.gui.controls.Font;
@@ -20,7 +22,14 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class SectionItem extends StackPane implements Styleable {
+	private static HashMap<Class<? extends SettingsContent>, SettingsContent> cache = new HashMap<>();
 	private static SectionItem selected;
+
+	public static void clearCache() {
+		cache.clear();
+	}
+
+	private boolean fillSet = false;
 
 	private Label lab;
 
@@ -28,29 +37,45 @@ public class SectionItem extends StackPane implements Styleable {
 
 	private Runnable onSelected;
 
-	public SectionItem(Settings settings, String key, Class<? extends SettingsContent> contentClass) {
+	public SectionItem(Settings settings, String key) {
 		setAlignment(Pos.CENTER_LEFT);
 		setCursor(Cursor.HAND);
-		setPadding(new Insets(6, 10, 6, 10));
+		setPadding(new Insets(6, 10, 8, 10));
 
 		selectedProperty = new SimpleBooleanProperty(false);
 		lab = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 16));
 
 		getChildren().add(lab);
 
+		applyStyle(settings.getWindow().getStyl());
+	}
+
+	public SectionItem(Settings settings, String key, Class<? extends SettingsContent> contentClass) {
+		this(settings, key);
+
 		setOnMouseClicked(e -> selectMe(this));
 
-		if (contentClass != null) {
-			try {
-				SettingsContent content = contentClass.getConstructor(Settings.class).newInstance(settings);
-				setOnSelected(() -> settings.loadContent(content));
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException | NoSuchMethodException | SecurityException x) {
-				ErrorHandler.handle(x, "create settings content for " + key);
-			}
-		}
+		setOnSelected(() -> {
+			if (contentClass != null) {
+				SettingsContent found = cache.get(contentClass);
+				if (found == null) {
+					try {
+						found = contentClass.getConstructor(Settings.class).newInstance(settings);
+						cache.put(contentClass, found);
+					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+							| InvocationTargetException | NoSuchMethodException | SecurityException x) {
+						ErrorHandler.handle(x, "create settings content for " + key);
+					}
+				}
 
-		applyStyle(settings.getWindow().getStyl());
+				settings.loadContent(found);
+			}
+		});
+	}
+
+	public SectionItem(Settings settings, String key, Runnable onAction) {
+		this(settings, key);
+		setOnMouseClicked(e -> onAction.run());
 	}
 
 	private static synchronized void selectMe(SectionItem item) {
@@ -70,9 +95,11 @@ public class SectionItem extends StackPane implements Styleable {
 			}
 		}
 	}
-	
-	public SectionItem(Settings settings, String key) {
-		this(settings, key, null);
+
+	public void setTextFill(Color fill) {
+		fillSet = true;
+		lab.fillProperty().unbind();
+		lab.setFill(fill);
 	}
 
 	public void setOnSelected(Runnable onSelected) {
@@ -108,13 +135,14 @@ public class SectionItem extends StackPane implements Styleable {
 			return Background.EMPTY;
 		}, hoverProperty(), selectedProperty, pressedProperty()));
 
-		lab.fillProperty().bind(Bindings.createObjectBinding(() -> {
-			if (isSelected() || isPressed()) {
-				return style.getInteractiveActive();
-			} else if (isHover()) {
-				return style.getInteractiveHover();
-			}
-			return style.getInteractiveNormal();
-		}, hoverProperty(), selectedProperty, pressedProperty()));
+		if (!fillSet)
+			lab.fillProperty().bind(Bindings.createObjectBinding(() -> {
+				if (isSelected() || isPressed()) {
+					return style.getInteractiveActive();
+				} else if (isHover()) {
+					return style.getInteractiveHover();
+				}
+				return style.getInteractiveNormal();
+			}, hoverProperty(), selectedProperty, pressedProperty()));
 	}
 }

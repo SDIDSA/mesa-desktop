@@ -121,13 +121,17 @@ public class FieldList extends VBox implements Styleable {
 			});
 		});
 
-		username.setEditOver(editUsername);
-		email.setEditOver(editEmail);
+		username.setOverlay(editUsername);
+		email.setOverlay(editEmail);
 
 		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 16, 32);
 		removePhone.setFont(new Font(14, FontWeight.BOLD));
 		removePhone.setUlOnHover(true);
 		phone.addToPreEdit(removePhone, new FixedHSpace(8));
+		
+		phone.emptyProperty().bind(user.phoneProperty().isEmpty());
+		
+		removePhone.visibleProperty().bind(user.phoneProperty().isEmpty().not());
 
 		Font font = new Font(16);
 
@@ -138,7 +142,7 @@ public class FieldList extends VBox implements Styleable {
 		usernameLab.setFont(font.getFont());
 		idLab.setFont(font.getFont());
 
-		username.addToValue(usernameLab, idLab);
+		username.setValue(usernameLab, idLab);
 
 		getChildren().addAll(username, email, phone);
 

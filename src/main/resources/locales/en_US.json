@@ -37,6 +37,8 @@
 	"birth_day": "Day",
 	"continue": "Continue",
 	"logout": "Logout",
+	"log_out": "Log Out",
+	"logout_confirm": "Are you sure you want to logout?",
 	
 	"month_1": "January",
 	"month_2": "February",
@@ -50,6 +52,8 @@
 	"month_10": "October",
 	"month_11": "November",
 	"month_12": "December",
+	
+	"close": "Close",
 	
 	"home": "Home",
 	"add_server": "Add a Server",
@@ -91,7 +95,9 @@
 	"overview_hide": "Hide",
 	"overview_reveal": "Reveal",
 	"overview_edit": "Edit",
+	"overview_add": "Add",
 	"overview_remove": "Remove",
+	"overview_empty": "You haven't added a {$0} yet.",
 	
 	"change_attr": "Change your {$0}",
 	"enter_attr": "Enter a new {$0} and your existing password",

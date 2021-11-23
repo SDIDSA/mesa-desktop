@@ -1,5 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings.overview;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
@@ -7,9 +9,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.settings.Settings;
-import mesa.app.pages.session.settings.content.user_settings.overlays.AbstractOverlay;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.alert.Overlay;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -20,7 +22,10 @@ public class OverviewField extends HBox implements Styleable {
 	private Label name;
 	private HBox value;
 	private HBox preEdit;
-	private Button edit;
+
+	protected Button edit;
+
+	private ObjectProperty<Overlay> overlay;
 
 	public OverviewField(Settings settings, String key) {
 		setAlignment(Pos.CENTER);
@@ -44,21 +49,32 @@ public class OverviewField extends HBox implements Styleable {
 
 		edit = new Button(settings.getWindow(), "overview_edit", 3, 16, 32);
 		edit.setFont(new Font(14, FontWeight.BOLD));
+		
+		overlay = new SimpleObjectProperty<Overlay>();
+		
+		edit.setAction(() -> {
+			if (overlay.get() != null)
+				overlay.get().show();
+		});
 
 		getChildren().addAll(left, new ExpandingHSpace(), preEdit, edit);
-		
+
 		applyStyle(settings.getWindow().getStyl());
 	}
-	
-	public void setEditOver(AbstractOverlay editOver) {
-		edit.setAction(editOver::show);
+
+	public void setOverlay(Overlay overlay) {
+		this.overlay.set(overlay);
 	}
 
-	public void addToValue(Node... node) {
-		value.getChildren().addAll(node);
+	public ObjectProperty<Overlay> overlayProperty() {
+		return overlay;
 	}
-	
-	public void addToPreEdit(Node...nodes) {
+
+	public void setValue(Node... node) {
+		value.getChildren().setAll(node);
+	}
+
+	public void addToPreEdit(Node... nodes) {
 		preEdit.getChildren().addAll(nodes);
 	}
 

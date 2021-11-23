@@ -29,12 +29,14 @@ public class LoginPage extends Page {
 	private double hideY = -100;
 	private double hideScale = .7;
 	private double duration = .4;
+	
+	private Login login;
 
 	public LoginPage(Window window) {
 		super(window, new Dimension(970, 530));
 
 		Register register = new Register(window);
-		Login login = new Login(window);
+		login = new Login(window);
 		Verify verify = new Verify(window);
 
 		subs.add(register);
@@ -75,7 +77,7 @@ public class LoginPage extends Page {
 		login.setOnRegister(() -> {
 			register.preTransition();
 			login.preTransition();
-			
+
 			getChildren().add(register);
 			register.setMouseTransparent(false);
 			login.setMouseTransparent(true);
@@ -104,7 +106,7 @@ public class LoginPage extends Page {
 		login.setOnVerify(user -> {
 			verify.preTransition();
 			login.preTransition();
-			
+
 			getChildren().add(verify);
 			verify.setMouseTransparent(false);
 			register.setMouseTransparent(true);
@@ -141,6 +143,7 @@ public class LoginPage extends Page {
 		verify.setOnSuccess(onSuccess);
 
 		getChildren().addAll(login);
+		prepare(login);
 
 		applyStyle(window.getStyl());
 	}
@@ -171,10 +174,25 @@ public class LoginPage extends Page {
 				new KeyValue(from.scaleYProperty(), hideScale, inter)));
 	}
 
+	private Timeline show(Node from) {
+		return new Timeline(new KeyFrame(Duration.seconds(duration), new KeyValue(from.opacityProperty(), 1, inter),
+				new KeyValue(from.translateYProperty(), 0, inter),
+
+				new KeyValue(from.scaleXProperty(), 1, inter), new KeyValue(from.scaleYProperty(), 1, inter)));
+	}
+
 	@Override
 	public void applyStyle(Style style) {
 		window.setFill(style.getAccent());
 		window.setBorder(Color.TRANSPARENT, 0);
+	}
+
+	@Override
+	public void setup(Window window) {
+		super.setup(window);
+
+		show(login).playFromStart();
+		login.setMouseTransparent(false);
 	}
 
 	@Override

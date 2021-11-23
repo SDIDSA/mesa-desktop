@@ -78,7 +78,7 @@ public class Label extends Text implements Localized {
 
 	@Override
 	public void applyLocale(Locale locale) {
-		if (key != null) {
+		if (key != null && !key.isEmpty()) {
 			String val = locale.get(key);
 			for (int i = 0; i < params.size(); i++) {
 				String param = params.get(i);

@@ -14,24 +14,32 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 
 public class Section extends VBox implements Styleable {
-	
+
 	private Label title;
 	private VBox items;
 
 	public Section(Settings settings, String titleKey, boolean first) {
-		title = new Label(settings.getWindow(), titleKey, new Font(12, FontWeight.BOLD));
-		title.setTransform(TextTransform.UPPERCASE);
-		StackPane titCont = new StackPane(title);
-		titCont.setAlignment(Pos.CENTER_LEFT);
-		titCont.setPadding(new Insets(first ? 0 : 6, 10, 6, 10));
 
 		items = new VBox(2);
-		
-		getChildren().addAll(titCont, items);
+
+		if (titleKey != null) {
+			title = new Label(settings.getWindow(), titleKey, new Font(12, FontWeight.BOLD));
+			title.setTransform(TextTransform.UPPERCASE);
+			StackPane titCont = new StackPane(title);
+			titCont.setAlignment(Pos.CENTER_LEFT);
+			titCont.setPadding(new Insets(first ? 0 : 6, 10, 6, 10));
+			getChildren().add(titCont);
+		}
+
+		getChildren().add(items);
 
 		applyStyle(settings.getWindow().getStyl());
 	}
 	
+	public Section(Settings settings) {
+		this(settings, null);
+	}
+
 	public void addItem(SectionItem item) {
 		items.getChildren().add(item);
 	}
@@ -42,7 +50,8 @@ public class Section extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		title.setFill(style.getChannelDefault());
+		if (title != null)
+			title.setFill(style.getChannelDefault());
 	}
 
 }

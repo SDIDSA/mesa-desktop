@@ -16,10 +16,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
+import mesa.app.pages.login.LoginPage;
 import mesa.app.pages.session.content.Content;
 import mesa.app.pages.session.settings.Settings;
+import mesa.app.pages.session.settings.menu.SectionItem;
 import mesa.data.User;
 import mesa.gui.controls.SplineInterpolator;
+import mesa.gui.controls.alert.Alert;
+import mesa.gui.controls.alert.AlertType;
+import mesa.gui.controls.alert.ButtonType;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -156,6 +161,18 @@ public class SessionPage extends Page {
 	public void applyStyle(Style style) {
 		window.setFill(style.getBack3());
 		window.setBorder(Color.web("#494a4d"), 1);
+	}
+
+	public void logout() {
+		Alert confirm = new Alert(this, AlertType.LOGOUT);
+		confirm.setHead("log_out");
+		confirm.setBody("logout_confirm");
+		confirm.addAction(ButtonType.LOGOUT, () -> {
+			SectionItem.clearCache();
+			window.loadPage(new LoginPage(window));
+		});
+		confirm.show();
+
 	}
 
 }

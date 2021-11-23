@@ -1,4 +1,4 @@
-package mesa.gui.controls;
+package mesa.gui.controls.alert;
 
 import java.util.ArrayList;
 
@@ -13,9 +13,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
+import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.factory.Backgrounds;
+import mesa.gui.window.Window;
 
 public class Overlay extends StackPane {
+	private Page owner;
+	
 	private StackPane back;
 	private VBox content;
 	
@@ -24,7 +28,8 @@ public class Overlay extends StackPane {
 	
 	private ArrayList<Runnable> onShown;
 	
-	public Overlay() {
+	public Overlay(Page owner) {
+		this.owner = owner;
 		onShown = new ArrayList<>();
 		back = new StackPane();
 		back.setBackground(Backgrounds.make(Color.gray(0, .8)));
@@ -70,14 +75,14 @@ public class Overlay extends StackPane {
 		this.content.getChildren().setAll(cont);
 	}
 	
-	protected void show(Page page) {
+	public void show() {
 		hide.stop();
 		back.setOpacity(0);
 		content.setScaleX(.7);
 		content.setScaleY(.7);
-		if(!page.getChildren().contains(this)) {
-			page.getChildren().get(0).setDisable(true);
-			page.getChildren().add(this);
+		if(!owner.getChildren().contains(this)) {
+			owner.getChildren().get(0).setDisable(true);
+			owner.getChildren().add(this);
 		}
 		show.playFromStart();
 	}
@@ -85,10 +90,18 @@ public class Overlay extends StackPane {
 	public void hide() {
 		show.stop();
 		hide.setOnFinished(e-> {
-			((Page) getParent()).getChildren().get(0).setDisable(false);
-			((Page) getParent()).getChildren().remove(this);
+			owner.getChildren().get(0).setDisable(false);
+			owner.getChildren().remove(this);
 			
 		});
 		hide.playFromStart();
+	}
+	
+	public Page getOwner() {
+		return owner;
+	}
+	
+	public Window getWindow() {
+		return owner.getWindow();
 	}
 }

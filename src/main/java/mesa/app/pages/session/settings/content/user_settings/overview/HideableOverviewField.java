@@ -4,27 +4,34 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import mesa.app.pages.session.settings.Settings;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.Link;
 import mesa.gui.controls.label.TextTransform;
-import mesa.gui.controls.space.FixedHSpace;
 import mesa.gui.style.Style;
 
 public class HideableOverviewField extends OverviewField {
 
 	private Text value;
+	private Label emptyLabel;
 
 	private BooleanProperty hidden;
+	private BooleanProperty empty;
 
 	public HideableOverviewField(Settings settings, String key, StringProperty full, TextTransform hide) {
 		super(settings, key);
+
+		empty = new SimpleBooleanProperty(false);
 
 		hidden = new SimpleBooleanProperty(true);
 
 		this.value = new Text();
 		this.value.setFont(new Font(16).getFont());
+		HBox.setMargin(this.value, new Insets(0, 4, 0, 0));
 
 		Link reveal = new Link(settings.getWindow(), "overview_reveal");
 		reveal.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
@@ -34,9 +41,27 @@ public class HideableOverviewField extends OverviewField {
 		value.textProperty().bind(
 				Bindings.createStringBinding(() -> hidden.get() ? hide.apply(full.get()) : full.get(), hidden, full));
 
-		addToValue(this.value, new FixedHSpace(4), reveal);
+		emptyLabel = new Label(settings.getWindow(), "overview_empty", new Font(16));
+		emptyLabel.addParam(0, key);
+		emptyLabel.setTransform(TextTransform.CAPITALIZE_PHRASE);
+
+		empty.addListener((obs, ov, nv) -> {
+			if (nv.booleanValue()) {
+				setValue(emptyLabel);
+				edit.setKey("overview_add");
+			} else {
+				setValue(this.value, reveal);
+				edit.setKey("overview_edit");
+			}
+		});
+
+		setValue(this.value, reveal);
 
 		applyStyle(settings.getWindow().getStyl());
+	}
+
+	public BooleanProperty emptyProperty() {
+		return empty;
 	}
 
 	@Override
@@ -46,5 +71,6 @@ public class HideableOverviewField extends OverviewField {
 		}
 		super.applyStyle(style);
 		value.setFill(style.getText1());
+		emptyLabel.setFill(style.getText1());
 	}
 }

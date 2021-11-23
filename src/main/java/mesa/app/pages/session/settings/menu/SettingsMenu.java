@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.user_settings.MyAccount;
+import mesa.app.utils.Colors;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
@@ -44,9 +45,19 @@ public class SettingsMenu extends VBox implements Styleable {
 		appSettings.addItem(os);
 		appSettings.addItem(new SectionItem(settings, "advanced"));
 		
+		Section logoutSection = new Section(settings);
+		SectionItem logout = new SectionItem(settings, "log_out", () -> {
+			settings.getSession().logout();
+		});
+		logout.setTextFill(Colors.Error);
+		logoutSection.addItem(logout);
+		
 		addSection(userSettings);
 		separate();
 		addSection(appSettings);
+		separate();
+		addSection(logoutSection);
+		separate();
 		
 		applyStyle(settings.getWindow().getStyl());
 	}

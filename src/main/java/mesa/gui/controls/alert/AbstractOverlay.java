@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays;
+package mesa.gui.controls.alert;
 
 import org.json.JSONArray;
 
@@ -17,7 +17,6 @@ import mesa.app.component.Form;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.Overlay;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;
@@ -25,8 +24,6 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class AbstractOverlay extends Overlay implements Styleable {
-	private SessionPage session;
-	
 	private StackPane preRoot;
 	private HBox bottom;
 	private Button cancel;
@@ -39,7 +36,7 @@ public class AbstractOverlay extends Overlay implements Styleable {
 	protected Form form;
 
 	public AbstractOverlay(SessionPage session, double width) {
-		this.session = session;
+		super(session);
 		
 		root = new VBox();
 
@@ -77,10 +74,6 @@ public class AbstractOverlay extends Overlay implements Styleable {
 
 		form = new Form();
 		form.setDefaultButton(done);
-	}
-
-	public void show() {
-		show(session);
 	}
 	
 	public AbstractOverlay(SessionPage session) {

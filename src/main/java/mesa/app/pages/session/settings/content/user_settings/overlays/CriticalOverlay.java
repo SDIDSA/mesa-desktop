@@ -9,6 +9,7 @@ import javafx.scene.text.TextFlow;
 import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.alert.AbstractOverlay;
 import mesa.gui.controls.label.Label;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
@@ -25,6 +26,7 @@ public class CriticalOverlay extends AbstractOverlay {
 
 		StackPane.setMargin(closeIcon, new Insets(10));
 		root.setPadding(new Insets(16));
+		
 		head = new Label(session.getWindow(), headKey, new Font(20, FontWeight.BOLD));
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 
@@ -37,6 +39,8 @@ public class CriticalOverlay extends AbstractOverlay {
 
 		VBox.setMargin(preWarning, new Insets(0, 0, 20, 0));
 		password = new TextInputField(session.getWindow(), "password", 408, true);
+		
+		form.addAll(password);
 		
 		done.setKey(headKey);
 

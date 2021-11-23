@@ -59,7 +59,7 @@ public class Auth {
 	public static void deleteAccount(String userId, String password, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.DELETE_ACCOUNT, "delete account", onResult,
 				new Param(USER_ID, userId),
-				new Param(PASSWORD, password));
+				new Param(PASSWORD, hashPassword(password)));
 	}
 
 	public static String hashPassword(String password) {

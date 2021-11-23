@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.alert.AbstractOverlay;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.style.Style;
