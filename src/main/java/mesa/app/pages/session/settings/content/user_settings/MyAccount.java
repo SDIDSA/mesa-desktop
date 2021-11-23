@@ -142,7 +142,7 @@ public class MyAccount extends SettingsContent {
 						deleteOverlay.applyErrors(result.getJSONArray("err"));
 					} else {
 						deleteOverlay.hide();
-						//Logout
+						settings.getSession().logout();
 					}
 					
 					deleteOverlay.stopLoading();

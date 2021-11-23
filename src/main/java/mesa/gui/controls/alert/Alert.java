@@ -56,7 +56,7 @@ public class Alert extends Overlay implements Styleable {
 
 		TextFlow preBody = new TextFlow(body);
 		preBody.setLineSpacing(5);
-		preBody.setMinHeight(54);
+		preBody.setMinHeight(60);
 
 		root.getChildren().addAll(head, preBody);
 
@@ -116,6 +116,6 @@ public class Alert extends Overlay implements Styleable {
 				.otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
 
 		head.setFill(style.getText1());
-		body.setFill(style.getText1());
+		body.setFill(style.getText2());
 	}
 }

@@ -1,4 +1,4 @@
-package mesa.gui.controls.alert;
+package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import org.json.JSONArray;
 
@@ -17,6 +17,7 @@ import mesa.app.component.Form;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.alert.Overlay;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;

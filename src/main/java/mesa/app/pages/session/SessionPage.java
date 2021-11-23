@@ -164,15 +164,18 @@ public class SessionPage extends Page {
 	}
 
 	public void logout() {
+		SectionItem.clearCache();
+		window.loadPage(new LoginPage(window));
+	}
+
+	public void logoutPrompt() {
 		Alert confirm = new Alert(this, AlertType.LOGOUT);
 		confirm.setHead("log_out");
 		confirm.setBody("logout_confirm");
 		confirm.addAction(ButtonType.LOGOUT, () -> {
-			SectionItem.clearCache();
-			window.loadPage(new LoginPage(window));
+			logout();
 		});
 		confirm.show();
-
 	}
 
 }

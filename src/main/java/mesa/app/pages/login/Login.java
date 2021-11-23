@@ -78,8 +78,8 @@ public class Login extends LoginSubPage {
 		getChildren().add(root);
 
 		form = NodeUtils.getForm(left);
-		form.setField("email_phone", "+213657693679");
-		form.setField("password", "a1b2.a1b2");
+//		form.setField("email_phone", "+213657693679");
+//		form.setField("password", "a1b2.a1b2");
 		form.setDefaultButton(loginButton);
 		loginButton.setAction(() -> {
 			if (form.check()) {

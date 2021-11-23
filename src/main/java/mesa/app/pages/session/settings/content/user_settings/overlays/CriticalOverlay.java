@@ -9,7 +9,6 @@ import javafx.scene.text.TextFlow;
 import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.alert.AbstractOverlay;
 import mesa.gui.controls.label.Label;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
