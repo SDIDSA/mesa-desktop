@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.TextInputField;
-import mesa.app.pages.session.settings.content.user_settings.overlays.phone.PhoneInput;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -70,8 +69,6 @@ public class Login extends LoginSubPage {
 		bottom.getChildren().addAll(needAcc, register);
 
 		left.getChildren().addAll(web, etsya, email, password, recover, loginButton, bottom);
-		
-		left.getChildren().add(new PhoneInput(window));
 
 		VBox right = new VBox(0);
 		right.setMinWidth(240);
