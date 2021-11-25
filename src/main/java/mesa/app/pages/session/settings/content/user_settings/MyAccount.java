@@ -18,8 +18,8 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordEd
 import mesa.app.pages.session.settings.content.user_settings.overview.ProfileOverview;
 import mesa.app.utils.Colors;
 import mesa.data.User;
-import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.LayerIcon;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;

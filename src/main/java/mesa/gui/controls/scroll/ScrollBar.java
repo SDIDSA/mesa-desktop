@@ -26,7 +26,7 @@ public class ScrollBar extends StackPane {
 	public ScrollBar(double width, double padding) {
 		setAlignment(Pos.TOP_CENTER);
 		double effectiveWidth = width - padding * 2;
-		
+
 		setPadding(new Insets(padding));
 		position = new SimpleDoubleProperty(0);
 
@@ -34,47 +34,47 @@ public class ScrollBar extends StackPane {
 		track.heightProperty().bind(heightProperty().subtract(padding * 2));
 		track.setFill(Color.TRANSPARENT);
 		thumb = new Rectangle();
-		
+
 		thumb.setArcHeight(effectiveWidth + 2);
 		thumb.setArcWidth(effectiveWidth + 2);
 		track.setArcHeight(effectiveWidth + 2);
 		track.setArcWidth(effectiveWidth + 2);
-		
+
 		thumb.translateYProperty().bind(position.multiply(track.heightProperty().subtract(thumb.heightProperty())));
-		
+
 		setOnMousePressed(e -> {
 			initPos = position.get();
 			initY = e.getScreenY();
 		});
-		
+
 		setOnMouseDragged(e -> {
 			double dy = (e.getScreenY() - initY) / (track.getHeight() - thumb.getHeight());
 			setPos(initPos + dy);
 		});
 
 		getChildren().addAll(track, thumb);
-		
+
 		thumb.setWidth(effectiveWidth);
 		track.setWidth(effectiveWidth);
 		setMinWidth(width);
 		setMaxWidth(width);
-		
+
 		setMaxHeight(USE_PREF_SIZE);
 		setMinHeight(USE_PREF_SIZE);
 		setCursor(Cursor.DEFAULT);
 	}
 
 	public void install(Region parent, Region child) {
-		thumb.heightProperty()
-				.bind(parent.heightProperty().divide(child.heightProperty()).multiply(track.heightProperty()));
-		
+		thumb.heightProperty().bind(Bindings.max(40,
+				parent.heightProperty().divide(child.heightProperty()).multiply(track.heightProperty())));
+
 		child.translateYProperty().bind(
 				positionProperty().multiply(child.heightProperty().subtract(parent.heightProperty())).multiply(-1));
 
-		child.addEventFilter(ScrollEvent.ANY, e-> scrollByPixels(e.getDeltaY(), child.getHeight()));
-		
+		child.addEventFilter(ScrollEvent.ANY, e -> scrollByPixels(e.getDeltaY(), child.getHeight()));
+
 		prefHeightProperty().bind(parent.heightProperty());
-		
+
 		visibleProperty().bind(thumb.heightProperty().lessThan(track.heightProperty()));
 	}
 
@@ -82,10 +82,11 @@ public class ScrollBar extends StackPane {
 		double newPos = position.get() - (pixels / relativeTo);
 		setPos(newPos);
 	}
-	
+
 	public void bindOpacityToHover(Node node) {
 		opacityProperty().unbind();
-		opacityProperty().bind(Bindings.when(node.hoverProperty().or(this.hoverProperty()).or(this.pressedProperty())).then(1).otherwise(0));
+		opacityProperty().bind(Bindings.when(node.hoverProperty().or(this.hoverProperty()).or(this.pressedProperty()))
+				.then(1).otherwise(0));
 	}
 
 	private void setPos(double val) {

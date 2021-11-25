@@ -2,7 +2,12 @@ package mesa.gui.file;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.json.JSONObject;
+
+import mesa.data.CountryCode;
 import mesa.gui.exception.ErrorHandler;
 
 public class FileUtils {
@@ -29,5 +34,20 @@ public class FileUtils {
 		}
 
 		return sb.toString();
+	}
+
+	private static List<CountryCode> countryCodes;
+
+	public static List<CountryCode> readCountryCodes() {
+		if (countryCodes == null) {
+			countryCodes = new ArrayList<>();
+			JSONObject obj = new JSONObject(readFile("/countries.json"));
+			for (Object o : obj.getJSONArray("countryCodes")) {
+				JSONObject countryObj = (JSONObject) o;
+				countryCodes.add(
+						new CountryCode(countryObj.getString("country_name"), countryObj.getString("dialling_code")));
+			}
+		}
+		return countryCodes;
 	}
 }

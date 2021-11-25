@@ -15,16 +15,16 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.component.Form;
 import mesa.app.pages.session.SessionPage;
-import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.alert.Overlay;
+import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class AbstractOverlay extends Overlay implements Styleable {
+public abstract class AbstractOverlay extends Overlay implements Styleable {
 	private StackPane preRoot;
 	private HBox bottom;
 	private Button cancel;
@@ -36,7 +36,7 @@ public class AbstractOverlay extends Overlay implements Styleable {
 
 	protected Form form;
 
-	public AbstractOverlay(SessionPage session, double width) {
+	protected AbstractOverlay(SessionPage session, double width) {
 		super(session);
 		
 		root = new VBox();
@@ -77,7 +77,7 @@ public class AbstractOverlay extends Overlay implements Styleable {
 		form.setDefaultButton(done);
 	}
 	
-	public AbstractOverlay(SessionPage session) {
+	protected AbstractOverlay(SessionPage session) {
 		this(session, 440);
 	}
 

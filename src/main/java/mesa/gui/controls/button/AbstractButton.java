@@ -1,4 +1,4 @@
-package mesa.gui.controls;
+package mesa.gui.controls.button;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -9,42 +9,45 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import mesa.app.utils.Colors;
-import mesa.gui.controls.label.Label;
+import mesa.gui.controls.Animator;
+import mesa.gui.controls.Loading;
 import mesa.gui.factory.Borders;
-import mesa.gui.window.Window;
 
-public class Button extends StackPane {
-	private Rectangle back;
-	private Label label;
+public class AbstractButton extends StackPane {
 	private double radius;
 	private DoubleProperty radiusProperty;
 	private Timeline enter;
 	private Timeline exit;
 	private Runnable action;
 
-	private boolean ulOnHover = false;
 	private Loading load;
+
+	private HBox content;
+
+	protected Rectangle back;
 
 	private BooleanProperty loading;
 
-	public Button(Window window, String key, double radius, double width, double height) {
+	public AbstractButton(double radius, double height) {
 		this.radius = radius;
-		getStyleClass().addAll("butt", key);
+		getStyleClass().addAll("butt");
 
 		getStylesheets().clear();
 
@@ -56,16 +59,6 @@ public class Button extends StackPane {
 		setPrefHeight(height);
 
 		radiusProperty = new SimpleDoubleProperty(radius);
-
-		label = new Label(window, key);
-
-		if (width < 50) {
-			prefWidthProperty()
-					.bind(Bindings.createDoubleBinding(() -> label.getBoundsInLocal().getWidth() + (width * 2),
-							label.textProperty(), label.fontProperty()));
-		} else {
-			setPrefWidth(width);
-		}
 
 		back = new Rectangle();
 		back.setFill(Color.TRANSPARENT);
@@ -85,24 +78,9 @@ public class Button extends StackPane {
 		load = new Loading(height / 5);
 		load.setOpacity(.7);
 
-		setFontSize(16);
-		setFontWeight(FontWeight.BOLD);
+		setOnMouseEntered(this::onEnter);
 
-		setOnMouseEntered(e -> {
-			exit.stop();
-			enter.playFromStart();
-			if (ulOnHover) {
-				label.setUnderline(true);
-			}
-		});
-
-		setOnMouseExited(e -> {
-			enter.stop();
-			exit.playFromStart();
-			if (ulOnHover) {
-				label.setUnderline(false);
-			}
-		});
+		setOnMouseExited(this::onExit);
 
 		setOnMouseClicked(this::fire);
 		setOnKeyPressed(this::fire);
@@ -113,13 +91,29 @@ public class Button extends StackPane {
 
 		effectProperty().bind(Bindings.when(disabledProperty()).then(bw).otherwise(col));
 		back.opacityProperty().bind(Bindings.when(disabledProperty()).then(.3).otherwise(1));
-		label.opacityProperty().bind(back.opacityProperty());
 
-		getChildren().addAll(back, label);
+		content = new HBox();
+		content.setAlignment(Pos.CENTER);
+
+		getChildren().addAll(back, content);
+	}
+	
+	public void setContentPadding(Insets insets) {
+		content.setPadding(insets);
+	}
+	
+	public void add(Node...nodes) {
+		content.getChildren().addAll(nodes);
 	}
 
-	public void setUlOnHover(boolean ulOnHover) {
-		this.ulOnHover = ulOnHover;
+	protected void onEnter(MouseEvent event) {
+		exit.stop();
+		enter.playFromStart();
+	}
+
+	protected void onExit(MouseEvent event) {
+		enter.stop();
+		exit.playFromStart();
 	}
 
 	public void show() {
@@ -142,7 +136,7 @@ public class Button extends StackPane {
 	public void stopLoading() {
 		setMouseTransparent(false);
 		setFocusTraversable(true);
-		getChildren().setAll(back, label);
+		getChildren().setAll(back, content);
 		load.stop();
 		loading.set(false);
 	}
@@ -151,12 +145,12 @@ public class Button extends StackPane {
 		return loading;
 	}
 
-	public Button(Window window, String key, int width) {
-		this(window, key, 4.0, width, 44);
+	public AbstractButton() {
+		this(4.0, 44);
 	}
 
-	public Button(Window window, String string, double radius, int width) {
-		this(window, string, radius, width, 44);
+	public AbstractButton(double radius) {
+		this(radius, 44);
 	}
 
 	private void fire(MouseEvent dismiss) {
@@ -182,33 +176,8 @@ public class Button extends StackPane {
 		this.action = action;
 	}
 
-	public void setFont(Font font) {
-		label.setFont(font);
-	}
-
-	public void setFontFamily(String family) {
-		label.setFontFamily(family);
-	}
-
-	public void setFontSize(int size) {
-		label.setFontSize(size);
-	}
-
-	public void setFontWeight(FontWeight weight) {
-		label.setFontWeight(weight);
-	}
-
-	public void setFontPosture(FontPosture posture) {
-		label.setFontPosture(posture);
-	}
-
 	public void setTextFill(Paint fill) {
-		label.setFill(fill);
 		load.setFill(fill);
-	}
-	
-	public void setKey(String key) {
-		label.setKey(key);
 	}
 
 	public double getRadius() {
@@ -223,7 +192,7 @@ public class Button extends StackPane {
 		exit = new Timeline(
 				new KeyFrame(Duration.seconds(.15), new KeyValue(back.fillProperty(), fill, Interpolator.EASE_BOTH)));
 	}
-	
+
 	public void setStroke(Color fill) {
 		back.setStroke(fill);
 	}

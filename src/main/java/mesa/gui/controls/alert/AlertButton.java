@@ -2,8 +2,8 @@ package mesa.gui.controls.alert;
 
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
-import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.button.Button;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 

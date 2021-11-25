@@ -1,5 +1,7 @@
 package mesa.gui.style;
 
+import javafx.scene.paint.Color;
+
 /**
  * Represents a Styleable Node. <br>
  * <br>
@@ -25,4 +27,9 @@ public interface Styleable {
 	 */
 
 	void applyStyle(Style style);
+
+	public static String colorToCss(Color color) {
+		return "rgb(" + (int) (color.getRed() * 255) + "," + (int) (color.getGreen() * 255) + ","
+				+ (int) (color.getBlue() * 255) + ", " + color.getOpacity() + ")";
+	}
 }

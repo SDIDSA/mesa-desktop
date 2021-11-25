@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays;
+package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -39,7 +39,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 		VBox content = new VBox();
 		content.setAlignment(Pos.TOP_CENTER);
-		content.setPadding(new Insets(100, 16, 16, 16));
+		content.setPadding(new Insets(106, 16, 16, 16));
 
 		head = new Label(owner.getWindow(), "enter_phone", new Font(20, FontWeight.BOLD));
 		VBox.setMargin(head, new Insets(0, 0, 14, 0));
@@ -56,7 +56,9 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		phoneUse.setTextAlignment(TextAlignment.CENTER);
 		phoneUse.setLineSpacing(7);
 
-		content.getChildren().addAll(head, smsCodeNode, phoneUse);
+		PhoneInput input = new PhoneInput(owner.getWindow());
+		
+		content.getChildren().addAll(head, smsCodeNode, phoneUse, input);
 
 		root.getChildren().addAll(isoPhone, content);
 

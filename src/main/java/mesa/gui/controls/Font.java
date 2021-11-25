@@ -49,7 +49,7 @@ public class Font {
 		this(DEFAULT_FAMILY, DEFAULT_SIZE, weight, DEFAULT_POSTURE);
 	}
 
-	public Font(int size, FontWeight weight) {
+	public Font(double size, FontWeight weight) {
 		this(DEFAULT_FAMILY, size, weight, DEFAULT_POSTURE);
 	}
 

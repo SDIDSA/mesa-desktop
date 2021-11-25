@@ -11,7 +11,7 @@ import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.style.Style;
 
-public class BasicOverlay extends AbstractOverlay {
+public abstract class BasicOverlay extends AbstractOverlay {
 
 	protected Label head;
 	protected Label subHead;

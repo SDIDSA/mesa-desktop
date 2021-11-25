@@ -9,9 +9,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.settings.Settings;
-import mesa.gui.controls.Button;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.alert.Overlay;
+import mesa.gui.controls.button.Button;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -50,7 +50,7 @@ public class OverviewField extends HBox implements Styleable {
 		edit = new Button(settings.getWindow(), "overview_edit", 3, 16, 32);
 		edit.setFont(new Font(14, FontWeight.BOLD));
 		
-		overlay = new SimpleObjectProperty<Overlay>();
+		overlay = new SimpleObjectProperty<>();
 		
 		edit.setAction(() -> {
 			if (overlay.get() != null)

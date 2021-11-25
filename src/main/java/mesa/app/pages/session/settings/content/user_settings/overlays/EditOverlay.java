@@ -2,7 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import mesa.app.pages.session.SessionPage;
 
-public class EditOverlay extends BasicOverlay {
+public abstract class EditOverlay extends BasicOverlay {
 
 	public EditOverlay(SessionPage session, String editWhat) {
 		super(session);

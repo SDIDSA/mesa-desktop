@@ -145,7 +145,7 @@ public class LoginPage extends Page {
 
 		getChildren().addAll(login);
 		prepare(login);
-
+		
 		applyStyle(window.getStyl());
 	}
 

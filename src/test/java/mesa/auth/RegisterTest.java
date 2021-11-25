@@ -22,7 +22,7 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import mesa.app.component.input.InputField;
 import mesa.app.pages.login.LoginPage;
-import mesa.gui.controls.Button;
+import mesa.gui.controls.button.AbstractButton;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -121,7 +121,7 @@ class RegisterTest {
 			assertThatErrorIs(field, null);
 		}
 
-		Assertions.assertThat(robot.lookup(".butt.login").queryAllAs(Button.class).size()).isEqualTo(1);
+		Assertions.assertThat(robot.lookup(".butt.login").queryAllAs(AbstractButton.class).size()).isEqualTo(1);
 	}
 	
 	@Stop
@@ -138,7 +138,7 @@ class RegisterTest {
 	}
 
 	private void contin(FxRobot robot) {
-		Button contin = robot.lookup(".butt.continue").query();
+		AbstractButton contin = robot.lookup(".butt.continue").query();
 		robot.clickOn(contin, MouseButton.PRIMARY);
 
 		waitFor(contin.loadingProperty(), false);

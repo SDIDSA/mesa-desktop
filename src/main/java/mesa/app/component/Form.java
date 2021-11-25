@@ -8,12 +8,12 @@ import org.json.JSONObject;
 
 import javafx.scene.input.KeyCode;
 import mesa.app.component.input.InputField;
-import mesa.gui.controls.Button;
+import mesa.gui.controls.button.AbstractButton;
 
 public class Form {
 	private ArrayList<InputField> fields;
 
-	private Button defaultButton;
+	private AbstractButton defaultButton;
 
 	public Form() {
 		super();
@@ -86,7 +86,7 @@ public class Form {
 		fields.forEach(InputField::removeError);
 	}
 
-	public void setDefaultButton(Button button) {
+	public void setDefaultButton(AbstractButton button) {
 		defaultButton = button;
 	}
 
