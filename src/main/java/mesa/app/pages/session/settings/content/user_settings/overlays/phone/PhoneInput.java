@@ -1,5 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
+import java.util.function.Consumer;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -35,6 +37,8 @@ public class PhoneInput extends HBox implements Styleable {
 
 	private Text selectedCode;
 
+	private boolean pressed;
+
 	public PhoneInput(Window window) {
 		setAlignment(Pos.CENTER);
 
@@ -47,7 +51,7 @@ public class PhoneInput extends HBox implements Styleable {
 		setHgrow(field, Priority.ALWAYS);
 
 		send = new Button(window, "phone_send", 3.0, 16, 32);
-		send.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13));
+		send.setFont(new Font(13, FontWeight.BOLD));
 		setMargin(send, new Insets(6, 6, 6, 0));
 
 		country = new AbstractButton(3.0, 32);
@@ -87,16 +91,28 @@ public class PhoneInput extends HBox implements Styleable {
 			countries.hide();
 		});
 
+		country.setOnMousePressed(e -> pressed = true);
+
 		country.setAction(() -> {
-			if (countries.isShowing())
+			if (!pressed)
 				countries.hide();
 			else
 				countries.showPop(this);
+
+			pressed = false;
 		});
 
 		getChildren().addAll(country, field, send);
-
+		
 		applyStyle(window.getStyl());
+	}
+
+	private String getValue() {
+		return selectedCode.getText() + field.getText();
+	}
+
+	public void setAction(Consumer<String> action) {
+		send.setAction(() -> action.accept(getValue()));
 	}
 
 	@Override
@@ -108,9 +124,8 @@ public class PhoneInput extends HBox implements Styleable {
 		selectedCode.setFill(style.getText1());
 		showPop.setFill(style.getText1());
 
-		Color tx = style.getText1();
-		field.setStyle("-fx-text-fill: rgb(" + (int) (tx.getRed() * 255) + "," + (int) (tx.getGreen() * 255) + ","
-				+ (int) (tx.getBlue() * 255) + ");-fx-background-color:transparent;-fx-text-box-border: transparent;");
+		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getText1())
+				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
 
 		send.setTextFill(style.getText1());
 		send.setFill(style.getAccent());

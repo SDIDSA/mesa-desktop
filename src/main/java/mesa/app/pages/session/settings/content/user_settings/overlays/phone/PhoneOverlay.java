@@ -58,6 +58,10 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 		PhoneInput input = new PhoneInput(owner.getWindow());
 		
+		input.setAction(value -> {
+			//TODO use the phone number
+		});
+		
 		content.getChildren().addAll(head, smsCodeNode, phoneUse, input);
 
 		root.getChildren().addAll(isoPhone, content);

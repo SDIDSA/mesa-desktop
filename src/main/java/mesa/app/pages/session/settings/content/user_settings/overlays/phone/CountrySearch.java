@@ -29,8 +29,6 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 		setPadding(new Insets(1));
 		setAlignment(Pos.CENTER_RIGHT);
 
-		setFocusTraversable(true);
-
 		field = new TextField();
 		field.setBackground(Background.EMPTY);
 		field.setBorder(Border.EMPTY);

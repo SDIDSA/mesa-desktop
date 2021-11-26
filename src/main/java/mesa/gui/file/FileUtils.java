@@ -37,7 +37,6 @@ public class FileUtils {
 	}
 
 	private static List<CountryCode> countryCodes;
-
 	public static List<CountryCode> readCountryCodes() {
 		if (countryCodes == null) {
 			countryCodes = new ArrayList<>();

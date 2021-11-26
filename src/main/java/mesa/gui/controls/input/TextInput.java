@@ -10,9 +10,9 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 import mesa.gui.controls.Font;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class TextInput extends Input {
@@ -34,17 +34,17 @@ public class TextInput extends Input {
 		preField = new HBox();
 		preField.setAlignment(Pos.CENTER);
 		preField.getChildren().add(field);
-		
+
 		HBox.setHgrow(field, Priority.ALWAYS);
-		
+
 		getChildren().add(preField);
 
 		setFont(font);
 
 		applyStyle(window.getStyl());
 	}
-	
-	public void addPostField(Node...nodes) {
+
+	public void addPostField(Node... nodes) {
 		preField.getChildren().addAll(nodes);
 	}
 
@@ -58,7 +58,7 @@ public class TextInput extends Input {
 
 	public void setFocusable(boolean focusable) {
 		field.setFocusTraversable(focusable);
-		if(!focusable) {
+		if (!focusable) {
 			setMouseTransparent(true);
 		}
 	}
@@ -81,9 +81,8 @@ public class TextInput extends Input {
 	@Override
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
-		Color tx = style.getText1();
-		field.setStyle("-fx-text-fill: rgb(" + (int) (tx.getRed() * 255) + "," + (int) (tx.getGreen() * 255) + ","
-				+ (int) (tx.getBlue() * 255) + ");-fx-background-color:transparent;-fx-text-box-border: transparent;");
+		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getText1())
+				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
 	}
 
 	@Override
@@ -100,7 +99,7 @@ public class TextInput extends Input {
 	public void clear() {
 		setValue("");
 	}
-	
+
 	@Override
 	public void requestFocus() {
 		field.requestFocus();
