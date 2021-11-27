@@ -2,8 +2,6 @@ package mesa.gui.controls.label;
 
 import java.util.ArrayList;
 
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
 import mesa.gui.locale.Locale;
@@ -16,7 +14,6 @@ public class Label extends Text implements Localized {
 	private TextTransform transform = TextTransform.NONE;
 
 	private String key;
-	private Font font;
 
 	private ArrayList<String> params = new ArrayList<>();
 
@@ -33,24 +30,7 @@ public class Label extends Text implements Localized {
 	}
 
 	public void setFont(Font font) {
-		this.font = font;
 		setFont(font.getFont());
-	}
-
-	public void setFontFamily(String family) {
-		setFont(font.setFamily(family));
-	}
-
-	public void setFontSize(int size) {
-		setFont(font.setSize(size));
-	}
-
-	public void setFontWeight(FontWeight weight) {
-		setFont(font.setWeight(weight));
-	}
-
-	public void setFontPosture(FontPosture posture) {
-		setFont(font.setPosture(posture));
 	}
 
 	public void setTransform(TextTransform transform) {

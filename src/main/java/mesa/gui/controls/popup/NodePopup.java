@@ -60,7 +60,7 @@ public class NodePopup extends PopupControl implements Styleable, Localized {
 			int x = (int) screenBounds.getMinX();
 			int y = (int) screenBounds.getMinY();
 
-			double px = x - getWidth() / 2 + node.getBoundsInLocal().getCenterX();
+			double px = x - getWidth() / 2 + (node.getBoundsInLocal().getMinX() + node.getBoundsInLocal().getMaxX()) / 2;
 
 			setX(px);
 			setY(y - getHeight());

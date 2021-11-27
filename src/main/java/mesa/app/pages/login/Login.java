@@ -16,6 +16,7 @@ import mesa.app.component.input.TextInputField;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
+import mesa.gui.controls.image.IsoPhone;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.Link;
 import mesa.gui.controls.space.Separator;
@@ -73,6 +74,26 @@ public class Login extends LoginSubPage {
 		VBox right = new VBox(0);
 		right.setMinWidth(240);
 		
+		IsoPhone ip = new IsoPhone(160);
+		ip.applyStyle(window.getStyl());
+		
+		ip.setOnMouseClicked(e-> {
+			ip.requestFocus();
+		});
+		
+		ip.setOnKeyPressed(e-> {
+			switch(e.getCode()) {
+			case A : ip.showError();break;
+			case B : ip.showSms();break;
+			case C : ip.showIncorrect();break;
+			case D : ip.showCorrect();break;
+			case ESCAPE : ip.showNormal();break;
+			default: break;
+			}
+		});
+		
+		
+		right.getChildren().add(ip);
 
 		root.getChildren().addAll(left, new Separator(Orientation.VERTICAL), right);
 

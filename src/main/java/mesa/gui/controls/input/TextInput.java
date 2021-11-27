@@ -49,10 +49,10 @@ public class TextInput extends Input {
 	}
 
 	public void align(Pos pos) {
-		if (field instanceof PasswordField passwordField) {
-			passwordField.setAlignment(pos);
-		} else if (field instanceof TextField textField) {
-			textField.setAlignment(pos);
+		if (field instanceof PasswordField) {
+			((PasswordField) field).setAlignment(pos);
+		} else if (field instanceof TextField) {
+			((TextField) field).setAlignment(pos);
 		}
 	}
 

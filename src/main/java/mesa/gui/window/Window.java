@@ -2,6 +2,7 @@ package mesa.gui.window;
 
 import mesa.app.pages.Page;
 import mesa.gui.NodeUtils;
+import mesa.gui.exception.ErrorHandler;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
@@ -13,10 +14,12 @@ import mesa.gui.window.helpers.State;
 import mesa.gui.window.helpers.TileHint;
 
 import java.awt.Dimension;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -63,9 +66,16 @@ public class Window extends Stage implements Styleable, Localized {
 		return root.getAppBar();
 	}
 
-	public void loadPage(Page page) {
-		page.setup(this);
-		root.setContent(page);
+	public void loadPage(Class<? extends Page> type) {
+		new Thread(()-> {
+			try {
+				Page page = type.getConstructor(Window.class).newInstance(this);
+				Platform.runLater(()-> root.setContent(page));
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException x) {
+				ErrorHandler.handle(x, "create page " + type.getSimpleName());
+			}
+		}).start();
 	}
 
 	public void setFill(Paint fill) {
@@ -148,8 +158,8 @@ public class Window extends Stage implements Styleable, Localized {
 	public JSONObject getJsonData(String key) {
 		Object obj = data.get(key);
 		
-		if(obj instanceof JSONObject jsonObject) {
-			return jsonObject;
+		if(obj instanceof JSONObject) {
+			return (JSONObject) obj;
 		}else {
 			throw new IllegalStateException("no json data was found at key " + key);
 		}

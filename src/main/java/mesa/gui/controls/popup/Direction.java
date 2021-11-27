@@ -43,12 +43,12 @@ public enum Direction {
 		double xHor = (isArrowFirst() ? (screenBounds.getMaxX() + offset) : (screenBounds.getMinX() - offset));
 		double x = isHorizontal()
 				? xHor
-				: screenBounds.getCenterX();
+				: (screenBounds.getMinX() + screenBounds.getMaxX()) / 2;
 
 		double yVer = (isArrowFirst() ? (screenBounds.getMaxY() + offset) : (screenBounds.getMinY() - offset));
 		double y = isVertical()
 				? yVer
-				: screenBounds.getCenterY();
+				:  (screenBounds.getMinY() + screenBounds.getMaxY()) / 2;
 
 		double pxHor = (isArrowFirst() ? 0 : popup.getWidth());
 		double pyVer = (isArrowFirst() ? 0 : popup.getHeight());

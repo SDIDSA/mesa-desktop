@@ -70,4 +70,8 @@ public abstract class BarItem extends HBox {
 	public void setAction(Runnable action) {
 		this.action = action;
 	}
+	
+	public static void clear() {
+		selected = null;
+	}
 }

@@ -18,6 +18,7 @@ import javafx.util.Duration;
 import mesa.app.pages.Page;
 import mesa.app.pages.login.LoginPage;
 import mesa.app.pages.session.content.Content;
+import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.menu.SectionItem;
 import mesa.data.User;
@@ -25,6 +26,7 @@ import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.alert.Alert;
 import mesa.gui.controls.alert.AlertType;
 import mesa.gui.controls.alert.ButtonType;
+import mesa.gui.controls.popup.tooltip.Tooltip;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -165,16 +167,16 @@ public class SessionPage extends Page {
 
 	public void logout() {
 		SectionItem.clearCache();
-		window.loadPage(new LoginPage(window));
+		BarItem.clear();
+		Tooltip.clear();
+		window.loadPage(LoginPage.class);
 	}
 
 	public void logoutPrompt() {
 		Alert confirm = new Alert(this, AlertType.LOGOUT);
 		confirm.setHead("log_out");
 		confirm.setBody("logout_confirm");
-		confirm.addAction(ButtonType.LOGOUT, () -> {
-			logout();
-		});
+		confirm.addAction(ButtonType.LOGOUT, this::logout);
 		confirm.show();
 	}
 

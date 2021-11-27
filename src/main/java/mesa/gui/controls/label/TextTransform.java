@@ -35,7 +35,7 @@ public abstract class TextTransform implements UnaryOperator<String> {
 			StringBuilder res = new StringBuilder();
 
 			for (String word : param.split(" ")) {
-				if (!res.isEmpty()) {
+				if (res.length() != 0) {
 					res.append(' ');
 				}
 				res.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1));

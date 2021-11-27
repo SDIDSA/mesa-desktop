@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
@@ -25,12 +26,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
+import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import mesa.data.CountryCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.Separator;
+import mesa.gui.exception.ErrorHandler;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.file.FileUtils;
@@ -46,11 +49,14 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 	private Separator separator;
 	private ScrollBar scrollBar;
-	
+
 	private Consumer<CountryCode> onSelect;
 
 	private Scale scale;
 	private Timeline scaleShow;
+	private boolean running = false;
+	private boolean cancel = false;
+
 	public CountryCodePopup(Window owner) {
 		this.owner = owner;
 		setAutoHide(true);
@@ -81,25 +87,56 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 		Map<CountryCode, CountryCodeItem> cache = new HashMap<>();
 		Consumer<List<CountryCode>> display = codes -> {
-			items.getChildren().clear();
+			if (running) {
+				if (cancel) {
+					return;
+				} else {
+					cancel = true;
+					while (running) {
+						try {
+							Thread.sleep(5);
+						} catch (InterruptedException e) {
+							ErrorHandler.handle(e, "interrupted");
+							Thread.currentThread().interrupt();
+						}
+					}
+				}
+			}
+			running = true;
+			Platform.runLater(items.getChildren()::clear);
 			for (CountryCode code : codes) {
+				if (cancel) {
+					cancel = false;
+					break;
+				}
 				CountryCodeItem item = cache.get(code);
-				if(item == null) {
+				if (item == null) {
 					item = new CountryCodeItem(code);
-					item.setOnMouseClicked(e-> onSelect.accept(code));
+					item.setOnMouseClicked(e -> onSelect.accept(code));
 					cache.put(code, item);
 				}
-				
-				items.getChildren().add(item);
+				final CountryCodeItem fitem = item;
+				fitem.applyStyle(owner.getStyl());
+
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					ErrorHandler.handle(e, "interrupted");
+					Thread.currentThread().interrupt();
+				}
+
+				Platform.runLater(() -> items.getChildren().add(fitem));
 			}
+
+			running = false;
 		};
 
 		List<CountryCode> all = FileUtils.readCountryCodes();
 
-		Runnable reset = () -> display.accept(all);
+		Runnable reset = () -> new Thread(() -> display.accept(all)).start();
 
 		Consumer<String> searchFor = text -> new Thread() {
-			@Override 
+			@Override
 			public void run() {
 				ArrayList<CountryCode> found = new ArrayList<>();
 
@@ -109,14 +146,20 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 					}
 				}
 
-				Platform.runLater(() -> display.accept(found));
+				display.accept(found);
 			}
 		}.start();
 
 		search.setReset(reset);
 		search.setSearch(searchFor);
 
-		reset.run();
+		addEventFilter(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				reset.run();
+				removeEventFilter(WindowEvent.WINDOW_SHOWN, this);
+			}
+		});
 
 		scrollBar = new ScrollBar(16, 4);
 		scrollBar.install(listCont, items);
@@ -134,18 +177,16 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 		scale = new Scale(1, 1, 0, 0);
 		root.getTransforms().add(scale);
-		
+
 		scaleShow = new Timeline(
-				new KeyFrame(Duration.seconds(.1), 
-						new KeyValue(scale.xProperty(), 1, SplineInterpolator.OVERSHOOT), 
-						new KeyValue(scale.yProperty(), 1, SplineInterpolator.OVERSHOOT), 
-						new KeyValue(root.opacityProperty(), 1, SplineInterpolator.OVERSHOOT)
-					));
-		
+				new KeyFrame(Duration.seconds(.1), new KeyValue(scale.xProperty(), 1, SplineInterpolator.OVERSHOOT),
+						new KeyValue(scale.yProperty(), 1, SplineInterpolator.OVERSHOOT),
+						new KeyValue(root.opacityProperty(), 1, SplineInterpolator.OVERSHOOT)));
+
 		applyStyle(owner.getStyl());
 		applyLocale(owner.getLocale());
 	}
-	
+
 	public void setOnSelect(Consumer<CountryCode> onSelect) {
 		this.onSelect = onSelect;
 	}
@@ -166,13 +207,13 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 			if (y + getHeight() >= screen.getVisualBounds().getHeight() + 16) {
 				y = screenBounds.getMinY() - getHeight() + 8;
 				scale.setPivotY(getHeight());
-			}else {
+			} else {
 				scale.setPivotY(0);
 			}
 
 			setX(x);
 			setY(y);
-			
+
 			scaleShow.stop();
 			scaleShow.playFromStart();
 		});

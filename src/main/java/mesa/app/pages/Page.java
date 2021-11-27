@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.DoubleExpression;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -17,6 +18,8 @@ import mesa.gui.window.content.AppPreRoot;
 public abstract class Page extends StackPane implements Styleable {
 	protected Window window;
 	protected Dimension minSize;
+	
+	private ChangeListener<? super Boolean> onPaddingChange;
 
 	protected Page(Window window, Dimension minSize) {
 		this.window = window;
@@ -44,7 +47,7 @@ public abstract class Page extends StackPane implements Styleable {
 			setClip(Shape.union(clipBottom, clipTop));
 		});
 
-		window.paddedProperty().addListener((obs, ov, nv) -> {
+		onPaddingChange = (obs, ov, nv) -> {
 			if (nv.booleanValue()) {
 				clipBottom.setArcHeight(arc);
 				clipBottom.setArcWidth(arc);
@@ -54,7 +57,7 @@ public abstract class Page extends StackPane implements Styleable {
 			}
 
 			setClip(Shape.union(clipBottom, clipTop));
-		});
+		};
 
 		DoubleExpression height = window.heightProperty()
 				.subtract(Bindings.when(window.getRoot().paddedProperty()).then(AppPreRoot.DEFAULT_PADDING * 2).otherwise(0))
@@ -77,11 +80,13 @@ public abstract class Page extends StackPane implements Styleable {
 		return window.getJsonData(key);
 	}
 
-	public void setup(Window window) {
+	public void setup() {
 		window.setMinSize(minSize);
+		
+		window.paddedProperty().addListener(onPaddingChange);
 	}
 
 	public void destroy() {
-
+		window.paddedProperty().removeListener(onPaddingChange);
 	}
 }

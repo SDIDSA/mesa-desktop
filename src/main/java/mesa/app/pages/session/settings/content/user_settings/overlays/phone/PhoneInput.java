@@ -38,6 +38,8 @@ public class PhoneInput extends HBox implements Styleable {
 	private Text selectedCode;
 
 	private boolean pressed;
+	
+	private CountryCodePopup countries;
 
 	public PhoneInput(Window window) {
 		setAlignment(Pos.CENTER);
@@ -68,28 +70,7 @@ public class PhoneInput extends HBox implements Styleable {
 		showPop = new ColorIcon("expand", 8);
 		showPop.setRotate(-90);
 
-		Timeline onShown = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), 0)));
-		Timeline onHidden = new Timeline(
-				new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), -90)));
-
 		country.add(selectedCode, showPop);
-
-		CountryCodePopup countries = new CountryCodePopup(window);
-
-		countries.setOnShowing(e -> {
-			onHidden.stop();
-			onShown.playFromStart();
-		});
-
-		countries.setOnHiding(e -> {
-			onShown.stop();
-			onHidden.playFromStart();
-		});
-
-		countries.setOnSelect(code -> {
-			selectedCode.setText(code.getCode());
-			countries.hide();
-		});
 
 		country.setOnMousePressed(e -> pressed = true);
 
@@ -105,6 +86,37 @@ public class PhoneInput extends HBox implements Styleable {
 		getChildren().addAll(country, field, send);
 		
 		applyStyle(window.getStyl());
+	}
+	
+	public void load(Window window) {
+		if(countries != null) {
+			return;
+		}
+		
+		Timeline onShown = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), 0)));
+		Timeline onHidden = new Timeline(
+				new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), -90)));
+
+		countries = new CountryCodePopup(window);
+
+		countries.setOnShowing(e -> {
+			onHidden.stop();
+			onShown.playFromStart();
+		});
+
+		countries.setOnHiding(e -> {
+			onShown.stop();
+			onHidden.playFromStart();
+		});
+
+		countries.setOnSelect(code -> {
+			selectedCode.setText(code.getCode());
+			countries.hide();
+		});
+	}
+	
+	public void unload() {
+		countries = null;
 	}
 
 	private String getValue() {

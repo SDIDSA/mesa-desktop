@@ -47,18 +47,15 @@ public abstract class InputField extends VBox implements Styleable {
 		labs = new HBox();
 		labs.setAlignment(Pos.CENTER_LEFT);
 
-		Font e = new Font(12, FontPosture.ITALIC);
-		Font f = new Font(12, FontWeight.BOLD);
-
-		err = new Label(window, null, e);
+		err = new Label(window, null, new Font(12, FontPosture.ITALIC));
 		err.setFill(Colors.Error);
 
 		t = new Text(" - ");
 		t.setFill(Colors.Error);
-		t.setFont(e.getFont());
+		t.setFont(err.getFont());
 		t.setOpacity(0);
 
-		lab = new Label(window, key, f);
+		lab = new Label(window, key, new Font(12, FontWeight.BOLD));
 		lab.setTransform(TextTransform.UPPERCASE);
 		lab.setOpacity(.7);
 
@@ -82,8 +79,8 @@ public abstract class InputField extends VBox implements Styleable {
 
 	private void forEach(Consumer<Input> consumer) {
 		for (Node c : input.getChildren()) {
-			if (c instanceof Input in) {
-				consumer.accept(in);
+			if (c instanceof Input) {
+				consumer.accept((Input) c);
 			}
 		}
 	}

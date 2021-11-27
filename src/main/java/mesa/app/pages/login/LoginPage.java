@@ -136,7 +136,7 @@ public class LoginPage extends Page {
 
 		Consumer<JSONObject> onSuccess = user -> {
 			window.putData("user", user);
-			pt.setOnFinished(e -> window.loadPage(new SessionPage(window)));
+			pt.setOnFinished(e -> window.loadPage(SessionPage.class));
 			pt.playFromStart();
 		};
 
@@ -189,8 +189,10 @@ public class LoginPage extends Page {
 	}
 
 	@Override
-	public void setup(Window window) {
-		super.setup(window);
+	public void setup() {
+		super.setup();
+
+		window.centerOnScreen();
 
 		Loading loading = new Loading(10);
 		loading.setFill(window.getStyl().getBack3());

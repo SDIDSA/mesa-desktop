@@ -32,8 +32,8 @@ public class AppRoot extends BorderPane {
 		setEffect(ds);
 
 		setFocusTraversable(true);
-		
-		addEventFilter(MouseEvent.MOUSE_PRESSED, e-> requestFocus());
+
+		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> requestFocus());
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
 		setFill(window.getStyl().getBack3());
@@ -69,11 +69,16 @@ public class AppRoot extends BorderPane {
 		setBorder(Borders.make(fill, parent.isPadded() ? 10.0 : 1, parent.isPadded() ? width : 0));
 	}
 
+	private Page old = null;
 	public void setContent(Page page) {
-		if(getCenter() instanceof Page old) {
+		if (old != null) {
 			old.destroy();
 		}
+
+		page.setup();
 		setCenter(page);
+		
+		old = page;
 	}
 
 	public void applyTile(Tile tile) {

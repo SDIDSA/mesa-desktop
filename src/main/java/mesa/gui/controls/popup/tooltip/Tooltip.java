@@ -166,6 +166,10 @@ public class Tooltip extends PopupControl implements Styleable {
 		evs.install();
 		registered.put(node, evs);
 	}
+	
+	public static void clear() {
+		registered.clear();
+	}
 
 	public static void install(Node node, Direction dir, String value, double offset, boolean key) {
 		if (node.getScene() == null) {

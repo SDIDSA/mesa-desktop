@@ -27,6 +27,7 @@ public class SectionItem extends StackPane implements Styleable {
 
 	public static void clearCache() {
 		cache.clear();
+		selected = null;
 	}
 
 	private boolean fillSet = false;

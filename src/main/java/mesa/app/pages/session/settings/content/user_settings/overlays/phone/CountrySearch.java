@@ -37,7 +37,7 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 		field.setMinHeight(22);
 
 		field.textProperty().addListener((obs, ov, nv) -> {
-			if (nv.isBlank()) {
+			if (nv.isEmpty()) {
 				icon.search();
 
 				if(reset != null) {

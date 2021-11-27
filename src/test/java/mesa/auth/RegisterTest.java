@@ -39,7 +39,7 @@ class RegisterTest {
 		Window window = (Window) stage;
 		window.setTitle("mesa");
 		window.show();
-		window.loadPage(new LoginPage(window));
+		window.loadPage(LoginPage.class);
 		window.centerOnScreen();
 	}
 	

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import javafx.scene.input.MouseEvent;
 import mesa.gui.window.Window;
 import mesa.gui.window.content.AppPreRoot;
+import mesa.gui.window.content.AppRoot;
 import mesa.gui.window.content.app_bar.AppBar;
 import mesa.gui.window.helpers.TileHint.Tile;
 
@@ -52,14 +53,13 @@ public class MoveResizeHelper {
 	}
 
 	public void onMove(MouseEvent e) {
-		if (parent.isPadded()) {
+		if (parent.isPadded() && e.getTarget() instanceof AppRoot) {
 			state = State.stateForCoords(e.getSceneX() - padding, e.getSceneY() - padding, win.getWidth() - padding * 2,
 					win.getHeight() - padding * 2, range, range);
-
-			parent.setCursor(state.curs);
 		} else {
 			state = State.D;
 		}
+		parent.setCursor(state.curs);
 
 	}
 

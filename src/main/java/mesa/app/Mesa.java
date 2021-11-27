@@ -15,8 +15,7 @@ public class Mesa extends Application {
 		Window window = new Window(Style.DARK, Locale.EN_US);
 		window.setTitle("mesa");
 		window.setOnShown(e-> {
-			window.loadPage(new LoginPage(window));
-			window.centerOnScreen();
+			window.loadPage(LoginPage.class);
 		});
 		window.show();
 	}
