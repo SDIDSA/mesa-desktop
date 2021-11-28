@@ -45,8 +45,9 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 		VBox content = new VBox();
 		content.setPickOnBounds(false);
-		content.setAlignment(Pos.TOP_CENTER);
+		content.setAlignment(Pos.BOTTOM_CENTER);
 		content.setPadding(new Insets(106, 16, 16, 16));
+		content.setMinHeight(310);
 
 		head = new Label(owner.getWindow(), "enter_phone", new Font(20, FontWeight.BOLD));
 		VBox.setMargin(head, new Insets(0, 0, 14, 0));

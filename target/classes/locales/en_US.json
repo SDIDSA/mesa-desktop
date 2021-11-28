@@ -111,6 +111,7 @@
 	"phone_use_post": " at a time and is only used for verification and login.",
 	"phone_send": "Send",
 	"search_country": "Search a country",
+	"phone_invalid": "Phone number is invalid, please confirm that it is correct.",
 	
 	"change_pass" : "Change Password",
 	"new_password": "New Password",

@@ -109,7 +109,6 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 				Platform.runLater(() -> items.getChildren().add(fitem));
 			}
-			
 
 			running = false;
 			cancel = false;
@@ -122,7 +121,7 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		Consumer<String> searchFor = text -> new Thread() {
 			@Override
 			public void run() {
-				display.accept(all.stream().filter(e -> e.match(text)).toList());
+				display.accept(all.stream().filter(code -> code.match(text)).toList());
 			}
 		}.start();
 
@@ -132,8 +131,8 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		addEventFilter(WindowEvent.WINDOW_SHOWN, new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
-				reset.run();
 				removeEventFilter(WindowEvent.WINDOW_SHOWN, this);
+				reset.run();
 			}
 		});
 
