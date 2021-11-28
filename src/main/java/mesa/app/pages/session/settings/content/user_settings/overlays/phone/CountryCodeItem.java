@@ -27,7 +27,7 @@ public class CountryCodeItem extends HBox implements Styleable {
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(8, 10, 8, 10));
 		setMinHeight(34);
-		setMinWidth(200);
+		setMinWidth(198);
 
 		name = new Label(data.getName());
 		name.setFont(new Font(12).getFont());

@@ -1,6 +1,5 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,12 +27,12 @@ import javafx.scene.transform.Scale;
 import javafx.stage.Screen;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
+import mesa.app.utils.Threaded;
 import mesa.data.CountryCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.Separator;
-import mesa.gui.exception.ErrorHandler;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.file.FileUtils;
@@ -66,8 +65,6 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		root.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		root.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		root.setPrefSize(240, 250);
-		root.setCache(true);
-		root.setCacheHint(CacheHint.SPEED);
 
 		CountrySearch search = new CountrySearch();
 
@@ -87,28 +84,17 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 		Map<CountryCode, CountryCodeItem> cache = new HashMap<>();
 		Consumer<List<CountryCode>> display = codes -> {
-			if (running) {
-				if (cancel) {
-					return;
-				} else {
-					cancel = true;
-					while (running) {
-						try {
-							Thread.sleep(5);
-						} catch (InterruptedException e) {
-							ErrorHandler.handle(e, "interrupted");
-							Thread.currentThread().interrupt();
-						}
-					}
-				}
+			if (running && cancel) {
+				return;
+			} else if (running) {
+				cancel = true;
+				Threaded.waitWhile(() -> running);
 			}
 			running = true;
 			Platform.runLater(items.getChildren()::clear);
-			for (CountryCode code : codes) {
-				if (cancel) {
-					cancel = false;
-					break;
-				}
+			for (int i = 0; i < codes.size() && !cancel; i++) {
+				CountryCode code = codes.get(i);
+
 				CountryCodeItem item = cache.get(code);
 				if (item == null) {
 					item = new CountryCodeItem(code);
@@ -118,17 +104,13 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 				final CountryCodeItem fitem = item;
 				fitem.applyStyle(owner.getStyl());
 
-				try {
-					Thread.sleep(5);
-				} catch (InterruptedException e) {
-					ErrorHandler.handle(e, "interrupted");
-					Thread.currentThread().interrupt();
-				}
+				Threaded.sleep(5);
 
 				Platform.runLater(() -> items.getChildren().add(fitem));
 			}
 
 			running = false;
+			cancel = false;
 		};
 
 		List<CountryCode> all = FileUtils.readCountryCodes();
@@ -138,15 +120,7 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		Consumer<String> searchFor = text -> new Thread() {
 			@Override
 			public void run() {
-				ArrayList<CountryCode> found = new ArrayList<>();
-
-				for (CountryCode code : all) {
-					if (code.match(text)) {
-						found.add(code);
-					}
-				}
-
-				display.accept(found);
+				display.accept(all.stream().filter(e -> e.match(text)).toList());
 			}
 		}.start();
 
@@ -179,9 +153,12 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		root.getTransforms().add(scale);
 
 		scaleShow = new Timeline(
-				new KeyFrame(Duration.seconds(.1), new KeyValue(scale.xProperty(), 1, SplineInterpolator.OVERSHOOT),
+				new KeyFrame(Duration.seconds(.15), new KeyValue(scale.xProperty(), 1, SplineInterpolator.OVERSHOOT),
 						new KeyValue(scale.yProperty(), 1, SplineInterpolator.OVERSHOOT),
 						new KeyValue(root.opacityProperty(), 1, SplineInterpolator.OVERSHOOT)));
+
+		root.setCacheHint(CacheHint.SPEED);
+		scaleShow.setOnFinished(e -> root.setCache(false));
 
 		applyStyle(owner.getStyl());
 		applyLocale(owner.getLocale());
@@ -192,6 +169,8 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 	}
 
 	public void showPop(Node node) {
+		root.setCache(true);
+
 		scale.setX(.7);
 		scale.setY(.7);
 		root.setOpacity(0);
