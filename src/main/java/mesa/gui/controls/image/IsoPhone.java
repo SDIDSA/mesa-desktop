@@ -21,8 +21,6 @@ public class IsoPhone extends LayerIcon {
 	public IsoPhone(double size) {
 		super(size, "ips", "ipf", "ipe", "ipc", "ipr", "ipm", "ipt", "ipi");
 
-		setFocusTraversable(true);
-
 		transitions = new ArrayList<>();
 		
 		transitions.add(new Transition(4, size, 1));

@@ -2,7 +2,6 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -39,21 +38,6 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 		isoPhone = new IsoPhone(160);
 		isoPhone.setTranslateY(-64);
-
-		isoPhone.setOnMouseClicked(e-> {
-			isoPhone.requestFocus();
-		});
-		
-		isoPhone.setOnKeyPressed(e-> {
-			switch(e.getCode()) {
-			case A : isoPhone.showError();break;
-			case B : isoPhone.showSms();break;
-			case C : isoPhone.showIncorrect();break;
-			case D : isoPhone.showCorrect();break;
-			case ESCAPE : isoPhone.showNormal();break;
-			default: break;
-			}
-		});
 
 		VBox content = new VBox();
 		content.setPickOnBounds(false);
