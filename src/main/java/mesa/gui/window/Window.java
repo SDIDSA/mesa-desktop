@@ -158,8 +158,8 @@ public class Window extends Stage implements Styleable, Localized {
 	public JSONObject getJsonData(String key) {
 		Object obj = data.get(key);
 		
-		if(obj instanceof JSONObject) {
-			return (JSONObject) obj;
+		if(obj instanceof JSONObject json) {
+			return json;
 		}else {
 			throw new IllegalStateException("no json data was found at key " + key);
 		}

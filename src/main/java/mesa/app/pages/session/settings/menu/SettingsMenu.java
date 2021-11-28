@@ -46,9 +46,7 @@ public class SettingsMenu extends VBox implements Styleable {
 		appSettings.addItem(new SectionItem(settings, "advanced"));
 		
 		Section logoutSection = new Section(settings);
-		SectionItem logout = new SectionItem(settings, "log_out", () -> {
-			settings.getSession().logoutPrompt();
-		});
+		SectionItem logout = new SectionItem(settings, "log_out", () -> settings.getSession().logoutPrompt());
 		logout.setTextFill(Colors.Error);
 		logoutSection.addItem(logout);
 		

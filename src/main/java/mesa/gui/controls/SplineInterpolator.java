@@ -77,11 +77,8 @@ public class SplineInterpolator extends Interpolator {
 		final int numIterations = 4;
 		for (int i = 0; i < numIterations; ++i) {
 			double xT = (eval(t, x1, x2) - x);
-			if (xT == 0) {
-				break;
-			}
 			double dXdT = evalDerivative(t, x1, x2);
-			if (dXdT == 0) {
+			if (xT == 0 || dXdT == 0) {
 				break;
 			}
 			t -= xT / dXdT;
