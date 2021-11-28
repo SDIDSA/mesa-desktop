@@ -79,8 +79,8 @@ public abstract class InputField extends VBox implements Styleable {
 
 	private void forEach(Consumer<Input> consumer) {
 		for (Node c : input.getChildren()) {
-			if (c instanceof Input) {
-				consumer.accept((Input) c);
+			if (c instanceof Input in) {
+				consumer.accept(in);
 			}
 		}
 	}

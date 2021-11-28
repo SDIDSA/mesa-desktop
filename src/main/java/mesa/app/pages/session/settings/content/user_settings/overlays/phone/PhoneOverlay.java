@@ -1,8 +1,11 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -40,21 +43,6 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		isoPhone = new IsoPhone(160);
 		isoPhone.setTranslateY(-64);
 
-		isoPhone.setOnMouseClicked(e-> {
-			isoPhone.requestFocus();
-		});
-		
-		isoPhone.setOnKeyPressed(e-> {
-			switch(e.getCode()) {
-			case A : isoPhone.showError();break;
-			case B : isoPhone.showSms();break;
-			case C : isoPhone.showIncorrect();break;
-			case D : isoPhone.showCorrect();break;
-			case ESCAPE : isoPhone.showNormal();break;
-			default: break;
-			}
-		});
-
 		VBox content = new VBox();
 		content.setPickOnBounds(false);
 		content.setAlignment(Pos.TOP_CENTER);
@@ -76,10 +64,24 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		phoneUse.setLineSpacing(7);
 
 		input = new PhoneInput(owner.getWindow());
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 		
 		input.setAction(value -> {
-			//TODO use the phone number
+			try {
+				PhoneNumber number = phoneUtil.parse(value, input.getSelectedCountry().getCode());
+				boolean isValid = phoneUtil.isValidNumber(number);
+				if(isValid && phoneUtil.getNumberType(number).equals(PhoneNumberType.MOBILE)) {
+					isoPhone.showSms();
+				}else {
+					isoPhone.showError();
+				}
+			} catch (NumberParseException e) {
+				isoPhone.showError();
+			}
 		});
+		
+		input.setOnChange(e-> isoPhone.showNormal());
 		
 		content.getChildren().addAll(head, smsCodeNode, phoneUse, input);
 

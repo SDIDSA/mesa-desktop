@@ -13,22 +13,29 @@ import mesa.gui.style.Style;
 
 public class IsoPhone extends LayerIcon {
 	private static double factor = 1.68;
-	private static double duration = .3;
+	private static double duration = .2;
 
 	private Timeline colorNormal;
 
+	private Timeline shake;
+
 	private ArrayList<Transition> transitions;
+
 	public IsoPhone(double size) {
 		super(size, "ips", "ipf", "ipe", "ipc", "ipr", "ipm", "ipt", "ipi");
 
-		setFocusTraversable(true);
-
 		transitions = new ArrayList<>();
-		
+
 		transitions.add(new Transition(4, size, 1));
 		transitions.add(new Transition(5, size, -1));
 		transitions.add(new Transition(6, size, -1));
 		transitions.add(new Transition(7, size, 1));
+
+		shake = new Timeline(
+				new KeyFrame(Duration.seconds(duration/2),
+						new KeyValue(translateXProperty(), 10, Interpolator.EASE_BOTH)));
+		shake.setAutoReverse(true);
+		shake.setCycleCount(4);
 	}
 
 	private void stopAll() {
@@ -37,25 +44,26 @@ public class IsoPhone extends LayerIcon {
 	}
 
 	private void showTransition(int transition) {
-		if(transitions.get(transition).isShowing()) {
+		if (transitions.get(transition).isShowing()) {
 			return;
 		}
-		
+
 		stopAll();
 		hideOthers(transition);
 		transitions.get(transition).playShow();
 	}
-	
+
 	private void hideOthers(int transition) {
-		for(int i = 0; i < transitions.size(); i++) {
-			if(i != transition) {
+		for (int i = 0; i < transitions.size(); i++) {
+			if (i != transition) {
 				transitions.get(i).playHide();
 			}
 		}
 	}
-	
+
 	public void showError() {
 		showTransition(0);
+		shake();
 	}
 
 	public void showSms() {
@@ -72,9 +80,15 @@ public class IsoPhone extends LayerIcon {
 
 	public void showNormal() {
 		stopAll();
-		
+
 		hideOthers(-1);
 		colorNormal.playFromStart();
+	}
+	
+	private void shake() {
+		shake.stop();
+		
+		shake.playFromStart();
 	}
 
 	public void applyStyle(Style style) {
@@ -102,7 +116,7 @@ public class IsoPhone extends LayerIcon {
 			setTranslateX(layer, by * size / 4.0);
 			setTranslateY(layer, by * size / (4.0 * factor));
 			setOpacity(layer, 0.0);
-			
+
 			show = new Timeline(new KeyFrame(Duration.seconds(duration),
 					new KeyValue(translateXProperty(layer), 0, SplineInterpolator.ANTICIPATEOVERSHOOT),
 					new KeyValue(translateYProperty(layer), 0, SplineInterpolator.ANTICIPATEOVERSHOOT),
@@ -112,7 +126,8 @@ public class IsoPhone extends LayerIcon {
 
 			hide = new Timeline(new KeyFrame(Duration.seconds(duration),
 					new KeyValue(translateXProperty(layer), by * size / 4.0, SplineInterpolator.ANTICIPATEOVERSHOOT),
-					new KeyValue(translateYProperty(layer), by * size / (4.0 * factor), SplineInterpolator.ANTICIPATEOVERSHOOT),
+					new KeyValue(translateYProperty(layer), by * size / (4.0 * factor),
+							SplineInterpolator.ANTICIPATEOVERSHOOT),
 					new KeyValue(opacityProperty(layer), 0, SplineInterpolator.ANTICIPATEOVERSHOOT)));
 
 			colorShow = new Timeline(new KeyFrame(Duration.seconds(duration),
@@ -128,11 +143,11 @@ public class IsoPhone extends LayerIcon {
 		void playHide() {
 			hide.playFromStart();
 		}
-		
+
 		public boolean isShowing() {
 			return showing;
 		}
-		
+
 		void stop() {
 			showing = false;
 			show.stop();

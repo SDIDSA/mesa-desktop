@@ -16,7 +16,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 	protected Label head;
 	protected Label subHead;
 
-	public BasicOverlay(SessionPage session, double width) {
+	protected BasicOverlay(SessionPage session, double width) {
 		super(session, width);
 
 		StackPane.setMargin(closeIcon, new Insets(16));
@@ -38,7 +38,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 		applyStyle(session.getWindow().getStyl());
 	}
 
-	public BasicOverlay(SessionPage session) {
+	protected BasicOverlay(SessionPage session) {
 		this(session, 440);
 	}
 

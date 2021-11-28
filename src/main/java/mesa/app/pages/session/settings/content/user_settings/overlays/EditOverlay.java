@@ -4,7 +4,7 @@ import mesa.app.pages.session.SessionPage;
 
 public abstract class EditOverlay extends BasicOverlay {
 
-	public EditOverlay(SessionPage session, String editWhat) {
+	protected EditOverlay(SessionPage session, String editWhat) {
 		super(session);
 		
 		head.setKey("change_attr");

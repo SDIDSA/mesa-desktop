@@ -18,12 +18,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import mesa.data.CountryCode;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.AbstractButton;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
+import mesa.gui.file.FileUtils;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -38,8 +40,12 @@ public class PhoneInput extends HBox implements Styleable {
 	private Text selectedCode;
 
 	private boolean pressed;
-	
+
 	private CountryCodePopup countries;
+
+	private CountryCode selectedCountry;
+
+	private Consumer<String> onChange;
 
 	public PhoneInput(Window window) {
 		setAlignment(Pos.CENTER);
@@ -49,6 +55,7 @@ public class PhoneInput extends HBox implements Styleable {
 		field.setBorder(Border.EMPTY);
 		field.setPadding(new Insets(12));
 		field.setFont(new Font(16).getFont());
+		field.textProperty().addListener(c -> onChange());
 
 		setHgrow(field, Priority.ALWAYS);
 
@@ -84,15 +91,24 @@ public class PhoneInput extends HBox implements Styleable {
 		});
 
 		getChildren().addAll(country, field, send);
-		
+
 		applyStyle(window.getStyl());
 	}
-	
+
+	private void onChange() {
+		if (onChange != null)
+			onChange.accept(getValue());
+	}
+
+	public void setOnChange(Consumer<String> onChange) {
+		this.onChange = onChange;
+	}
+
 	public void load(Window window) {
-		if(countries != null) {
+		if (countries != null) {
 			return;
 		}
-		
+
 		Timeline onShown = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), 0)));
 		Timeline onHidden = new Timeline(
 				new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), -90)));
@@ -110,11 +126,19 @@ public class PhoneInput extends HBox implements Styleable {
 		});
 
 		countries.setOnSelect(code -> {
+			selectedCountry = code;
 			selectedCode.setText(code.getCode());
 			countries.hide();
+			onChange();
 		});
+
+		selectedCountry = FileUtils.readCountryCodes().get(0);
 	}
-	
+
+	public CountryCode getSelectedCountry() {
+		return selectedCountry;
+	}
+
 	public void unload() {
 		countries = null;
 	}
