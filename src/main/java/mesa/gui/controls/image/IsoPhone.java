@@ -33,7 +33,7 @@ public class IsoPhone extends LayerIcon {
 
 		shake = new Timeline(
 				new KeyFrame(Duration.seconds(duration/2),
-						new KeyValue(translateXProperty(), 10, Interpolator.EASE_BOTH)));
+						new KeyValue(translateXProperty(), 5, Interpolator.EASE_BOTH)));
 		shake.setAutoReverse(true);
 		shake.setCycleCount(4);
 	}
@@ -87,6 +87,7 @@ public class IsoPhone extends LayerIcon {
 	
 	private void shake() {
 		shake.stop();
+		setTranslateX(0);
 		
 		shake.playFromStart();
 	}
