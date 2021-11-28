@@ -11,7 +11,7 @@ public class Threaded {
 	
 	public static void waitWhile(BooleanSupplier condition) {
 		while(condition.getAsBoolean()) {
-			sleep(10);
+			sleep(5);
 		}
 	}
 	

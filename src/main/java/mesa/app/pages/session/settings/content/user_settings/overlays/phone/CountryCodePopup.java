@@ -91,6 +91,7 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 				Threaded.waitWhile(() -> running);
 			}
 			running = true;
+			scrollBar.top();
 			Platform.runLater(items.getChildren()::clear);
 			for (int i = 0; i < codes.size() && !cancel; i++) {
 				CountryCode code = codes.get(i);
@@ -108,6 +109,7 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 				Platform.runLater(() -> items.getChildren().add(fitem));
 			}
+			
 
 			running = false;
 			cancel = false;

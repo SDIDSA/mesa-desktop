@@ -104,4 +104,8 @@ public class ScrollBar extends StackPane {
 	public void setTrackFill(Paint fill) {
 		track.setFill(fill);
 	}
+	
+	public void top() {
+		setPos(0);
+	}
 }

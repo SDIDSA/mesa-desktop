@@ -1,5 +1,9 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType;
+import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -60,10 +64,24 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		phoneUse.setLineSpacing(7);
 
 		input = new PhoneInput(owner.getWindow());
+
+		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 		
 		input.setAction(value -> {
-			System.out.println(value);
+			try {
+				PhoneNumber number = phoneUtil.parse(value, input.getSelectedCountry().getCode());
+				boolean isValid = phoneUtil.isValidNumber(number);
+				if(isValid && phoneUtil.getNumberType(number).equals(PhoneNumberType.MOBILE)) {
+					isoPhone.showSms();
+				}else {
+					isoPhone.showError();
+				}
+			} catch (NumberParseException e) {
+				isoPhone.showError();
+			}
 		});
+		
+		input.setOnChange(e-> isoPhone.showNormal());
 		
 		content.getChildren().addAll(head, smsCodeNode, phoneUse, input);
 

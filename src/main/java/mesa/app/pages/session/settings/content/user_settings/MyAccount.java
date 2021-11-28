@@ -78,9 +78,7 @@ public class MyAccount extends SettingsContent {
 		twoFactAuthHead = new Label(window, "2_fact_auth", new Font(12, FontWeight.BOLD));
 		twoFactAuthHead.setTransform(TextTransform.UPPERCASE);
 
-		twoFactAuthBody = new Label(window,
-				settings.getUser().isEmailConfirmed() ? "2_fact_auth_note" : "2_fact_auth_verify_account",
-				new Font(13));
+		twoFactAuthBody = new Label(window, "", new Font(13));
 		TextFlow preBody = new TextFlow();
 		preBody.setLineSpacing(4);
 		preBody.getChildren().add(twoFactAuthBody);
@@ -92,10 +90,6 @@ public class MyAccount extends SettingsContent {
 		HBox.setHgrow(twoFactAuthLeft, Priority.ALWAYS);
 
 		twoFactAuthLeft.getChildren().addAll(twoFactAuthHead, preBody);
-
-		if (user.isEmailConfirmed()) {
-			twoFactAuthLeft.getChildren().add(enable2fa);
-		}
 
 		StackPane twoFactAuthRight = new StackPane();
 		twoFactAuthRight.setAlignment(Pos.BOTTOM_CENTER);
@@ -173,10 +167,6 @@ public class MyAccount extends SettingsContent {
 
 		getChildren().addAll(myAccountLab);
 
-		if (!user.isEmailConfirmed()) {
-			getChildren().add(unverifiedEmail);
-		}
-
 		getChildren().addAll(profileOverview);
 		separate(40);
 		getChildren().addAll(passAuth, changePass);
@@ -188,6 +178,8 @@ public class MyAccount extends SettingsContent {
 
 		user.emailConfirmedProperty().addListener((obs, ov, nv) -> onEmailConfirmedChange(nv.booleanValue()));
 
+		onEmailConfirmedChange(user.isEmailConfirmed());
+		
 		applyStyle(window.getStyl());
 	}
 
