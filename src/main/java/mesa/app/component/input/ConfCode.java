@@ -18,12 +18,12 @@ public class ConfCode extends InputField {
 
 	private ArrayList<TextInput> inputs;
 
-	public ConfCode(Window window, String key, double width) {
+	public ConfCode(Window window, String key, int length, double width) {
 		super(window, key, width);
 		inputs = new ArrayList<>();
 
-		StringProperty[] values = init(window, key);
-		
+		StringProperty[] values = init(window, key, length);
+
 		BooleanExpression empty = values[0].isEmpty();
 		StringExpression val = values[0];
 
@@ -73,11 +73,11 @@ public class ConfCode extends InputField {
 		applyStyle(window.getStyl());
 	}
 
-	private StringProperty[] init(Window window, String key) {
-		StringProperty[] values = new StringProperty[8];
+	private StringProperty[] init(Window window, String key, int length) {
+		StringProperty[] values = new StringProperty[length];
 		Font f = new Font(20);
-		for (int i = 0; i < 8; i++) {
-			if (i == 4) {
+		for (int i = 0; i < length; i++) {
+			if (i == length / 2) {
 				addNode(new ExpandingHSpace());
 			}
 			TextInput inp = new TextInput(window, f, key);
@@ -105,7 +105,7 @@ public class ConfCode extends InputField {
 				inp.unhover();
 			}
 	}
-	
+
 	private void append(char c) {
 		for (int i = 0; i < inputs.size(); i++) {
 			TextInput inp = inputs.get(i);
@@ -137,8 +137,12 @@ public class ConfCode extends InputField {
 		requestFocus();
 	}
 
+	public ConfCode(Window window, String key, int length) {
+		this(window, key, length, 200);
+	}
+
 	public ConfCode(Window window, String key) {
-		this(window, key, 200);
+		this(window, key, 8);
 	}
 
 	@Override

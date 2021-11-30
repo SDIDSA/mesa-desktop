@@ -26,6 +26,10 @@ public class API {
 
 		public static final String EDIT_EMAIL = PREFIX + "editEmail";
 
+		public static final String SEND_PHONE_CODE = PREFIX + "sendPhoneCode";
+
+		public static final String EDIT_PHONE = PREFIX + "editPhone";
+
 		public static final String CHANGE_PASSWORD = PREFIX + "changePassword";
 		
 		public static final String DELETE_ACCOUNT = PREFIX + "deleteAccount";

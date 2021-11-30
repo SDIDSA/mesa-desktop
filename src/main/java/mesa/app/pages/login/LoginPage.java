@@ -199,16 +199,18 @@ public class LoginPage extends Page {
 		getChildren().add(0, loading);
 		loading.play();
 		
+		login.setMouseTransparent(true);
+		
 		Timeline showLogin = show(login);
 		showLogin.setDelay(Duration.seconds(2));
 		login.preTransition();
 		showLogin.playFromStart();
 		showLogin.setOnFinished(e-> {
+			login.setMouseTransparent(false);
 			login.postTransition();
 			loading.stop();
 			getChildren().remove(loading);
 		});
-		login.setMouseTransparent(false);
 	}
 
 	@Override

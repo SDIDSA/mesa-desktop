@@ -61,6 +61,12 @@ public class Auth {
 				new Param(USER_ID, userId),
 				new Param(PASSWORD, hashPassword(password)));
 	}
+	
+	public static void sendPhoneCode(String userId, String phone, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.SEND_PHONE_CODE, "send phone code", onResult,
+				new Param(USER_ID, userId),
+				new Param("phone", phone));
+	}
 
 	public static String hashPassword(String password) {
 		return DigestUtils.sha256Hex(password);

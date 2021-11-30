@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.scene.CacheHint;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -61,5 +62,20 @@ public class LayerIcon extends StackPane {
 	
 	public DoubleProperty opacityProperty(int layer) {
 		return layers.get(layer).opacityProperty();
+	}
+	
+	public void preTransition(int layer) {
+		layers.get(layer).setCache(true);
+		layers.get(layer).setCacheHint(CacheHint.SPEED);
+	}
+	
+	public void postTransition(int layer) {
+		layers.get(layer).setCache(false);
+		layers.get(layer).setCacheHint(CacheHint.DEFAULT);
+	}
+	
+	public void setScale(int layer, double scale) {
+		layers.get(layer).setScaleX(scale);
+		layers.get(layer).setScaleY(scale);
 	}
 }
