@@ -151,6 +151,14 @@ public class PhoneInput extends HBox implements Styleable {
 		send.setAction(() -> action.accept(getValue()));
 	}
 
+	public void startLoading() {
+		send.startLoading();
+	}
+	
+	public void stopLoading() {
+		send.stopLoading();
+	}
+	
 	@Override
 	public void applyStyle(Style style) {
 		setBackground(Backgrounds.make(style.getBack2(), 5.0));
