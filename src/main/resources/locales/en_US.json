@@ -104,6 +104,8 @@
 	"cancel": "Cancel",
 	"done": "Done",
 	
+	
+	"remove_phone": "Remove phone number",
 	"enter_phone": "Enter a Phone Number",
 	"sms_code_note": "You will receive a text message with a verification code.",
 	"phone_use_pre": "Your phone number can be used to verify ",
