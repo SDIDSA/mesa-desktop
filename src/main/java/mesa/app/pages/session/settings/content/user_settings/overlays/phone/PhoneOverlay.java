@@ -1,6 +1,5 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
-import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType;
@@ -23,6 +22,7 @@ import javafx.util.Duration;
 import mesa.api.Auth;
 import mesa.app.component.input.ConfCode;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordOverlay;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.SplineInterpolator;
@@ -35,6 +35,8 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class PhoneOverlay extends Overlay implements Styleable {
+
+	private String pending;
 
 	private StackPane root;
 	private IsoPhone isoPhone;
@@ -50,7 +52,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 	private Label enterCode;
 	private Button resend;
 
-	PhoneInput input;
+	private PhoneInput input;
 
 	public PhoneOverlay(SessionPage owner) {
 		super(owner);
@@ -86,7 +88,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		VBox.setMargin(smsCodeNode, new Insets(0, 0, 24, 0));
 
 		enterCode = new Label(owner.getWindow(), "phone_enter_code", new Font(Font.DEFAULT_FAMILY_MEDIUM, 15));
-		VBox.setMargin(enterCode, new Insets(0, 0, 16, 0));
+		VBox.setMargin(enterCode, new Insets(0, 0, 12, 0));
 
 		phoneUsePre = new Label(owner.getWindow(), "phone_use_pre", new Font(15));
 		oneAccount = new Label(owner.getWindow(), "one_account", new Font(15, FontWeight.BOLD));
@@ -108,7 +110,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		resend = new Button(owner.getWindow(), "Back", 4.0, 16, 32);
 		resend.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		resend.setUlOnHover(true);
-		VBox.setMargin(resend, new Insets(16, 0, 0, 0));
+		VBox.setMargin(resend, new Insets(30, 0, 0, 0));
 
 		PhoneNumberUtil phoneUtil = PhoneNumberUtil.getInstance();
 
@@ -120,29 +122,32 @@ public class PhoneOverlay extends Overlay implements Styleable {
 			}
 		};
 
+		Runnable onValid = () -> {
+			isoPhone.showNormal();
+			if (content.getChildren().contains(invalid)) {
+				content.getChildren().remove(invalid);
+				content.getChildren().add(1, smsCodeNode);
+				content.getChildren().add(2, phoneUse);
+			}
+		};
+
 		Timeline showNext = new Timeline(new KeyFrame(Duration.seconds(.2),
 				new KeyValue(content.opacityProperty(), 0, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(content.scaleXProperty(), .5, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(content.scaleYProperty(), .5, SplineInterpolator.ANTICIPATEOVERSHOOT),
-				//new KeyValue(content.translateXProperty(), -472, SplineInterpolator.ANTICIPATEOVERSHOOT),
 
 				new KeyValue(verify.opacityProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(verify.scaleXProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT),
-				new KeyValue(verify.scaleYProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT)
-				//new KeyValue(verify.translateXProperty(), 0, SplineInterpolator.ANTICIPATEOVERSHOOT)
-			));
-		
+				new KeyValue(verify.scaleYProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT)));
+
 		Timeline showPrevious = new Timeline(new KeyFrame(Duration.seconds(.2),
 				new KeyValue(content.opacityProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(content.scaleXProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(content.scaleYProperty(), 1, SplineInterpolator.ANTICIPATEOVERSHOOT),
-				//new KeyValue(content.translateXProperty(), -472, SplineInterpolator.ANTICIPATEOVERSHOOT),
 
 				new KeyValue(verify.opacityProperty(), 0, SplineInterpolator.ANTICIPATEOVERSHOOT),
 				new KeyValue(verify.scaleXProperty(), .5, SplineInterpolator.ANTICIPATEOVERSHOOT),
-				new KeyValue(verify.scaleYProperty(), .5, SplineInterpolator.ANTICIPATEOVERSHOOT)
-				//new KeyValue(verify.translateXProperty(), 0, SplineInterpolator.ANTICIPATEOVERSHOOT)
-			));
+				new KeyValue(verify.scaleYProperty(), .5, SplineInterpolator.ANTICIPATEOVERSHOOT)));
 
 		showNext.setOnFinished(e -> {
 			content.setCache(false);
@@ -151,8 +156,8 @@ public class PhoneOverlay extends Overlay implements Styleable {
 			verify.setCache(false);
 			verify.setCacheHint(CacheHint.DEFAULT);
 		});
-		
-		showPrevious.setOnFinished(e-> {
+
+		showPrevious.setOnFinished(e -> {
 			content.setCache(false);
 			content.setCacheHint(CacheHint.DEFAULT);
 
@@ -163,56 +168,108 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		verify.setScaleX(.5);
 		verify.setScaleY(.5);
 		verify.setOpacity(0);
-		//verify.setTranslateX(472);
 		verify.setMouseTransparent(true);
 
 		Runnable next = () -> {
+			confCode.clear();
+
 			isoPhone.showSms();
 			content.setMouseTransparent(true);
 			verify.setMouseTransparent(false);
-			
+
 			content.setCache(true);
 			content.setCacheHint(CacheHint.SPEED);
 			verify.setCache(true);
 			verify.setCacheHint(CacheHint.SPEED);
-			
+
 			showNext.playFromStart();
 		};
-		
+
 		Runnable previous = () -> {
 			isoPhone.showNormal();
 			content.setMouseTransparent(false);
 			verify.setMouseTransparent(true);
-			
+
 			content.setCache(true);
 			content.setCacheHint(CacheHint.SPEED);
 			verify.setCache(true);
 			verify.setCacheHint(CacheHint.SPEED);
-			
+
 			showPrevious.playFromStart();
 		};
 
 		resend.setAction(previous);
-		
+
 		input.setAction(value -> {
 			try {
 				PhoneNumber number = phoneUtil.parse(value, input.getSelectedCountry().getCode());
 				boolean isValid = phoneUtil.isValidNumber(number);
 				if (isValid && phoneUtil.getNumberType(number).equals(PhoneNumberType.MOBILE)) {
-					String phone = phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL);
+					onValid.run();
+					pending = phoneUtil.format(number, PhoneNumberFormat.INTERNATIONAL);
 
 					input.startLoading();
-					isoPhone.showNormal();
-					Auth.sendPhoneCode(owner.getUser().getId(), phone, result -> {
-						next.run();
+					Auth.sendPhoneCode(owner.getUser().getId(), pending, result -> {
+						if (!result.has("err")) {
+							next.run();
+						}
 
 						input.stopLoading();
 					});
 				} else {
 					onInvalid.run();
 				}
-			} catch (NumberParseException e) {
+			} catch (Exception e) {
 				onInvalid.run();
+			}
+		});
+
+		PasswordOverlay finalize = new PasswordOverlay(owner, "confirm_changes_password", "confirm", 472);
+		finalize.setAutoHide(false);
+		finalize.setOnCancel(() -> {
+			confCode.setDisable(false);
+			resend.stopLoading();
+			previous.run();
+		});
+		finalize.setAction(() -> {
+			finalize.startLoading();
+			Auth.finalizePhone(owner.getUser().getId(), finalize.getPassword(), result -> {
+				if (result.has("err")) {
+					finalize.applyErrors(result.getJSONArray("err"));
+				} else {
+					resend.stopLoading();
+					resend.setKey("close");
+					resend.setAction(this::hide);
+					
+					verify.getChildren().remove(confCode);
+					enterCode.setKey("");
+					verifyHead.setKey("phone_changed");
+					isoPhone.showCorrect();
+					finalize.hide();
+					
+					owner.getUser().setPhone(result.getString("phone"));
+				}
+				
+				finalize.stopLoading();
+			});
+		});
+
+		confCode.valueProperty().addListener((obs, ov, nv) -> {
+			if (!nv.isEmpty()) {
+				confCode.setDisable(true);
+				resend.startLoading();
+
+				Auth.verifyPhone(owner.getUser().getId(), pending, nv, result -> {
+					if (result.has("err")) {
+						isoPhone.showIncorrect();
+						confCode.setError("verification_code_incorrect");
+
+						confCode.setDisable(false);
+						resend.stopLoading();
+					} else {
+						finalize.show();
+					}
+				});
 			}
 		});
 

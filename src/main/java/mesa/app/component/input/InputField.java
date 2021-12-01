@@ -100,6 +100,10 @@ public abstract class InputField extends VBox implements Styleable {
 		forEach(in -> in.setBorder(Colors.Error, Colors.Error, Colors.Error));
 	}
 
+	public void setError(String string) {
+		setError(string, null);
+	}
+
 	public void removeError() {
 		t.setOpacity(0);
 		err.setKey(null);

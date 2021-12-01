@@ -38,7 +38,7 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 
 	protected AbstractOverlay(SessionPage session, double width) {
 		super(session);
-		
+
 		root = new VBox();
 
 		preRoot = new StackPane();
@@ -76,7 +76,7 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 		form = new Form();
 		form.setDefaultButton(done);
 	}
-	
+
 	protected AbstractOverlay(SessionPage session) {
 		this(session, 440);
 	}
@@ -94,6 +94,15 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 			if (form.check())
 				run.run();
 		});
+	}
+
+	public void setOnCancel(Runnable action) {
+		Runnable onClose = () -> {
+			hide();
+			action.run();
+		};
+		closeIcon.setAction(onClose);
+		cancel.setAction(onClose);
 	}
 
 	public void startLoading() {

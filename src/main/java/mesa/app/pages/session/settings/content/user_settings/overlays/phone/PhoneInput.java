@@ -25,7 +25,6 @@ import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
-import mesa.gui.file.FileUtils;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -67,7 +66,7 @@ public class PhoneInput extends HBox implements Styleable {
 		country.setContentPadding(new Insets(0, 12, 0, 12));
 		setMargin(country, new Insets(6, 0, 6, 6));
 
-		selectedCode = new Text("+1");
+		selectedCode = new Text("");
 		selectedCode.setFont(new Font(14, FontWeight.BOLD).getFont());
 		HBox.setMargin(selectedCode, new Insets(0, 8, 0, 0));
 
@@ -131,8 +130,6 @@ public class PhoneInput extends HBox implements Styleable {
 			countries.hide();
 			onChange();
 		});
-
-		selectedCountry = FileUtils.readCountryCodes().get(0);
 	}
 
 	public CountryCode getSelectedCountry() {
@@ -174,6 +171,12 @@ public class PhoneInput extends HBox implements Styleable {
 		send.setTextFill(style.getText1());
 		send.setFill(style.getAccent());
 		setEffect(new DropShadow(8, Color.gray(0, .2)));
+	}
+
+	public void clear() {
+		field.clear();
+		selectedCode.setText("");
+		selectedCountry = null;
 	}
 
 }
