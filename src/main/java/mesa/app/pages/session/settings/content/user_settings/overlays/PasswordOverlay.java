@@ -44,9 +44,14 @@ public class PasswordOverlay extends AbstractOverlay {
 	}
 
 	@Override
+	public void hide() {
+		password.clear();
+		super.hide();
+	}
+	
+	@Override
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
-
 		head.setFill(style.getText1());
 	}
 

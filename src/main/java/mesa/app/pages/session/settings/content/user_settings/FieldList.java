@@ -132,6 +132,21 @@ public class FieldList extends VBox implements Styleable {
 
 		PasswordOverlay removePhoneOverlay = new PasswordOverlay(settings.getSession(), "remove_phone",
 				"overview_remove");
+		
+		removePhoneOverlay.setAction(() -> {
+			removePhoneOverlay.startLoading();
+			Auth.removePhone(user.getId(), removePhoneOverlay.getPassword(), result -> {
+				if(result.has("err")) {
+					removePhoneOverlay.applyErrors(result.getJSONArray("err"));
+				}else {
+					user.setPhone("");
+					removePhoneOverlay.hide();
+				}
+				
+				removePhoneOverlay.stopLoading();
+			});
+		});
+
 		removePhone.setAction(removePhoneOverlay::show);
 
 		phone.addToPreEdit(removePhone, new FixedHSpace(8));
@@ -139,7 +154,14 @@ public class FieldList extends VBox implements Styleable {
 
 		removePhone.visibleProperty().bind(user.phoneProperty().isEmpty().not());
 
-		phone.setOverlay(new PhoneOverlay(settings.getSession()));
+		Runnable onPhoneChange = new Runnable() {
+			public void run() {
+				PhoneOverlay phoneOverlay = new PhoneOverlay(settings.getSession());
+				phoneOverlay.setOnSuccess(this);
+				phone.setOverlay(phoneOverlay);
+			}	
+		};
+		onPhoneChange.run();
 
 		Font font = new Font(16);
 

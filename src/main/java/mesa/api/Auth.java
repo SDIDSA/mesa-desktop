@@ -80,6 +80,12 @@ public class Auth {
 				new Param(USER_ID, userId),
 				new Param(PASSWORD, hashPassword(password)));
 	}
+	
+	public static void removePhone(String userId, String password, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.REMOVE_PHONE, "remove phone", onResult,
+				new Param(USER_ID, userId),
+				new Param(PASSWORD, hashPassword(password)));
+	}
 
 	public static String hashPassword(String password) {
 		return DigestUtils.sha256Hex(password);

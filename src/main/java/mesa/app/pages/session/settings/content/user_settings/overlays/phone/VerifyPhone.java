@@ -27,9 +27,15 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	private Runnable previous;
 	private Runnable hide;
+	private Runnable onSuccess;
 
 	public VerifyPhone(SessionPage owner) {
 		super(owner);
+
+		setScaleX(.5);
+		setScaleY(.5);
+		setOpacity(0);
+		setMouseTransparent(true);
 
 		verifyHead = new Label(owner.getWindow(), "verify_number", new Font(20, FontWeight.BOLD));
 		VBox.setMargin(verifyHead, new Insets(0, 0, 12, 0));
@@ -62,7 +68,10 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 				} else {
 					resend.stopLoading();
 					resend.setKey("close");
-					resend.setAction(hide);
+					resend.setAction(() -> {
+						hide.run();
+						onSuccess.run();
+					});
 
 					getChildren().remove(confCode);
 					enterCode.setKey("");
@@ -70,14 +79,16 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 					finalize.hide();
 
 					owner.getUser().setPhone(result.getString("phone"));
+
+					onSuccess.run();
 				}
 
 				finalize.stopLoading();
 			});
 		});
-		
+
 		getChildren().addAll(verifyHead, enterCode, confCode, resend);
-		
+
 		applyStyle(owner.getWindow().getStyl());
 	}
 
@@ -87,6 +98,10 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	public void setPrevious(Runnable previous) {
 		this.previous = previous;
+	}
+
+	public void setOnSuccess(Runnable onSuccess) {
+		this.onSuccess = onSuccess;
 	}
 
 	public void setAction(Runnable correct, Runnable incorrect, Supplier<String> getPending) {
