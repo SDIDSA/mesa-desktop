@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import mesa.app.utils.Threaded;
 
 public class ApiCall {
 	private static CloseableHttpClient client = HttpClients.createDefault();
@@ -48,8 +49,8 @@ public class ApiCall {
 
 		long dur = System.currentTimeMillis() - start;
 		
-		if(dur < 600) {
-			//do nothing
+		if(dur < 800) {
+			Threaded.sleep(800-dur);
 		}
 		
 		Platform.runLater(() -> onResult.accept(res));

@@ -46,13 +46,13 @@ public class Form {
 		boolean success = true;
 		for (InputField field : fields) {
 			if (field.getValue().isEmpty()) {
-				field.setError("field_required", null);
+				field.setError("field_required");
 				success = false;
 			} else if (field.getKey().equals("confirm_new_password") && !field.getValue().equals(get("new_password"))) {
-				field.setError("passwords_no_match", null);
+				field.setError("passwords_no_match");
 				success = false;
 			} else if (field.getKey().contains("password") && field.getValue().length() < 6) {
-				field.setError("password_short", null);
+				field.setError("password_short");
 				success = false;
 			} else {
 				field.removeError();

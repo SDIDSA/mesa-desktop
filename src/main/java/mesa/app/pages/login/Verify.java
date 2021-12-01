@@ -25,7 +25,7 @@ import mesa.gui.window.Window;
 public class Verify extends LoginSubPage {
 
 	private Runnable onLogout;
-	
+
 	private Consumer<JSONObject> onSuccess;
 
 	private Label info;
@@ -35,8 +35,9 @@ public class Verify extends LoginSubPage {
 	private ConfCode code;
 
 	private Form form;
-	
+
 	private JSONObject user;
+
 	public Verify(Window window) {
 		VBox root = new VBox();
 		root.setAlignment(Pos.CENTER);
@@ -46,30 +47,30 @@ public class Verify extends LoginSubPage {
 		VBox buttons = new VBox(10);
 		buttons.setAlignment(Pos.CENTER_RIGHT);
 
-		code = new ConfCode(window, "verification_code", 500);
-		
+		code = new ConfCode(window, "verification_code", 8, 500);
+
 		HBox bottom = new HBox();
 		Link resend = new Link(window, "resend_code", new Font(14));
 		Link hide = new Link(window, "hide", new Font(14));
-		
+
 		bottom.getChildren().addAll(resend, new ExpandingHSpace(), hide);
-		
+
 		verifyButton = new Button(window, "verify", 500);
-		
+
 		VBox now = new VBox(15);
 
 		now.setMaxHeight(0);
 		now.setMinHeight(0);
 		now.setOpacity(0);
 		now.setMouseTransparent(true);
-		
+
 		now.getChildren().addAll(code, bottom, verifyButton);
-		
+
 		verifyNow = new Button(window, "verify_now", 500);
 		later = new Button(window, "verify_later", 500);
 
 		Link logout = new Link(window, "logout", new Font(14));
-		
+
 		buttons.getChildren().addAll(verifyNow, later, logout);
 
 		root.getChildren().addAll(info, new FixedVSpace(32), now, buttons);
@@ -77,7 +78,6 @@ public class Verify extends LoginSubPage {
 		getChildren().add(root);
 
 		setRoot(root);
-		
 
 		logout.setAction(() -> {
 			if (onLogout != null) {
@@ -85,34 +85,34 @@ public class Verify extends LoginSubPage {
 			}
 		});
 
-		verifyNow.setAction(()-> {
+		verifyNow.setAction(() -> {
 			Animator.show(now, 163);
 			Animator.show(root, 307);
 			verifyNow.hide();
 		});
-		
-		later.setAction(()-> onSuccess.accept(user));
-		
-		hide.setAction(()-> {
+
+		later.setAction(() -> onSuccess.accept(user));
+
+		hide.setAction(() -> {
 			Animator.hide(now);
 			Animator.hide(root, 188);
 			verifyNow.show();
 		});
-		
+
 		form = NodeUtils.getForm(code);
 		form.setDefaultButton(verifyButton);
-		verifyButton.setAction(()-> {
-			if(form.check()) {
+		verifyButton.setAction(() -> {
+			if (form.check()) {
 				verifyButton.startLoading();
-				
-				Auth.verifyEmail(user.getString("id"), code.getValue(), result-> {
-					if(result.has("err")) {
+
+				Auth.verifyEmail(user.getString("id"), code.getValue(), result -> {
+					if (result.has("err")) {
 						form.applyErrors(result.getJSONArray("err"));
-					}else {
+					} else {
 						user.put("email_confirmed", true);
 						onSuccess.accept(user);
 					}
-					
+
 					verifyButton.stopLoading();
 				});
 			}
@@ -128,7 +128,7 @@ public class Verify extends LoginSubPage {
 	public void setOnSuccess(Consumer<JSONObject> onSuccess) {
 		this.onSuccess = onSuccess;
 	}
-	
+
 	public void loadData(JSONObject user) {
 		this.user = user;
 		info.addParam(0, hideMail(user.getString("email")));

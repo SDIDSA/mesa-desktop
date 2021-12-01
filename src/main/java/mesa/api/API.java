@@ -28,7 +28,9 @@ public class API {
 
 		public static final String SEND_PHONE_CODE = PREFIX + "sendPhoneCode";
 
-		public static final String EDIT_PHONE = PREFIX + "editPhone";
+		public static final String VERIFY_PHONE = PREFIX + "verifyPhone";
+
+		public static final String FINALIZE_PHONE = PREFIX + "finalizePhone";
 
 		public static final String CHANGE_PASSWORD = PREFIX + "changePassword";
 		

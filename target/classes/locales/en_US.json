@@ -104,6 +104,8 @@
 	"cancel": "Cancel",
 	"done": "Done",
 	
+	
+	"remove_phone": "Remove phone number",
 	"enter_phone": "Enter a Phone Number",
 	"sms_code_note": "You will receive a text message with a verification code.",
 	"phone_use_pre": "Your phone number can be used to verify ",
@@ -114,6 +116,10 @@
 	"phone_invalid": "Phone number is invalid, please confirm that it is correct.",
 	"verify_number": "Verify Your Number",
 	"phone_enter_code": "Enter the 6 digit code we sent to your phone.",
+	"phone_changed": "Phone Changed",
+	
+	"confirm_changes_password": "Enter your password to confirm changes",
+	"confirm": "Confirm",
 	
 	"change_pass" : "Change Password",
 	"new_password": "New Password",

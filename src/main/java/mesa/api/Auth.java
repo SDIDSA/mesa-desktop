@@ -67,6 +67,19 @@ public class Auth {
 				new Param(USER_ID, userId),
 				new Param("phone", phone));
 	}
+	
+	public static void verifyPhone(String userId, String phone, String code, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.VERIFY_PHONE, "verify phone code", onResult,
+				new Param(USER_ID, userId),
+				new Param("phone", phone),
+				new Param("code", code));
+	}
+	
+	public static void finalizePhone(String userId, String password, Consumer<JSONObject> onResult) {
+		API.asyncPost(API.Auth.FINALIZE_PHONE, "confirm phone change", onResult,
+				new Param(USER_ID, userId),
+				new Param(PASSWORD, hashPassword(password)));
+	}
 
 	public static String hashPassword(String password) {
 		return DigestUtils.sha256Hex(password);
