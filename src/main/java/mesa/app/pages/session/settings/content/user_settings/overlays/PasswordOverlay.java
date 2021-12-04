@@ -1,5 +1,6 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -9,6 +10,7 @@ import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 
 public class PasswordOverlay extends AbstractOverlay {
 
@@ -52,7 +54,12 @@ public class PasswordOverlay extends AbstractOverlay {
 	@Override
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
-		head.setFill(style.getText1());
+		head.setFill(style.getHeaderPrimary());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

@@ -1,5 +1,7 @@
 package mesa.gui.locale;
 
+import javafx.beans.property.ObjectProperty;
+
 /**
  * Represents a Localized Node. <br>
  * <br>
@@ -25,4 +27,14 @@ public interface Localized {
 	 * @param locale - the {@link Locale} to be applied on this Node
 	 */
 	public void applyLocale(Locale locale);
+	public void applyLocale(ObjectProperty<Locale> locale);
+
+	public static void bindLocale(Localized node, ObjectProperty<Locale> locale) {
+		node.applyLocale(locale.get());
+		locale.addListener((obs, ov, nv) -> {
+			if(nv != ov) {
+				node.applyLocale(nv);
+			}
+		});
+	}
 }

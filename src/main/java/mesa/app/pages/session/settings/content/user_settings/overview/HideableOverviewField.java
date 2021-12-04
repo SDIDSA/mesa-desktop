@@ -70,7 +70,7 @@ public class HideableOverviewField extends OverviewField {
 			return;
 		}
 		super.applyStyle(style);
-		value.setFill(style.getText1());
-		emptyLabel.setFill(style.getText1());
+		value.setFill(style.getHeaderPrimary());
+		emptyLabel.setFill(style.getHeaderPrimary());
 	}
 }

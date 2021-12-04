@@ -2,6 +2,7 @@ package mesa.gui.controls.label;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
 import mesa.gui.locale.Locale;
@@ -69,5 +70,10 @@ public class Label extends Text implements Localized {
 		} else {
 			setText("");
 		}
+	}
+	
+	@Override
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);
 	}
 }

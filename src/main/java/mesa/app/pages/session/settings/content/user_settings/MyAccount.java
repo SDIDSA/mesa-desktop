@@ -48,8 +48,6 @@ public class MyAccount extends SettingsContent {
 	private VBox twoFactAuthLeft;
 
 	public MyAccount(Settings settings) {
-		super(settings);
-
 		Window window = settings.getWindow();
 
 		User user = settings.getUser();
@@ -211,27 +209,27 @@ public class MyAccount extends SettingsContent {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 
-		myAccountLab.setFill(style.getText1());
-		passAuth.setFill(style.getText1());
+		myAccountLab.setFill(style.getHeaderPrimary());
+		passAuth.setFill(style.getHeaderPrimary());
 
-		changePass.setTextFill(style.getText1());
+		changePass.setTextFill(Color.WHITE);
 		changePass.setFill(style.getAccent());
 
-		twoFactAuthHead.setFill(style.getInteractiveNormal());
-		twoFactAuthBody.setFill(style.getInteractiveNormal());
+		twoFactAuthHead.setFill(style.getHeaderSecondary());
+		twoFactAuthBody.setFill(style.getHeaderSecondary());
 
-		enable2fa.setTextFill(style.getText1());
+		enable2fa.setTextFill(Color.WHITE);
 		enable2fa.setFill(style.getAccent());
 
-		twoFactAuthIcon.setFill(0, style.getBack3());
+		twoFactAuthIcon.setFill(0, style.getBackgroundTertiary());
 		twoFactAuthIcon.setFill(1, style.getAccent());
-		twoFactAuthIconUnder.setFill(style.getBack4());
+		twoFactAuthIconUnder.setFill(style.getBackgroundSecondaryAlt());
 
-		accountRemovalHead.setFill(style.getInteractiveNormal());
-		accountRemovalBody.setFill(style.getInteractiveNormal());
+		accountRemovalHead.setFill(style.getHeaderSecondary());
+		accountRemovalBody.setFill(style.getHeaderSecondary());
 
 		disable.setFill(Colors.Error);
-		disable.setTextFill(style.getText1());
+		disable.setTextFill(Color.WHITE);
 
 		delete.setFill(Color.TRANSPARENT);
 		delete.setTextFill(Colors.Error);

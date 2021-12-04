@@ -1,6 +1,7 @@
 package mesa.app.component.input;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.combo.ComboInput;
 import mesa.gui.controls.input.combo.item.MonthItem;
@@ -50,6 +51,14 @@ public class DateInputField extends InputField implements Localized {
 	}
 
 	@Override
+	public void setValue(String string) {
+		String[] parts = string.split("/");
+		day.setValue(parts[0]);
+		month.setValue(parts[1]);
+		year.setValue(parts[2]);
+	}
+
+	@Override
 	public void applyLocale(Locale locale) {
 		for (int i = 1; i <= 12; i++) {
 			month.addItem(new MonthItem(window, i));
@@ -57,11 +66,8 @@ public class DateInputField extends InputField implements Localized {
 	}
 
 	@Override
-	public void setValue(String string) {
-		String[] parts = string.split("/");
-		day.setValue(parts[0]);
-		month.setValue(parts[1]);
-		year.setValue(parts[2]);
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);
 	}
 
 }

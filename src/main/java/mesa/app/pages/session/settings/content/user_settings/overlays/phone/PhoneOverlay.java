@@ -3,6 +3,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
@@ -139,8 +140,13 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack1(), 5.0));
+		root.setBackground(Backgrounds.make(style.getBackgroundPrimary(), 5.0));
 		isoPhone.applyStyle(style);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

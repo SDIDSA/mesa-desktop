@@ -138,8 +138,8 @@ public abstract class Input extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBack(style.getTextBack1());
-		setBorder(style.getTextBorder1(), style.getTextBorderHover1(), Colors.LINK);
+		setBack(style.getDeprecatedTextInputBg());
+		setBorder(style.getDeprecatedTextInputBorder(), style.getDeprecatedTextInputBorderHover(), Colors.LINK);
 	}
 
 	public String getValue() {

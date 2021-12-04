@@ -3,6 +3,7 @@ package mesa.app.component.input;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
@@ -139,7 +140,12 @@ public abstract class InputField extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		lab.setFill(style.getText1());
+		lab.setFill(style.getHeaderSecondary());
+	}
+	
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 	public String getValue() {

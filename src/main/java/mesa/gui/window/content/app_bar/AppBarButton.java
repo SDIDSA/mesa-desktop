@@ -1,6 +1,7 @@
 package mesa.gui.window.content.app_bar;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Cursor;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.style.Style;
@@ -13,7 +14,7 @@ public class AppBarButton extends ColorIcon implements Styleable {
 
 		setPickOnBounds(true);
 		setCursor(Cursor.HAND);
-		
+
 		applyStyle(window.getStyl());
 	}
 
@@ -24,6 +25,12 @@ public class AppBarButton extends ColorIcon implements Styleable {
 	@Override
 	public void applyStyle(Style style) {
 		fillProperty().unbind();
-		fillProperty().bind(Bindings.when(hoverProperty()).then(style.getText1()).otherwise(style.getText1().deriveColor(0, 1, .75, 1)));
+		fillProperty()
+				.bind(Bindings.when(hoverProperty()).then(style.getInteractiveHover()).otherwise(style.getInteractiveNormal()));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

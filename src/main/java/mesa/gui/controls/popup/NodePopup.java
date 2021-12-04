@@ -1,5 +1,6 @@
 package mesa.gui.controls.popup;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -9,16 +10,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import mesa.gui.NodeUtils;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
-import mesa.gui.locale.Locale;
-import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class NodePopup extends PopupControl implements Styleable, Localized {
+public class NodePopup extends PopupControl implements Styleable {
 	protected Window owner;
 
 	protected VBox root;
@@ -70,14 +68,12 @@ public class NodePopup extends PopupControl implements Styleable, Localized {
 
 	@Override
 	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack1(), 11.0));
-		root.setBorder(Borders.make(style.getBack5(), 10.0));
-
-		NodeUtils.applyStyle(root, style);
+		root.setBackground(Backgrounds.make(style.getBackgroundPrimary(), 11.0));
+		root.setBorder(Borders.make(style.getBackgroundFloating(), 10.0));
 	}
-
+	
 	@Override
-	public void applyLocale(Locale locale) {
-		NodeUtils.applyLocale(root, locale);
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

@@ -4,6 +4,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -67,7 +68,7 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		back.setFill(style.getBack1());
+		back.setFill(style.getBackgroundPrimary());
 		ic.setFill(to);
 
 		if (to != null) {
@@ -75,9 +76,14 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 					new KeyFrame(Duration.seconds(.1), new KeyValue(back.fillProperty(), to, Interpolator.EASE_BOTH),
 							new KeyValue(ic.fillProperty(), Color.WHITE, Interpolator.EASE_BOTH)));
 			undoCol = new Timeline(new KeyFrame(Duration.seconds(.1),
-					new KeyValue(back.fillProperty(), style.getBack1(), Interpolator.EASE_BOTH),
+					new KeyValue(back.fillProperty(), style.getBackgroundPrimary(), Interpolator.EASE_BOTH),
 					new KeyValue(ic.fillProperty(), to, Interpolator.EASE_BOTH)));
 		}
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

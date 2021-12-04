@@ -1,5 +1,6 @@
 package mesa.gui.style;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 
 /**
@@ -26,10 +27,20 @@ public interface Styleable {
 	 * @param style - the {@link Style} to be applied on this Node
 	 */
 
+	void applyStyle(ObjectProperty<Style> style);
 	void applyStyle(Style style);
 
 	public static String colorToCss(Color color) {
 		return "rgb(" + (int) (color.getRed() * 255) + "," + (int) (color.getGreen() * 255) + ","
 				+ (int) (color.getBlue() * 255) + ", " + color.getOpacity() + ")";
+	}
+	
+	public static void bindStyle(Styleable node, ObjectProperty<Style> style) {
+		node.applyStyle(style.get());
+		style.addListener((obs, ov, nv) -> {
+			if(nv != ov) {
+				node.applyStyle(nv);
+			}
+		});
 	}
 }

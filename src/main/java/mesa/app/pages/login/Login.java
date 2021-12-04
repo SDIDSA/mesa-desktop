@@ -10,6 +10,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.TextInputField;
@@ -133,10 +134,10 @@ public class Login extends LoginSubPage {
 		super.applyStyle(style);
 
 		loginButton.setFill(style.getAccent());
-		loginButton.setTextFill(style.getText1());
-		web.setFill(style.getText1());
-		etsya.setFill(style.getText1());
-		needAcc.setFill(style.getText1());
+		loginButton.setTextFill(Color.WHITE);
+		web.setFill(style.getHeaderPrimary());
+		etsya.setFill(style.getHeaderSecondary());
+		needAcc.setFill(style.getTextMuted());
 	}
 
 }

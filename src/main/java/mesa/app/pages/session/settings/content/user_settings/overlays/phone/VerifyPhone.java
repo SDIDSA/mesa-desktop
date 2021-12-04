@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import java.util.function.Supplier;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -45,7 +46,7 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 		confCode = new ConfCode(owner.getWindow(), "", 6, 360);
 
-		resend = new Button(owner.getWindow(), "Back", 4.0, 16, 32);
+		resend = new Button(owner.getWindow(), "back", 4.0, 16, 32);
 		resend.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		resend.setUlOnHover(true);
 		VBox.setMargin(resend, new Insets(30, 0, 0, 0));
@@ -68,10 +69,7 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 				} else {
 					resend.stopLoading();
 					resend.setKey("close");
-					resend.setAction(() -> {
-						hide.run();
-						onSuccess.run();
-					});
+					resend.setAction(hide);
 
 					getChildren().remove(confCode);
 					enterCode.setKey("");
@@ -132,11 +130,16 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		verifyHead.setFill(style.getText1());
-		enterCode.setFill(style.getText2());
+		verifyHead.setFill(style.getHeaderPrimary());
+		enterCode.setFill(style.getTextNormal());
 
 		resend.setFill(Color.TRANSPARENT);
-		resend.setTextFill(style.getText1());
+		resend.setTextFill(style.getLinkButtonText());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

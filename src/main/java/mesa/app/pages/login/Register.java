@@ -9,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.DateInputField;
@@ -113,9 +114,9 @@ public class Register extends LoginSubPage {
 		super.applyStyle(style);
 
 		contin.setFill(style.getAccent());
-		contin.setTextFill(style.getText1());
-		crec.setFill(style.getText1());
-		haveAcc.setFill(style.getText1());
+		contin.setTextFill(Color.WHITE);
+		crec.setFill(style.getTextNormal());
+		haveAcc.setFill(style.getTextNormal());
 	}
 
 }

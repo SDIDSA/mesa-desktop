@@ -4,9 +4,15 @@ import java.util.function.Consumer;
 
 import org.json.JSONObject;
 
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.ConfCode;
@@ -85,10 +91,20 @@ public class Verify extends LoginSubPage {
 			}
 		});
 
+		now.setTranslateY(-163);
+		
+		Timeline preShow = new Timeline(
+				new KeyFrame(Duration.seconds(.2), new KeyValue(now.translateYProperty(), 0, Interpolator.EASE_BOTH)));
+		
+		Timeline preHide = new Timeline(
+				new KeyFrame(Duration.seconds(.2), new KeyValue(now.translateYProperty(), -163, Interpolator.EASE_BOTH)));
+
 		verifyNow.setAction(() -> {
 			Animator.show(now, 163);
 			Animator.show(root, 307);
 			verifyNow.hide();
+			
+			preShow.playFromStart();
 		});
 
 		later.setAction(() -> onSuccess.accept(user));
@@ -97,6 +113,8 @@ public class Verify extends LoginSubPage {
 			Animator.hide(now);
 			Animator.hide(root, 188);
 			verifyNow.show();
+
+			preHide.playFromStart();
 		});
 
 		form = NodeUtils.getForm(code);
@@ -142,12 +160,12 @@ public class Verify extends LoginSubPage {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 
-		info.setFill(style.getText1());
-		verifyButton.setTextFill(style.getText1());
+		info.setFill(style.getTextNormal());
+		verifyButton.setTextFill(Color.WHITE);
 		verifyButton.setFill(style.getAccent());
-		verifyNow.setTextFill(style.getText1());
+		verifyNow.setTextFill(Color.WHITE);
 		verifyNow.setFill(style.getAccent());
-		later.setTextFill(style.getText1());
-		later.setFill(style.getBack4());
+		later.setTextFill(Color.WHITE);
+		later.setFill(style.getBackgroundSecondaryAlt());
 	}
 }

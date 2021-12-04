@@ -2,6 +2,7 @@ package mesa.gui.controls.popup.context;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
@@ -14,17 +15,14 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import mesa.gui.NodeUtils;
 import mesa.gui.controls.popup.Direction;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
-import mesa.gui.locale.Locale;
-import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class ContextMenu extends PopupControl implements Styleable, Localized {
+public class ContextMenu extends PopupControl implements Styleable {
 	protected Window owner;
 	protected VBox root;
 	protected ArrayList<ContextMenuItem> items;
@@ -137,15 +135,14 @@ public class ContextMenu extends PopupControl implements Styleable, Localized {
 		StackPane sep = new StackPane();
 		sep.setMinHeight(1);
 		sep.setMaxHeight(1);
-		Background b = separators.isEmpty() ? Backgrounds.make(owner.getStyl().getBackAccent())
-				: separators.get(0).getBackground();
-		sep.setBackground(b);
 
 		StackPane preSep = new StackPane(sep);
 		preSep.setPadding(new Insets(2, 4, 2, 4));
 
 		root.getChildren().add(preSep);
 		separators.add(sep);
+		
+		applyStyle(owner.getStyl().get());
 	}
 
 	private void select(ContextMenuItem item) {
@@ -197,25 +194,25 @@ public class ContextMenu extends PopupControl implements Styleable, Localized {
 		showPop(node, null, 0);
 	}
 
-	@Override
-	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack5(), 5.0));
-		root.setBorder(Borders.make(style.getBack5(), 4.0));
-
-		Background sepBac = Backgrounds.make(style.getBackAccent());
-		for (StackPane sep : separators) {
-			sep.setBackground(sepBac);
-		}
-
-		NodeUtils.applyStyle(root, style);
-	}
-
-	@Override
-	public void applyLocale(Locale locale) {
-		NodeUtils.applyLocale(root, locale);
-	}
-
 	public Window getOwner() {
 		return owner;
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		root.setBackground(Backgrounds.make(style.getBackgroundFloating(), 5.0));
+		root.setBorder(Borders.make(style.getBackgroundFloating(), 4.0));
+
+		if(!separators.isEmpty()) {
+			Background sepBac = Backgrounds.make(style.getBackgroundModifierAccent());
+			for (StackPane sep : separators) {
+				sep.setBackground(sepBac);
+			}
+		}
+	}
+	
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

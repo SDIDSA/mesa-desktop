@@ -5,6 +5,7 @@ import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberType;
 import com.google.i18n.phonenumbers.Phonenumber.PhoneNumber;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -113,22 +114,27 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 		return pending;
 	}
 
-	@Override
-	public void applyStyle(Style style) {
-		head.setFill(style.getText1());
-		smsCodeNode.setFill(style.getText2());
-
-		phoneUsePre.setFill(style.getText2());
-		oneAccount.setFill(style.getText2());
-		phoneUsePost.setFill(style.getText2());
-
-	}
-
 	public void load() {
 		input.load(owner.getWindow());
 	}
 
 	public void unload() {
 		input.unload();
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		head.setFill(style.getHeaderPrimary());
+		smsCodeNode.setFill(style.getTextNormal());
+
+		phoneUsePre.setFill(style.getTextNormal());
+		oneAccount.setFill(style.getTextNormal());
+		phoneUsePost.setFill(style.getTextNormal());
+
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

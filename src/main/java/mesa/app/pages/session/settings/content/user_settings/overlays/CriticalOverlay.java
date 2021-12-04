@@ -36,7 +36,7 @@ public class CriticalOverlay extends PasswordOverlay {
 		super.applyStyle(style);
 
 		if (warning != null)
-			warning.setFill(style.getText1());
+			warning.setFill(Color.WHITE);
 	}
 
 }

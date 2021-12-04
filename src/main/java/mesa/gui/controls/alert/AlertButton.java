@@ -1,5 +1,6 @@
 package mesa.gui.controls.alert;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.gui.controls.Font;
@@ -26,9 +27,8 @@ public class AlertButton extends Button implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setTextFill(style.getText1());
-		
 		if(type.isFilled()) {
+			setTextFill(Color.WHITE);
 			if(type.getFill() == null) {
 				setFill(style.getAccent());
 			}else {
@@ -36,7 +36,13 @@ public class AlertButton extends Button implements Styleable {
 			}
 		}else {
 			setFill(Color.TRANSPARENT);
+			setTextFill(style.getLinkButtonText());
 		}
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

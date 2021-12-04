@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Border;
@@ -181,23 +182,28 @@ public class FieldList extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBack2(), 8.0));
+		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 8.0));
 
-		usernameLab.setFill(style.getText1());
+		usernameLab.setFill(style.getHeaderPrimary());
 
-		idLab.setFill(style.getInteractiveNormal());
+		idLab.setFill(style.getHeaderSecondary());
 
 		removePhone.setFill(Color.TRANSPARENT);
-		removePhone.setTextFill(style.getText1());
+		removePhone.setTextFill(style.getLinkButtonText());
 
 		editTagSeparate.setFill(style.getInteractiveNormal());
 
 		hash.setFill(style.getTextMuted());
-		tag.setFill(style.getText1());
+		tag.setFill(style.getTextMuted());
 
 		helpEditTag.backgroundProperty()
 				.bind(Bindings.when(helpEditTag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
 						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
-		editTagIcon.setFill(style.getText1());
+		editTagIcon.setFill(Color.WHITE);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

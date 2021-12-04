@@ -1,5 +1,6 @@
 package mesa.gui.controls.input;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -79,13 +80,6 @@ public class TextInput extends Input {
 	}
 
 	@Override
-	public void applyStyle(Style style) {
-		super.applyStyle(style);
-		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getText1())
-				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
-	}
-
-	@Override
 	public String getValue() {
 		return field.getText();
 	}
@@ -105,6 +99,18 @@ public class TextInput extends Input {
 		field.requestFocus();
 		field.deselect();
 		field.positionCaret(getValue().length());
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		super.applyStyle(style);
+		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getTextNormal())
+				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

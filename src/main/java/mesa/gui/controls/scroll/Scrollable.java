@@ -2,7 +2,6 @@ package mesa.gui.controls.scroll;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.input.ScrollEvent;
@@ -18,10 +17,9 @@ public class Scrollable extends StackPane {
 
 		contentCont = new StackPane();
 		StackPane scrollBarCont = new StackPane();
-		scrollBarCont.setPadding(new Insets(5));
 		scrollBarCont.setAlignment(Pos.CENTER_RIGHT);
 
-		ScrollBar sb = new ScrollBar(6, 0);
+		ScrollBar sb = new ScrollBar(15, 5);
 		scrollBarCont.setPickOnBounds(false);
 		scrollBarCont.getChildren().add(sb);
 		sb.install(this, contentCont);

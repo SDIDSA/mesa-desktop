@@ -3,6 +3,7 @@ package mesa.gui.controls.alert;
 import java.util.EnumMap;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -109,13 +110,18 @@ public class Alert extends Overlay implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		preRoot.setBackground(Backgrounds.make(style.getBack1(), new CornerRadii(5, 5, 0, 0, false)));
-		bottom.setBackground(Backgrounds.make(style.getBack2(), new CornerRadii(0, 0, 5, 5, false)));
+		preRoot.setBackground(Backgrounds.make(style.getBackgroundPrimary(), new CornerRadii(5, 5, 0, 0, false)));
+		bottom.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(0, 0, 5, 5, false)));
 
-		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getText1())
-				.otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
+		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getHeaderPrimary())
+				.otherwise(style.getHeaderSecondary()));
 
-		head.setFill(style.getText1());
-		body.setFill(style.getText2());
+		head.setFill(style.getHeaderPrimary());
+		body.setFill(style.getTextNormal());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

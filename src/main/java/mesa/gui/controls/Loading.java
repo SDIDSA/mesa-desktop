@@ -4,6 +4,8 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
@@ -17,15 +19,24 @@ public class Loading extends Pane {
 	private Runnable init;
 	private Timeline animation;
 	
+	private ObjectProperty<Paint> fill;
+	
 	public Loading(double size) {
 		double width = size * 5;
 		setMinSize(width, size);
 		setMaxSize(width, size);
+		
+		fill = new SimpleObjectProperty<>();
 
 		c0 = new Circle(size / 2);
 		c1 = new Circle(size / 2);
 		c2 = new Circle(size / 2);
 		c3 = new Circle(size / 2);
+		
+		c0.fillProperty().bind(fill);
+		c1.fillProperty().bind(fill);
+		c2.fillProperty().bind(fill);
+		c3.fillProperty().bind(fill);
 
 		setTranslateY(size / 2);
 		setTranslateX(size / 2);
@@ -79,9 +90,10 @@ public class Loading extends Pane {
 	}
 
 	public void setFill(Paint fill) {
-		c0.setFill(fill);
-		c1.setFill(fill);
-		c2.setFill(fill);
-		c3.setFill(fill);
+		this.fill.set(fill);
+	}
+	
+	public ObjectProperty<Paint> fillProperty() {
+		return fill;
 	}
 }

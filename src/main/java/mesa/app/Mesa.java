@@ -8,14 +8,14 @@ import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class Mesa extends Application {
-	
+
 	@Override
 	public void start(Stage dismiss) throws Exception {
 		System.setProperty("prism.lcdtext", "false");
-		Window window = new Window(Style.DARK, Locale.EN_US);
+		Window window = new Window(Style.LIGHT, Locale.EN_US);
 		window.setTitle("mesa");
-		window.setOnShown(e-> window.loadPage(LoginPage.class));
+		window.setOnShown(e -> window.loadPage(LoginPage.class, window::centerOnScreen));
 		window.show();
 	}
-	
+
 }

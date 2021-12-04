@@ -2,6 +2,7 @@ package mesa.gui.controls.popup.context;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -64,5 +65,10 @@ public class ContextMenuItem extends StackPane implements Styleable {
 	public void applyStyle(Style style) {
 		lab.fillProperty().bind(Bindings.when(active).then(Color.WHITE).otherwise(fill == null ? style.getInteractiveNormal() : fill));
 		backgroundProperty().bind(Bindings.when(active).then(Backgrounds.make(fill == null ? style.getAccent() : fill, 3.0)).otherwise(Background.EMPTY));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

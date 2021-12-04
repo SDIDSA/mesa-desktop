@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -121,9 +122,9 @@ public class SectionItem extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		Background hover = Backgrounds.make(style.getBackHover(), 4.0);
-		Background active = Backgrounds.make(style.getBackActive(), 4.0);
-		Background selectedBack = Backgrounds.make(style.getBackSelected(), 4.0);
+		Background hover = Backgrounds.make(style.getBackgroundModifierHover(), 4.0);
+		Background active = Backgrounds.make(style.getBackgroundModifierActive(), 4.0);
+		Background selectedBack = Backgrounds.make(style.getBackgroundModifierSelected(), 4.0);
 
 		backgroundProperty().bind(Bindings.createObjectBinding(() -> {
 			if (isSelected()) {
@@ -145,5 +146,10 @@ public class SectionItem extends StackPane implements Styleable {
 				}
 				return style.getInteractiveNormal();
 			}, hoverProperty(), selectedProperty, pressedProperty()));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

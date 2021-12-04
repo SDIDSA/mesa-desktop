@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -8,7 +9,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import mesa.data.CountryCode;
@@ -37,19 +37,22 @@ public class CountryCodeItem extends HBox implements Styleable {
 		code.setFont(new Font(13, FontWeight.BOLD).getFont());
 
 		setCursor(Cursor.HAND);
-		
+
 		getChildren().addAll(name, new ExpandingHSpace(), code);
 	}
 
 	@Override
 	public void applyStyle(Style style) {
-		name.setTextFill(style.getInteractiveNormal());
-		code.setFill(style.getText1());
+		name.setTextFill(style.getCountryNameItemText());
+		code.setFill(style.getCountryCodeItemText());
 
-		backgroundProperty().bind(Bindings.when(hoverProperty()).then(Backgrounds.make(
-				style == Style.DARK ? Color.web("#20222599"): null
-				, 3.0))
+		backgroundProperty().bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getCountryCodeItemHover(), 3.0))
 				.otherwise(Background.EMPTY));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

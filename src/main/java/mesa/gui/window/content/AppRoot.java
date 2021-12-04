@@ -36,7 +36,7 @@ public class AppRoot extends BorderPane {
 		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> requestFocus());
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
-		setFill(window.getStyl().getBack3());
+		setFill(window.getStyl().get().getBackgroundTertiary());
 
 		helper = new MoveResizeHelper(window, parent, 5);
 

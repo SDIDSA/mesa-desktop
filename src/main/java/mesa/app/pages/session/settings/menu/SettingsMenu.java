@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.menu;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
@@ -14,11 +15,9 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class SettingsMenu extends VBox implements Styleable {
-	private Settings settings;
 	private ArrayList<Rectangle> separators;
 	
 	public SettingsMenu(Settings settings) {
-		this.settings = settings;
 		setPadding(new Insets(60, 6, 60, 20));
 		setMinWidth(218);
 		setAlignment(Pos.TOP_CENTER);
@@ -66,18 +65,21 @@ public class SettingsMenu extends VBox implements Styleable {
 	
 	public void separate() {
 		Rectangle sep = new Rectangle(172, 1);
-		
+		separators.add(sep);
 		getChildren().addAll(new FixedVSpace(10), sep, new FixedVSpace(8));
-		
-		styleSeparator(settings.getWindow().getStyl(), sep);
 	}
 	
 	private void styleSeparator(Style style, Rectangle sep) {
-		sep.setFill(style.getBackAccent());
+		sep.setFill(style.getBackgroundModifierAccent());
 	}
 
 	@Override
 	public void applyStyle(Style style) {
 		separators.forEach(sep -> styleSeparator(style, sep));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

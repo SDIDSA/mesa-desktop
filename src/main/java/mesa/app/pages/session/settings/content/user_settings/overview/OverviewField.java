@@ -81,7 +81,12 @@ public class OverviewField extends HBox implements Styleable {
 	@Override
 	public void applyStyle(Style style) {
 		name.setFill(style.getInteractiveNormal());
-		edit.setFill(style == Style.DARK ? Color.web("#4f545c") : Color.TRANSPARENT);
-		edit.setTextFill(style.getText1());
+		edit.setFill(style.getSecondaryButtonBack());
+		edit.setTextFill(Color.WHITE);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

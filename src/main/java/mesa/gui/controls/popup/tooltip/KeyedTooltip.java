@@ -1,5 +1,6 @@
 package mesa.gui.controls.popup.tooltip;
 
+import javafx.beans.property.ObjectProperty;
 import mesa.gui.controls.popup.Direction;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
@@ -23,6 +24,11 @@ public class KeyedTooltip extends Tooltip implements Localized {
 	@Override
 	public void applyLocale(Locale locale) {
 		setText(locale.get(key));
+	}
+	
+	@Override
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);	
 	}
 
 }
