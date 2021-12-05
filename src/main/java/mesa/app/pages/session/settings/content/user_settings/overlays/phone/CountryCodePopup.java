@@ -9,6 +9,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
@@ -29,23 +30,22 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import mesa.app.utils.Threaded;
 import mesa.data.CountryCode;
-import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.Separator;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.file.FileUtils;
-import mesa.gui.locale.Locale;
-import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class CountryCodePopup extends PopupControl implements Styleable, Localized {
+public class CountryCodePopup extends PopupControl implements Styleable {
 	protected Window owner;
 	private VBox root;
 
+	private CountrySearch search;
+	
 	private Separator separator;
 	private ScrollBar scrollBar;
 
@@ -66,7 +66,7 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		root.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		root.setPrefSize(240, 250);
 
-		CountrySearch search = new CountrySearch();
+		search = new CountrySearch();
 
 		separator = new Separator(Orientation.HORIZONTAL);
 		VBox.setMargin(separator, new Insets(8, 0, 8, 0));
@@ -118,13 +118,16 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 		Runnable reset = () -> new Thread(() -> display.accept(all)).start();
 
-		Consumer<String> searchFor = text -> new Thread() {
-			@Override
-			public void run() {
-				display.accept(all.stream().filter(code -> code.match(text)).toList());
-			}
-		}.start();
-
+		Consumer<String> searchFor = 
+				text -> new Thread(
+						() -> 
+							display.accept(
+								all.stream().filter(code -> 
+									code.match(text)
+								).toList()
+							)
+						).start();
+		
 		search.setReset(reset);
 		search.setSearch(searchFor);
 
@@ -161,8 +164,10 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 		root.setCacheHint(CacheHint.SPEED);
 		scaleShow.setOnFinished(e -> root.setCache(false));
 
+		search.applyLocale(owner.getLocale());
+		search.applyStyle(owner.getStyl());
+		
 		applyStyle(owner.getStyl());
-		applyLocale(owner.getLocale());
 	}
 
 	public void setOnSelect(Consumer<CountryCode> onSelect) {
@@ -202,19 +207,17 @@ public class CountryCodePopup extends PopupControl implements Styleable, Localiz
 
 	@Override
 	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack1(), 5.0));
-		root.setBorder(Borders.make(style == Style.DARK ? Color.web("#20222599") : null, 4.0));
+		root.setBackground(Backgrounds.make(style.getBackgroundPrimary(), 5.0));
+		root.setBorder(Borders.make(style.getBackgroundSecondary(), 4.0));
+		
+		separator.setFill(style.getBackgroundModifierAccent());
 
-		separator.setFill(style.getBackAccent());
-
-		scrollBar.setThumbFill(style.getBack3());
-		scrollBar.setTrackFill(style.getBack2());
-
-		NodeUtils.applyStyle(root, style);
+		scrollBar.setThumbFill(style.getScrollbarAutoThumb());
+		scrollBar.setTrackFill(style.getScrollbarAutoTrack());
 	}
 
 	@Override
-	public void applyLocale(Locale locale) {
-		NodeUtils.applyLocale(root, locale);
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

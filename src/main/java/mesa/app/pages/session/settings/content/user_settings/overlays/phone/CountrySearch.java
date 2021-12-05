@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import java.util.function.Consumer;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -69,19 +70,29 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBack3(), 4.0));
+		setBackground(Backgrounds.make(style.getBackgroundTertiary(), 4.0));
 
-		Color tx = style.getText2();
+		Color tx = style.getTextNormal();
 		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(tx) + ";-fx-prompt-text-fill: "
 				+ Styleable.colorToCss(tx.deriveColor(0, 1, 1, .35))
 				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
 
-		icon.setFill(style.getText2());
+		icon.setFill(tx);
 	}
 
 	@Override
 	public void applyLocale(Locale locale) {
 		field.setPromptText(locale.get("search_country"));
+	}
+
+	@Override
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

@@ -1,5 +1,6 @@
 package mesa.app.pages.session.settings.content.user_settings.overview;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -80,6 +81,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 		more.setCursor(Cursor.HAND);
 		more.setTranslateY(11);
 		more.setPadding(4);
+		more.applyStyle(settings.getWindow().getStyl());
 
 		ContextMenu menu = new ContextMenu(settings.getSession().getWindow());
 		menu.addMenuItem("copy_id", () -> {
@@ -105,15 +107,20 @@ public class ProfileOverview extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		back.setBackground(Backgrounds.make(style.getBack3(), 8.0));
+		back.setBackground(Backgrounds.make(style.getBackgroundTertiary(), 8.0));
 
-		pfpCont.setBackground(Backgrounds.make(style.getBack3(), 47.0));
-		userName.setFill(style.getText1());
-		id.setFill(style.getInteractiveNormal());
+		pfpCont.setBackground(Backgrounds.make(style.getBackgroundTertiary(), 47.0));
+		userName.setFill(style.getHeaderPrimary());
+		id.setFill(style.getHeaderSecondary());
 		more.setFill(style.getInteractiveNormal());
 
 		editUserProfile.setFill(style.getAccent());
-		editUserProfile.setTextFill(style.getText1());
+		editUserProfile.setTextFill(Color.WHITE);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

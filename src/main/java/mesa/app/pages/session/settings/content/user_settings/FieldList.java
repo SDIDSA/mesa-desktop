@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Border;
@@ -17,7 +18,6 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordOv
 import mesa.app.pages.session.settings.content.user_settings.overlays.phone.PhoneOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
 import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
-import mesa.app.utils.Colors;
 import mesa.data.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -67,9 +67,9 @@ public class FieldList extends VBox implements Styleable {
 
 		hash = new Text("#");
 		hash.setFont(new Font(15).getFont());
+		hash.setOpacity(.5);
 		tag = new Text(user.getId());
 		tag.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 15).getFont());
-		tag.setOpacity(.5);
 
 		helpEditTag = new StackPane();
 		helpEditTag.setCursor(Cursor.HAND);
@@ -77,8 +77,6 @@ public class FieldList extends VBox implements Styleable {
 		helpEditTag.setMinSize(32, 31);
 
 		helpEditTag.setFocusTraversable(true);
-		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
-				.then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
 
 		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!", Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
@@ -132,6 +130,21 @@ public class FieldList extends VBox implements Styleable {
 
 		PasswordOverlay removePhoneOverlay = new PasswordOverlay(settings.getSession(), "remove_phone",
 				"overview_remove");
+		
+		removePhoneOverlay.setAction(() -> {
+			removePhoneOverlay.startLoading();
+			Auth.removePhone(user.getId(), removePhoneOverlay.getPassword(), result -> {
+				if(result.has("err")) {
+					removePhoneOverlay.applyErrors(result.getJSONArray("err"));
+				}else {
+					user.setPhone("");
+					removePhoneOverlay.hide();
+				}
+				
+				removePhoneOverlay.stopLoading();
+			});
+		});
+
 		removePhone.setAction(removePhoneOverlay::show);
 
 		phone.addToPreEdit(removePhone, new FixedHSpace(8));
@@ -139,7 +152,14 @@ public class FieldList extends VBox implements Styleable {
 
 		removePhone.visibleProperty().bind(user.phoneProperty().isEmpty().not());
 
-		phone.setOverlay(new PhoneOverlay(settings.getSession()));
+		Runnable onPhoneChange = new Runnable() {
+			public void run() {
+				PhoneOverlay phoneOverlay = new PhoneOverlay(settings.getSession());
+				phoneOverlay.setOnSuccess(this);
+				phone.setOverlay(phoneOverlay);
+			}	
+		};
+		onPhoneChange.run();
 
 		Font font = new Font(16);
 
@@ -159,23 +179,32 @@ public class FieldList extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBack2(), 8.0));
+		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 8.0));
 
-		usernameLab.setFill(style.getText1());
+		usernameLab.setFill(style.getHeaderPrimary());
 
-		idLab.setFill(style.getInteractiveNormal());
+		idLab.setFill(style.getHeaderSecondary());
 
 		removePhone.setFill(Color.TRANSPARENT);
-		removePhone.setTextFill(style.getText1());
+		removePhone.setTextFill(style.getLinkButtonText());
 
 		editTagSeparate.setFill(style.getInteractiveNormal());
 
 		hash.setFill(style.getTextMuted());
-		tag.setFill(style.getText1());
+		tag.setFill(style.getTextMuted());
 
 		helpEditTag.backgroundProperty()
 				.bind(Bindings.when(helpEditTag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
 						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
-		editTagIcon.setFill(style.getText1());
+
+		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
+				.then(Borders.make(style.getTextLink(), 4.0)).otherwise(Border.EMPTY));
+		
+		editTagIcon.setFill(Color.WHITE);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 
 import java.util.function.Supplier;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -27,9 +28,15 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	private Runnable previous;
 	private Runnable hide;
+	private Runnable onSuccess;
 
 	public VerifyPhone(SessionPage owner) {
 		super(owner);
+
+		setScaleX(.5);
+		setScaleY(.5);
+		setOpacity(0);
+		setMouseTransparent(true);
 
 		verifyHead = new Label(owner.getWindow(), "verify_number", new Font(20, FontWeight.BOLD));
 		VBox.setMargin(verifyHead, new Insets(0, 0, 12, 0));
@@ -39,7 +46,7 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 		confCode = new ConfCode(owner.getWindow(), "", 6, 360);
 
-		resend = new Button(owner.getWindow(), "Back", 4.0, 16, 32);
+		resend = new Button(owner.getWindow(), "back", 4.0, 16, 32);
 		resend.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		resend.setUlOnHover(true);
 		VBox.setMargin(resend, new Insets(30, 0, 0, 0));
@@ -70,14 +77,16 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 					finalize.hide();
 
 					owner.getUser().setPhone(result.getString("phone"));
+
+					onSuccess.run();
 				}
 
 				finalize.stopLoading();
 			});
 		});
-		
+
 		getChildren().addAll(verifyHead, enterCode, confCode, resend);
-		
+
 		applyStyle(owner.getWindow().getStyl());
 	}
 
@@ -87,6 +96,10 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	public void setPrevious(Runnable previous) {
 		this.previous = previous;
+	}
+
+	public void setOnSuccess(Runnable onSuccess) {
+		this.onSuccess = onSuccess;
 	}
 
 	public void setAction(Runnable correct, Runnable incorrect, Supplier<String> getPending) {
@@ -117,11 +130,16 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		verifyHead.setFill(style.getText1());
-		enterCode.setFill(style.getText2());
+		verifyHead.setFill(style.getHeaderPrimary());
+		enterCode.setFill(style.getTextNormal());
 
 		resend.setFill(Color.TRANSPARENT);
-		resend.setTextFill(style.getText1());
+		resend.setTextFill(style.getLinkButtonText());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

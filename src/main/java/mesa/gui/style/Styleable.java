@@ -1,5 +1,10 @@
 package mesa.gui.style;
 
+import java.lang.ref.WeakReference;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 
 /**
@@ -26,10 +31,37 @@ public interface Styleable {
 	 * @param style - the {@link Style} to be applied on this Node
 	 */
 
+	void applyStyle(ObjectProperty<Style> style);
+
 	void applyStyle(Style style);
 
 	public static String colorToCss(Color color) {
 		return "rgb(" + (int) (color.getRed() * 255) + "," + (int) (color.getGreen() * 255) + ","
 				+ (int) (color.getBlue() * 255) + ", " + color.getOpacity() + ")";
+	}
+
+	public static void bindStyle(Styleable node, ObjectProperty<Style> style) {
+		bindStyleWeak(node, style);
+	}
+	
+	private static void bindStyleWeak(Styleable node, ObjectProperty<Style> style) {
+		node.applyStyle(style.get());
+
+		WeakReference<Styleable> weakNode = new WeakReference<>(node);
+		
+		ChangeListener<Style> listener = new ChangeListener<Style>() {
+			@Override
+			public void changed(ObservableValue<? extends Style> obs, Style ov, Style nv) {
+				if (weakNode.get() != null) {
+					if (nv != ov) {
+						weakNode.get().applyStyle(nv);
+					}
+				} else {
+					style.removeListener(this);
+				}
+			}
+		};
+		
+		style.addListener(listener);
 	}
 }

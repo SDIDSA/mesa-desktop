@@ -1,5 +1,6 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -10,6 +11,7 @@ import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 
 public abstract class BasicOverlay extends AbstractOverlay {
 
@@ -24,6 +26,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 		VBox top = new VBox(8);
 		top.setPadding(new Insets(26, 16, 26, 16));
 		top.setAlignment(Pos.CENTER);
+		top.setMouseTransparent(true);
 
 		head = new Label(session.getWindow(), "", new Font(24, FontWeight.BOLD));
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);
@@ -52,7 +55,12 @@ public abstract class BasicOverlay extends AbstractOverlay {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 		
-		head.setFill(style.getText1());
-		subHead.setFill(style.getInteractiveNormal());
+		head.setFill(style.getHeaderPrimary());
+		subHead.setFill(style.getHeaderSecondary());
+	}
+	
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

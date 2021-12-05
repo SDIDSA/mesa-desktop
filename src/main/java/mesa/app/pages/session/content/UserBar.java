@@ -1,5 +1,6 @@
 package mesa.app.pages.session.content;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -62,8 +63,13 @@ public class UserBar extends HBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBack4()));
-		username.setFill(style.getText1());
-		userid.setFill(style.getText2());
+		setBackground(Backgrounds.make(style.getBackgroundSecondaryAlt()));
+		username.setFill(style.getHeaderPrimary());
+		userid.setFill(style.getHeaderSecondary());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

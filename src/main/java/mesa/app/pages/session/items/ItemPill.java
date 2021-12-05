@@ -4,6 +4,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import mesa.app.pages.session.SessionPage;
@@ -63,7 +64,12 @@ public class ItemPill extends Rectangle implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setFill(style.getText1());
+		setFill(style.getHeaderPrimary());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

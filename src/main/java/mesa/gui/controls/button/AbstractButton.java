@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Insets;
@@ -25,12 +26,14 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
-import mesa.app.utils.Colors;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Loading;
 import mesa.gui.factory.Borders;
+import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
+import mesa.gui.window.Window;
 
-public class AbstractButton extends StackPane {
+public class AbstractButton extends StackPane implements Styleable {
 	private double radius;
 	private DoubleProperty radiusProperty;
 	private Timeline enter;
@@ -45,7 +48,7 @@ public class AbstractButton extends StackPane {
 
 	private BooleanProperty loading;
 
-	public AbstractButton(double radius, double height) {
+	public AbstractButton(Window window, double radius, double height) {
 		this.radius = radius;
 		getStyleClass().addAll("butt");
 
@@ -70,9 +73,6 @@ public class AbstractButton extends StackPane {
 		back.widthProperty().bind(widthProperty().subtract(Bindings.when(focusedProperty()).then(6).otherwise(0)));
 		back.heightProperty().bind(heightProperty().subtract(Bindings.when(focusedProperty()).then(6).otherwise(0)));
 
-		borderProperty()
-				.bind(Bindings.when(focusedProperty()).then(Borders.make(Colors.LINK, radius)).otherwise(Border.EMPTY));
-
 		setCursor(Cursor.HAND);
 
 		load = new Loading(height / 5);
@@ -96,13 +96,15 @@ public class AbstractButton extends StackPane {
 		content.setAlignment(Pos.CENTER);
 
 		getChildren().addAll(back, content);
+		
+		applyStyle(window.getStyl());
 	}
-	
+
 	public void setContentPadding(Insets insets) {
 		content.setPadding(insets);
 	}
-	
-	public void add(Node...nodes) {
+
+	public void add(Node... nodes) {
 		content.getChildren().addAll(nodes);
 	}
 
@@ -145,12 +147,12 @@ public class AbstractButton extends StackPane {
 		return loading;
 	}
 
-	public AbstractButton() {
-		this(4.0, 44);
+	public AbstractButton(Window window) {
+		this(window, 4.0, 44);
 	}
 
-	public AbstractButton(double radius) {
-		this(radius, 44);
+	public AbstractButton(Window window, double radius) {
+		this(window, radius, 44);
 	}
 
 	private void fire(MouseEvent dismiss) {
@@ -200,5 +202,16 @@ public class AbstractButton extends StackPane {
 	public void setRadius(double radius) {
 		this.radius = radius;
 		radiusProperty.set(radius);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		borderProperty().bind(Bindings.when(focusedProperty()).then(Borders.make(style.getTextLink(), radius))
+				.otherwise(Border.EMPTY));
 	}
 }

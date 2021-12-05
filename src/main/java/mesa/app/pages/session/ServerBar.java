@@ -2,6 +2,7 @@ package mesa.app.pages.session;
 
 import java.util.ArrayList;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
@@ -50,6 +51,11 @@ public class ServerBar extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		seps.forEach(sep -> sep.setFill(style.getBack2()));
+		seps.forEach(sep -> sep.setFill(style.getBackgroundModifierAccent()));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

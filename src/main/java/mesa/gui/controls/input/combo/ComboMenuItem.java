@@ -27,7 +27,7 @@ public abstract class ComboMenuItem extends StackPane implements Styleable {
 	public void applyStyle(Style style) {		
 		backgroundProperty().unbind();
 		
-		Background hover = Backgrounds.make(style.getBack5());
+		Background hover = Backgrounds.make(style.getBackgroundTertiary());
 		backgroundProperty().bind(Bindings.when(hoverProperty()).then(hover).otherwise(Background.EMPTY));
 	}
 	

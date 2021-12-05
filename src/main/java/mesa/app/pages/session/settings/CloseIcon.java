@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
@@ -30,8 +31,13 @@ public class CloseIcon extends StackPane implements Styleable {
 	@Override
 	public void applyStyle(Style style) {
 		setBorder(Borders.make(style.getTextMuted(), 18, 2));
-		backgroundProperty().bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getBackActive().deriveColor(0, 1, 1, 3), 36)).otherwise(Background.EMPTY));
+		backgroundProperty().bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getCloseIconActive(), 36)).otherwise(Background.EMPTY));
 		
-		icon.setFill(style.getText2());
+		icon.setFill(style.getInteractiveNormal());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

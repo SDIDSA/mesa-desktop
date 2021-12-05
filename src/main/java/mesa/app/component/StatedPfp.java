@@ -39,7 +39,7 @@ public class StatedPfp extends StackPane {
 			pfp = new Icon(session.getWindow(), path, size.size, true);
 		} else {
 			pfp = new Icon(session.getWindow(), "user", size.size);
-			pfp.setBrightness(session.getWindow().getStyl() == Style.DARK ? 1 : -1);
+			pfp.brightnessProperty().bind(Bindings.when(session.getWindow().getStyl().isEqualTo(Style.DARK)).then(1).otherwise(-.6));
 		}
 
 		Rectangle keep = new Rectangle(size.size, size.size);

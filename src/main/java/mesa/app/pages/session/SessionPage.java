@@ -6,6 +6,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -29,6 +30,7 @@ import mesa.gui.controls.alert.ButtonType;
 import mesa.gui.controls.popup.tooltip.Tooltip;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class SessionPage extends Page {
@@ -63,11 +65,9 @@ public class SessionPage extends Page {
 		
 		side = new StackPane();
 		side.setMinWidth(240);
-		side.setBackground(Backgrounds.make(window.getStyl().getBack2(), new CornerRadii(8.0, 0, 0, 0, false)));
 		side.setAlignment(Pos.TOP_CENTER);
 		
 		main = new StackPane();
-		main.setBackground(Backgrounds.make(window.getStyl().getBack1()));
 		main.setAlignment(Pos.TOP_CENTER);
 		HBox.setHgrow(main, Priority.ALWAYS);
 		
@@ -159,12 +159,6 @@ public class SessionPage extends Page {
 		main.getChildren().setAll(content.getMain());
 	}
 
-	@Override
-	public void applyStyle(Style style) {
-		window.setFill(style.getBack3());
-		window.setBorder(Color.web("#494a4d"), 1);
-	}
-
 	public void logout() {
 		SectionItem.clearCache();
 		BarItem.clear();
@@ -178,6 +172,20 @@ public class SessionPage extends Page {
 		confirm.setBody("logout_confirm");
 		confirm.addAction(ButtonType.LOGOUT, this::logout);
 		confirm.show();
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		window.setFill(style.getBackgroundTertiary());
+		window.setBorder(Color.web("#494a4d"), 1);
+		
+		side.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(8.0, 0, 0, 0, false)));
+		main.setBackground(Backgrounds.make(style.getBackgroundPrimary()));
+	}
+	
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

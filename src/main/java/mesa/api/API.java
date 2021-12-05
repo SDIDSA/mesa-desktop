@@ -32,6 +32,8 @@ public class API {
 
 		public static final String FINALIZE_PHONE = PREFIX + "finalizePhone";
 
+		public static final String REMOVE_PHONE = PREFIX + "removePhone";
+
 		public static final String CHANGE_PASSWORD = PREFIX + "changePassword";
 		
 		public static final String DELETE_ACCOUNT = PREFIX + "deleteAccount";

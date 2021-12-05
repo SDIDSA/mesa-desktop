@@ -3,6 +3,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
@@ -20,7 +21,8 @@ import mesa.gui.style.Styleable;
 
 public class PhoneOverlay extends Overlay implements Styleable {
 	private EnterPhone content;
-
+	private VerifyPhone verify;
+	
 	private StackPane root;
 	private IsoPhone isoPhone;
 
@@ -38,7 +40,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 		content = new EnterPhone(owner);
 
-		VerifyPhone verify = new VerifyPhone(owner);
+		verify = new VerifyPhone(owner);
 
 		Runnable onInvalid = isoPhone::showError;
 		Runnable onValid = isoPhone::showNormal;
@@ -77,11 +79,6 @@ public class PhoneOverlay extends Overlay implements Styleable {
 			verify.setCacheHint(CacheHint.DEFAULT);
 		});
 
-		verify.setScaleX(.5);
-		verify.setScaleY(.5);
-		verify.setOpacity(0);
-		verify.setMouseTransparent(true);
-
 		Runnable next = () -> {
 			verify.clear();
 
@@ -118,13 +115,17 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		verify.setAction(isoPhone::showCorrect, isoPhone::showIncorrect, content::getPending);
 
 		root.getChildren().addAll(isoPhone, content, verify);
-
+		
 		VBox.setMargin(root, new Insets(40, 0, 0, 0));
 		setContent(root);
 
 		applyStyle(owner.getWindow().getStyl());
 	}
 
+	public void setOnSuccess(Runnable action) {
+		verify.setOnSuccess(action);
+	}
+	
 	@Override
 	public void show() {
 		content.load();
@@ -139,8 +140,13 @@ public class PhoneOverlay extends Overlay implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack1(), 5.0));
+		root.setBackground(Backgrounds.make(style.getBackgroundPrimary(), 5.0));
 		isoPhone.applyStyle(style);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

@@ -1,12 +1,12 @@
 package mesa.app.pages.session.settings;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.settings.content.SettingsContent;
@@ -109,15 +109,22 @@ public class Settings extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		rightBack.setBackground(Backgrounds.make(style.getBack1()));
-		leftBack.setBackground(Backgrounds.make(style.getBack2()));
+		rightBack.setBackground(Backgrounds.make(style.getBackgroundPrimary()));
+		leftBack.setBackground(Backgrounds.make(style.getBackgroundSecondary()));
 
-		sideSb.setThumbFill(style.getBack3());
-		mainSb.setThumbFill(style.getBack3());
-		mainSb.setTrackFill(style.getBack2());
+		sideSb.setThumbFill(style.getScrollbarThinThumb());
+		sideSb.setTrackFill(style.getScrollbarThinTrack());
+
+		mainSb.setThumbFill(style.getScrollbarAutoThumb());
+		mainSb.setTrackFill(style.getScrollbarAutoTrack());
 
 		content.setBackground(rightBack.getBackground());
 		
-		esc.setFill(style == Style.DARK ? Color.web("#72767d"):null);
+		esc.setFill(style.getTextMuted());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

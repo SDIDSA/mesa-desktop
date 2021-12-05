@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
-import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
@@ -138,8 +137,8 @@ public abstract class Input extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBack(style.getTextBack1());
-		setBorder(style.getTextBorder1(), style.getTextBorderHover1(), Colors.LINK);
+		setBack(style.getDeprecatedTextInputBg());
+		setBorder(style.getDeprecatedTextInputBorder(), style.getDeprecatedTextInputBorderHover(), style.getTextLink());
 	}
 
 	public String getValue() {

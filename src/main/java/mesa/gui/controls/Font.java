@@ -3,14 +3,15 @@ package mesa.gui.controls;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
+import java.util.HashMap;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import mesa.gui.exception.ErrorHandler;
 
 public class Font {
-	public static final String DEFAULT_FAMILY = "Ubuntu";//Ubuntu
-	public static final String DEFAULT_FAMILY_MEDIUM = DEFAULT_FAMILY + " medium";
+	public static final String DEFAULT_FAMILY = "Ubuntu";// Ubuntu
+	public static final String DEFAULT_FAMILY_MEDIUM = DEFAULT_FAMILY + " Medium";
 	public static final FontWeight DEFAULT_WEIGHT = FontWeight.NORMAL;
 	public static final FontPosture DEFAULT_POSTURE = FontPosture.REGULAR;
 	public static final double DEFAULT_SIZE = 14;
@@ -81,8 +82,29 @@ public class Font {
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Font otherFont) {
+			return family.equals(otherFont.family) 	&&
+					size == otherFont.size			&&
+					weight.equals(otherFont.weight)	&&
+					posture.equals(otherFont.posture);
+		} else {
+			return false;
+		}
+	}
+
+	private static HashMap<Font, javafx.scene.text.Font> cache = new HashMap<>();
+
 	public javafx.scene.text.Font getFont() {
-		return javafx.scene.text.Font.font(family, weight, posture, size);
+		javafx.scene.text.Font found = cache.get(this);
+
+		if (found == null) {
+			found = javafx.scene.text.Font.font(family, weight, posture, size);
+			cache.put(this, found);
+		}
+
+		return found;
 	}
 
 	static {
@@ -92,7 +114,7 @@ public class Font {
 	public static void init() {
 		loadFont(DEFAULT_FAMILY);
 	}
-	
+
 	private static void loadFont(String name) {
 		try {
 			File parent = new File(URLDecoder.decode(Font.class

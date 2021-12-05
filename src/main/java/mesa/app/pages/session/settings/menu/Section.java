@@ -6,7 +6,7 @@ import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
-
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
@@ -51,7 +51,12 @@ public class Section extends VBox implements Styleable {
 	@Override
 	public void applyStyle(Style style) {
 		if (title != null)
-			title.setFill(style.getChannelDefault());
+			title.setFill(style.getChannelsDefault());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

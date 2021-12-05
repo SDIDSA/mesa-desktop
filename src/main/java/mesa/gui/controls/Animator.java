@@ -11,9 +11,9 @@ import javafx.util.Duration;
 
 public class Animator {
 	private Animator() {
-		
+
 	}
-	
+
 	public static void show(Region r, double to) {
 		r.setMouseTransparent(false);
 		double from = r.getHeight();
@@ -22,9 +22,8 @@ public class Animator {
 		r.minHeightProperty().bind(v);
 		r.maxHeightProperty().bind(v);
 
-		Timeline an = new Timeline(60.0,
-				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
-						new KeyValue(r.opacityProperty(), 1, Interpolator.EASE_BOTH)));
+		Timeline an = new Timeline(60.0, new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
+				new KeyValue(r.opacityProperty(), 1, Interpolator.EASE_BOTH)));
 		an.setOnFinished(e -> {
 			r.maxHeightProperty().unbind();
 			r.minHeightProperty().unbind();
@@ -41,9 +40,8 @@ public class Animator {
 		r.minHeightProperty().bind(v);
 		r.maxHeightProperty().bind(v);
 
-		Timeline an = new Timeline(60.0,
-				new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
-						new KeyValue(r.opacityProperty(), to == 0 ? 0 : 1, Interpolator.EASE_BOTH)));
+		Timeline an = new Timeline(60.0, new KeyFrame(Duration.seconds(.2), new KeyValue(v, to, Interpolator.EASE_BOTH),
+				new KeyValue(r.opacityProperty(), to == 0 ? 0 : 1, Interpolator.EASE_BOTH)));
 		an.setOnFinished(e -> {
 			r.maxHeightProperty().unbind();
 			r.minHeightProperty().unbind();

@@ -6,6 +6,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -230,9 +231,14 @@ public class Tooltip extends PopupControl implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		content.setBackground(Backgrounds.make(style.getBack5(), 5.0));
-		text.setFill(style.getText2());
-		arr.setFill(style.getBack5());
+		content.setBackground(Backgrounds.make(style.getBackgroundFloating(), 5.0));
+		text.setFill(style.getTextNormal());
+		arr.setFill(style.getBackgroundFloating());
+	}
+	
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

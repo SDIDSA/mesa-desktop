@@ -6,6 +6,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.SplineInterpolator;
@@ -92,14 +93,14 @@ public class IsoPhone extends LayerIcon {
 	}
 
 	public void applyStyle(Style style) {
-		setFill(0, style.getBack3());
+		setFill(0, style.getBackgroundTertiary());
 		setFill(1, style.getInteractiveNormal());
 		setFill(2, style.getAccent());
-		setFill(3, style.getBack5());
-		setFill(4, style.getText1());
-		setFill(5, style.getText1());
-		setFill(6, style.getText1());
-		setFill(7, style.getText1());
+		setFill(3, style.getBackgroundFloating());
+		setFill(4, Color.WHITE);
+		setFill(5, Color.WHITE);
+		setFill(6, Color.WHITE);
+		setFill(7, Color.WHITE);
 
 		colorNormal = new Timeline(new KeyFrame(Duration.seconds(duration),
 				new KeyValue(getFillProperty(2), style.getAccent(), Interpolator.EASE_BOTH)));

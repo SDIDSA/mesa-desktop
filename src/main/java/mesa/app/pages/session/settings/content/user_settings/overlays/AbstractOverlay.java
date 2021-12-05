@@ -49,13 +49,17 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
+		closeIcon.applyStyle(session.getWindow().getStyl());
 
 		center = new VBox(16);
 		center.setPadding(new Insets(0, 16, 16, 16));
 
 		root.getChildren().add(center);
+		
+		root.setPickOnBounds(false);
+		center.setPickOnBounds(false);
 
-		preRoot.getChildren().addAll(root, closeIcon);
+		preRoot.getChildren().addAll(closeIcon ,root);
 
 		bottom = new HBox(8);
 		bottom.setMaxWidth(width);
@@ -121,16 +125,16 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		preRoot.setBackground(Backgrounds.make(style.getBack1(), new CornerRadii(5, 5, 0, 0, false)));
-		bottom.setBackground(Backgrounds.make(style.getBack2(), new CornerRadii(0, 0, 5, 5, false)));
+		preRoot.setBackground(Backgrounds.make(style.getBackgroundPrimary(), new CornerRadii(5, 5, 0, 0, false)));
+		bottom.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(0, 0, 5, 5, false)));
 
 		cancel.setFill(Color.TRANSPARENT);
-		cancel.setTextFill(style.getText1());
+		cancel.setTextFill(style.getLinkButtonText());
 
 		done.setFill(style.getAccent());
-		done.setTextFill(style.getText1());
+		done.setTextFill(Color.WHITE);
 
-		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getText1())
-				.otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
+		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getHeaderPrimary())
+				.otherwise(style.getHeaderSecondary()));
 	}
 }

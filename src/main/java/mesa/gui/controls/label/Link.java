@@ -1,6 +1,7 @@
 package mesa.gui.controls.label;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -8,12 +9,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.factory.Borders;
+import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class Link extends StackPane {
+public class Link extends StackPane implements Styleable {
 	private Label label;
 
 	private Runnable action;
@@ -23,7 +25,6 @@ public class Link extends StackPane {
 		getStyleClass().addAll("link", key);
 
 		label = new Label(window, key, font);
-		label.setFill(Colors.LINK);
 
 		label.underlineProperty().bind(hoverProperty());
 		getChildren().add(label);
@@ -40,15 +41,12 @@ public class Link extends StackPane {
 
 		setFocusTraversable(true);
 
-		Border unfocused = Borders.make(Color.TRANSPARENT);
-		Border focused = Borders.make(Colors.LINK, 4.0);
-
-		borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
-
 		setOnMouseClicked(this::fire);
 		setOnKeyPressed(this::fire);
 
 		setCursor(Cursor.HAND);
+
+		applyStyle(window.getStyl());
 	}
 
 	private void fire(MouseEvent dismiss) {
@@ -81,5 +79,20 @@ public class Link extends StackPane {
 
 	public Link(Window window, String key) {
 		this(window, key, Font.DEFAULT);
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		label.setFill(style.getTextLink());
+
+		Border unfocused = Borders.make(Color.TRANSPARENT);
+		Border focused = Borders.make(style.getTextLink(), 4.0);
+
+		borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

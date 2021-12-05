@@ -1,5 +1,6 @@
 package mesa.gui.window.content.app_bar;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -46,6 +47,11 @@ public class AppBar extends HBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		icon.setFill(style.getText2());
+		icon.setFill(style.getInteractiveNormal());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

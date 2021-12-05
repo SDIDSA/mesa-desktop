@@ -4,6 +4,7 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.ImageView;
 
@@ -52,6 +53,11 @@ public class Icon extends ImageView implements Styleable {
 		StringBuilder path = new StringBuilder();
 		path.append("/images/icons/").append(name).append('_').append(size).append(".png");
 		setImage(ImageProxy.load(name, size, fullPath));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

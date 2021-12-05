@@ -1,5 +1,6 @@
 package mesa.gui.controls.input.combo.item;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.combo.ComboMenuItem;
@@ -33,12 +34,22 @@ public abstract class KeyedTextItem extends ComboMenuItem implements Styleable, 
 	@Override
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
-		lab.setFill(style.getText1());
+		lab.setFill(style.getHeaderPrimary());
 	}
 	
 	@Override
 	public void applyLocale(Locale locale) {
 		lab.setText(locale.get(key));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
+	}
+	
+	@Override
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);
 	}
 	
 }

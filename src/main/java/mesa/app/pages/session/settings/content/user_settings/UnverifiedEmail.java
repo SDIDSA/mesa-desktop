@@ -1,5 +1,6 @@
 package mesa.app.pages.session.settings.content.user_settings;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -83,16 +84,21 @@ public class UnverifiedEmail extends VBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		root.setBackground(Backgrounds.make(style.getBack3().deriveColor(0, 1, 1, .6), 5.0));
-		root.setBorder(Borders.make(style.getBack3(), 5.0));
+		root.setBackground(Backgrounds.make(style.getDeprecatedCardBg(), 5.0));
+		root.setBorder(Borders.make(style.getBackgroundTertiary(), 5.0));
 
-		head.setFill(style.getInteractiveNormal());
-		body.setFill(style.getText2());
+		head.setFill(style.getHeaderSecondary());
+		body.setFill(style.getTextNormal());
 
-		resend.setTextFill(style.getText1());
-		resend.setFill(style == Style.DARK ? Color.web("#4f545c") : Color.TRANSPARENT);
-		
-		verify.setTextFill(style.getText1());
+		resend.setTextFill(Color.WHITE);
+		resend.setFill(style.getSecondaryButtonBack());
+
+		verify.setTextFill(Color.WHITE);
 		verify.setFill(style.getAccent());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

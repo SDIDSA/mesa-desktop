@@ -3,6 +3,7 @@ package mesa.gui.controls.input.combo;
 import java.util.ArrayList;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -14,6 +15,7 @@ import mesa.gui.controls.shape.Triangle;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class ComboInput extends Input implements Localized {
@@ -126,6 +128,23 @@ public class ComboInput extends Input implements Localized {
 		}
 	}
 
+	public void setValue(ComboMenuItem value) {
+		selected = value;
+
+		base.setText(value.getDisplay());
+		this.value.set(value.getValue());
+	}
+
+	private void search(String value) {
+		for (ComboMenuItem item : items) {
+			if (item.getValue().toLowerCase().contains(value.toLowerCase())
+					|| item.getDisplay().toLowerCase().contains(value.toLowerCase())) {
+				setValue(item);
+				return;
+			}
+		}
+	}
+
 	@Override
 	public void setFont(Font font) {
 		this.font = font;
@@ -141,30 +160,6 @@ public class ComboInput extends Input implements Localized {
 	@Override
 	public String getValue() {
 		return base.getText();
-	}
-
-	@Override
-	public void applyStyle(Style style) {
-		super.applyStyle(style);
-		popup.applyStyle(style);
-
-		base.setFill(style.getText1());
-		prompt.setFill(style.getText1());
-		arrow.setFill(style.getText1());
-	}
-
-	@Override
-	public void applyLocale(Locale locale) {
-		popup.applyLocale(locale);
-
-		prompt.setText(locale.get(key));
-	}
-
-	public void setValue(ComboMenuItem value) {
-		selected = value;
-
-		base.setText(value.getDisplay());
-		this.value.set(value.getValue());
 	}
 
 	@Override
@@ -187,14 +182,29 @@ public class ComboInput extends Input implements Localized {
 		setValue("");
 	}
 
-	private void search(String value) {
-		for (ComboMenuItem item : items) {
-			if (item.getValue().toLowerCase().contains(value.toLowerCase())
-					|| item.getDisplay().toLowerCase().contains(value.toLowerCase())) {
-				setValue(item);
-				return;
-			}
-		}
+	@Override
+	public void applyStyle(Style style) {
+		super.applyStyle(style);
+		popup.applyStyle(style);
+
+		base.setFill(style.getTextNormal());
+		prompt.setFill(style.getHeaderSecondary());
+		arrow.setFill(style.getTextNormal());
+	}
+
+	@Override
+	public void applyLocale(Locale locale) {
+		prompt.setText(locale.get(key));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
+	}
+	
+	@Override
+	public void applyLocale(ObjectProperty<Locale> locale) {
+		Localized.bindLocale(this, locale);
 	}
 
 }

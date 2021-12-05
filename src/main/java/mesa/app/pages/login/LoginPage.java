@@ -2,23 +2,24 @@ package mesa.app.pages.login;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.function.Consumer;
 
 import org.json.JSONObject;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
-import javafx.animation.ParallelTransition;
 import javafx.animation.Timeline;
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.utils.DoubleParamFunc;
 import mesa.gui.controls.Loading;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class LoginPage extends Page {
@@ -30,7 +31,7 @@ public class LoginPage extends Page {
 	private double hideY = -100;
 	private double hideScale = .7;
 	private double duration = .4;
-	
+
 	private Login login;
 
 	public LoginPage(Window window) {
@@ -131,21 +132,19 @@ public class LoginPage extends Page {
 			hideVerify.playFromStart();
 		});
 
-		ParallelTransition pt = new ParallelTransition();
-		pt.getChildren().addAll(hide(login), hide(verify));
-
-		Consumer<JSONObject> onSuccess = user -> {
+		DoubleParamFunc<JSONObject, Timeline, Void> onSuccess = (user, hide) -> {
 			window.putData("user", user);
-			pt.setOnFinished(e -> window.loadPage(SessionPage.class));
-			pt.playFromStart();
+			hide.setOnFinished(e -> window.loadPage(SessionPage.class));
+			hide.playFromStart();
+			return null;
 		};
 
-		login.setOnSuccess(onSuccess);
-		verify.setOnSuccess(onSuccess);
+		login.setOnSuccess(user -> onSuccess.execute(user, hide(login)));
+		verify.setOnSuccess(user -> onSuccess.execute(user, hide(verify)));
 
 		getChildren().addAll(login);
 		prepare(login);
-		
+
 		applyStyle(window.getStyl());
 	}
 
@@ -183,29 +182,21 @@ public class LoginPage extends Page {
 	}
 
 	@Override
-	public void applyStyle(Style style) {
-		window.setFill(style.getAccent());
-		window.setBorder(Color.TRANSPARENT, 0);
-	}
-
-	@Override
 	public void setup() {
 		super.setup();
 
-		window.centerOnScreen();
-
 		Loading loading = new Loading(10);
-		loading.setFill(window.getStyl().getBack3());
+		loading.setFill(window.getStyl().get().getBackgroundTertiary());
 		getChildren().add(0, loading);
 		loading.play();
-		
+
 		login.setMouseTransparent(true);
-		
+
 		Timeline showLogin = show(login);
 		showLogin.setDelay(Duration.seconds(2));
 		login.preTransition();
 		showLogin.playFromStart();
-		showLogin.setOnFinished(e-> {
+		showLogin.setOnFinished(e -> {
 			login.setMouseTransparent(false);
 			login.postTransition();
 			loading.stop();
@@ -222,5 +213,16 @@ public class LoginPage extends Page {
 		}
 
 		subs.clear();
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		window.setFill(style.getAccent());
+		window.setBorder(Color.TRANSPARENT, 0);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

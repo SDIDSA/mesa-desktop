@@ -1,184 +1,368 @@
 package mesa.gui.style;
 
+import java.util.HashMap;
+
+import org.apache.commons.text.CaseUtils;
+
 import javafx.scene.paint.Color;
+import mesa.gui.file.FileUtils;
 
 public class Style {
-	public static final Style DARK = new Style(
-			// Color.web("#f26963").darker(),
-			Color.web("#5865f2"), // accent
-			Color.web("#36393f"), // background 1
-			Color.web("#2f3136"), // background 2
-			Color.web("#202225"), // background 3
-			Color.web("#292b2f"), // background 4
-			Color.web("#18191c"), // background 5
-
-			Color.web("#4f545c29"), // back modifier hover
-			Color.web("#4f545c52"), // back modifier selected
-			Color.web("#4f545c3d"), // back modifier active
-			Color.web("#ffffff0f"), // back modifier accent
-
-			Color.web("#4f545c52"), // back modifier selected deprecated
-
-			Color.WHITE, // text1
-			Color.web("#dcddde"), // text2
-			Color.web("#72767d"), // text muted
-
-			Color.web("#b9bbbe"), // interactive normal
-			Color.web("#dcddde"), // interactive hover
-			Color.web("#fff"), // interactive active
-
-			Color.web("#8e9297"), // channel default
-
-			Color.gray(0, .1), Color.gray(0, .3), Color.web("#040405")
-
-	);
+	public static final Style DARK = new Style("dark");
+	public static final Style LIGHT = new Style("light");
 
 	private Color accent;
+	private HashMap<String, Color> colors;
 
-	private Color back1;
-	private Color back2;
-	private Color back3;
-	private Color back4;
-	private Color back5;
+	private Style(String theme) {
+		colors = new HashMap<>();
 
-	private Color backHover;
-	private Color backSelected;
-	private Color backActive;
-	private Color backAccent;
+		String content = FileUtils.readFile("/themes/" + theme + ".txt");
 
-	private Color backSelectedDeprecated;
+		for (String preLine : content.split("\n")) {
+			String[] line = preLine.trim().split(":");
+			if (line.length != 2) {
+				continue;
+			}
+			String key = line[0].replace("-", " ").trim().replace(" ", "_");
+			String value = line[1].replace(";", "").trim().replace("var(--saturation-factor, 1)*", "")
+					.replaceAll("\\bcalc\\(\\b([0-9]+\\.?[0-9]+%)\\)", "$1");
 
-	private Color text1;
-	private Color text2;
-	private Color textMuted;
+			key = CaseUtils.toCamelCase(key, false, '_');
 
-	private Color interactiveNormal;
-	private Color interactiveHover;
-	private Color interactiveActive;
+			try {
+				Color c = value.startsWith("hsl") ? parseHSL(value) : Color.web(value);
+				colors.put(key, c);
+			} catch (Exception x) {
+				// IGNORE
+			}
+		}
 
-	private Color channelDefault;
+		accent = Color.web("#5865f2");
+	}
 
-	private Color textBack1;
-	private Color textBorder1;
-	private Color textBorderHover1;
+	private static Color parseHSL(String hslString) {
+		double[] vals = new double[4];
 
-	private Style(Color... colors) {
 		int pos = 0;
-		this.accent = colors[pos++];
+		for (String preVal : hslString.substring(hslString.indexOf("(") + 1, hslString.indexOf(")")).split(",")) {
+			vals[pos++] = Double.parseDouble(preVal.replace("%", ""));
+		}
 
-		this.back1 = colors[pos++];
-		this.back2 = colors[pos++];
-		this.back3 = colors[pos++];
-		this.back4 = colors[pos++];
-		this.back5 = colors[pos++];
+		double hue = vals[0];
+		double saturation = vals[1] / 100;
+		double lightness = vals[2] / 100;
+		double alpha = vals[3] == 0 ? 1.0 : vals[3];
 
-		this.backHover = colors[pos++];
-		this.backSelected = colors[pos++];
-		this.backActive = colors[pos++];
-		this.backAccent = colors[pos++];
+		double c = (1 - Math.abs((2 * lightness) - 1)) * saturation;
+		double x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+		double m = lightness - c / 2;
 
-		this.backSelectedDeprecated = colors[pos++];
+		double[] dRgb = null;
 
-		this.text1 = colors[pos++];
-		this.text2 = colors[pos++];
-		this.textMuted = colors[pos++];
+		int div = (int) hue / 60;
+		switch (div) {
+		case 0:
+			dRgb = new double[] { c, x, 0 };
+			break;
+		case 1:
+			dRgb = new double[] { x, c, 0 };
+			break;
+		case 2:
+			dRgb = new double[] { 0, c, x };
+			break;
+		case 3:
+			dRgb = new double[] { 0, x, c };
+			break;
+		case 4:
+			dRgb = new double[] { x, 0, c };
+			break;
+		case 5:
+			dRgb = new double[] { c, 0, x };
+			break;
+		default:
+			dRgb = new double[3];
+		}
 
-		this.interactiveNormal = colors[pos++];
-		this.interactiveHover = colors[pos++];
-		this.interactiveActive = colors[pos++];
+		int[] rgb = new int[dRgb.length];
+		for (int i = 0; i < dRgb.length; i++) {
+			rgb[i] = (int) ((dRgb[i] + m) * 255);
+		}
 
-		this.channelDefault = colors[pos++];
-
-		this.textBack1 = colors[pos++];
-		this.textBorder1 = colors[pos++];
-		this.textBorderHover1 = colors[pos++];
+		return Color.rgb(rgb[0], rgb[1], rgb[2], alpha);
 	}
 
 	public Color getAccent() {
 		return accent;
 	}
 
-	public Color getBack1() {
-		return back1;
+	public void setAccent(Color accent) {
+		this.accent = accent;
 	}
 
-	public Color getBack2() {
-		return back2;
+	/* ********************************** */
+
+	public Color getHeaderPrimary() {
+		return colors.get("headerPrimary");
 	}
 
-	public Color getBack3() {
-		return back3;
+	public Color getHeaderSecondary() {
+		return colors.get("headerSecondary");
 	}
 
-	public Color getBack4() {
-		return back4;
-	}
-
-	public Color getBack5() {
-		return back5;
-	}
-
-	public Color getBackHover() {
-		return backHover;
-	}
-
-	public Color getBackSelected() {
-		return backSelected;
-	}
-
-	public Color getBackActive() {
-		return backActive;
-	}
-
-	public Color getBackAccent() {
-		return backAccent;
-	}
-
-	public Color getBackSelectedDeprecated() {
-		return backSelectedDeprecated;
-	}
-
-	public Color getText1() {
-		return text1;
-	}
-
-	public Color getText2() {
-		return text2;
+	public Color getTextNormal() {
+		return colors.get("textNormal");
 	}
 
 	public Color getTextMuted() {
-		return textMuted;
+		return colors.get("textMuted");
+	}
+
+	public Color getTextLink() {
+		return colors.get("textLink");
+	}
+
+	public Color getTextLinkLowSaturation() {
+		return colors.get("textLinkLowSaturation");
+	}
+
+	public Color getTextPositive() {
+		return colors.get("textPositive");
+	}
+
+	public Color getTextWarning() {
+		return colors.get("textWarning");
+	}
+
+	public Color getTextDanger() {
+		return colors.get("textDanger");
+	}
+
+	public Color getTextBrand() {
+		return colors.get("textBrand");
 	}
 
 	public Color getInteractiveNormal() {
-		return interactiveNormal;
+		return colors.get("interactiveNormal");
 	}
 
 	public Color getInteractiveHover() {
-		return interactiveHover;
+		return colors.get("interactiveHover");
 	}
 
 	public Color getInteractiveActive() {
-		return interactiveActive;
+		return colors.get("interactiveActive");
 	}
 
-	public Color getChannelDefault() {
-		return channelDefault;
+	public Color getInteractiveMuted() {
+		return colors.get("interactiveMuted");
 	}
 
-	public Color getTextBack1() {
-		return textBack1;
+	public Color getBackgroundPrimary() {
+		return colors.get("backgroundPrimary");
 	}
 
-	public Color getTextBorder1() {
-		return textBorder1;
+	public Color getBackgroundSecondary() {
+		return colors.get("backgroundSecondary");
 	}
 
-	public Color getTextBorderHover1() {
-		return textBorderHover1;
+	public Color getBackgroundSecondaryAlt() {
+		return colors.get("backgroundSecondaryAlt");
 	}
 
-	public void setAccent(Color accent) {
-		this.accent = accent;
+	public Color getBackgroundTertiary() {
+		return colors.get("backgroundTertiary");
+	}
+
+	public Color getBackgroundAccent() {
+		return colors.get("backgroundAccent");
+	}
+
+	public Color getBackgroundFloating() {
+		return colors.get("backgroundFloating");
+	}
+
+	public Color getBackgroundNestedFloating() {
+		return colors.get("backgroundNestedFloating");
+	}
+
+	public Color getBackgroundMobilePrimary() {
+		return colors.get("backgroundMobilePrimary");
+	}
+
+	public Color getBackgroundMobileSecondary() {
+		return colors.get("backgroundMobileSecondary");
+	}
+
+	public Color getBackgroundModifierHover() {
+		return colors.get("backgroundModifierHover");
+	}
+
+	public Color getBackgroundModifierActive() {
+		return colors.get("backgroundModifierActive");
+	}
+
+	public Color getBackgroundModifierSelected() {
+		return colors.get("backgroundModifierSelected");
+	}
+
+	public Color getBackgroundModifierAccent() {
+		return colors.get("backgroundModifierAccent");
+	}
+
+	public Color getInfoPositiveText() {
+		return colors.get("infoPositiveText");
+	}
+
+	public Color getInfoWarningText() {
+		return colors.get("infoWarningText");
+	}
+
+	public Color getInfoDangerText() {
+		return colors.get("infoDangerText");
+	}
+
+	public Color getInfoHelpBackground() {
+		return colors.get("infoHelpBackground");
+	}
+
+	public Color getInfoHelpForeground() {
+		return colors.get("infoHelpForeground");
+	}
+
+	public Color getInfoHelpText() {
+		return colors.get("infoHelpText");
+	}
+
+	public Color getStatusWarningText() {
+		return colors.get("statusWarningText");
+	}
+
+	public Color getScrollbarThinThumb() {
+		return colors.get("scrollbarThinThumb");
+	}
+
+	public Color getScrollbarThinTrack() {
+		return colors.get("scrollbarThinTrack");
+	}
+
+	public Color getScrollbarAutoThumb() {
+		return colors.get("scrollbarAutoThumb");
+	}
+
+	public Color getScrollbarAutoTrack() {
+		return colors.get("scrollbarAutoTrack");
+	}
+
+	public Color getScrollbarAutoScrollbarColorThumb() {
+		return colors.get("scrollbarAutoScrollbarColorThumb");
+	}
+
+	public Color getScrollbarAutoScrollbarColorTrack() {
+		return colors.get("scrollbarAutoScrollbarColorTrack");
+	}
+
+	public Color getLogoPrimary() {
+		return colors.get("logoPrimary");
+	}
+
+	public Color getControlBrandForeground() {
+		return colors.get("controlBrandForeground");
+	}
+
+	public Color getControlBrandForegroundNew() {
+		return colors.get("controlBrandForegroundNew");
+	}
+
+	public Color getBackgroundMentioned() {
+		return colors.get("backgroundMentioned");
+	}
+
+	public Color getBackgroundMentionedHover() {
+		return colors.get("backgroundMentionedHover");
+	}
+
+	public Color getBackgroundMessageHover() {
+		return colors.get("backgroundMessageHover");
+	}
+
+	public Color getChannelsDefault() {
+		return colors.get("channelsDefault");
+	}
+
+	public Color getChanneltextareaBackground() {
+		return colors.get("channeltextareaBackground");
+	}
+
+	public Color getActivityCardBackground() {
+		return colors.get("activityCardBackground");
+	}
+
+	public Color getTextboxMarkdownSyntax() {
+		return colors.get("textboxMarkdownSyntax");
+	}
+
+	public Color getDeprecatedCardBg() {
+		return colors.get("deprecatedCardBg");
+	}
+
+	public Color getDeprecatedCardEditableBg() {
+		return colors.get("deprecatedCardEditableBg");
+	}
+
+	public Color getDeprecatedStoreBg() {
+		return colors.get("deprecatedStoreBg");
+	}
+
+	public Color getDeprecatedQuickswitcherInputBackground() {
+		return colors.get("deprecatedQuickswitcherInputBackground");
+	}
+
+	public Color getDeprecatedQuickswitcherInputPlaceholder() {
+		return colors.get("deprecatedQuickswitcherInputPlaceholder");
+	}
+
+	public Color getDeprecatedTextInputBg() {
+		return colors.get("deprecatedTextInputBg");
+	}
+
+	public Color getDeprecatedTextInputBorder() {
+		return colors.get("deprecatedTextInputBorder");
+	}
+
+	public Color getDeprecatedTextInputBorderHover() {
+		return colors.get("deprecatedTextInputBorderHover");
+	}
+
+	public Color getDeprecatedTextInputBorderDisabled() {
+		return colors.get("deprecatedTextInputBorderDisabled");
+	}
+
+	public Color getDeprecatedTextInputPrefix() {
+		return colors.get("deprecatedTextInputPrefix");
+	}
+
+	public Color getCloseIconActive() {
+		return colors.get("closeIconActive");
+	}
+
+	public Color getCountryCodeItemHover() {
+		return colors.get("countryCodeItemHover");
+	}
+
+	public Color getSecondaryButtonBack() {
+		return colors.get("secondaryButtonBack");
+	}
+
+	public Color getLinkButtonText() {
+		return colors.get("linkButtonText");
+	}
+
+	public Color getCountryCodeItemText() {
+		return colors.get("countryCodeItemText");
+	}
+
+	public Color getCountryNameItemText() {
+		return colors.get("countryNameItemText");
 	}
 }

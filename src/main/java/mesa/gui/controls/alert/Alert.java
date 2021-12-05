@@ -3,6 +3,7 @@ package mesa.gui.controls.alert;
 import java.util.EnumMap;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -44,12 +45,15 @@ public class Alert extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
+		closeIcon.applyStyle(page.getWindow().getStyl());
 		StackPane.setMargin(closeIcon, new Insets(10));
 
 		root = new VBox();
 		root.setPadding(new Insets(16));
+		root.setPickOnBounds(false);
 
 		head = new Label(page.getWindow(), "", new Font(20, FontWeight.BOLD));
+		head.setMouseTransparent(true);
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 
 		body = new Label(page.getWindow(), "", new Font(15));
@@ -60,7 +64,7 @@ public class Alert extends Overlay implements Styleable {
 
 		root.getChildren().addAll(head, preBody);
 
-		preRoot.getChildren().addAll(root, closeIcon);
+		preRoot.getChildren().addAll(closeIcon, root);
 
 		bottom = new HBox(8);
 		bottom.setMaxWidth(width);
@@ -109,13 +113,18 @@ public class Alert extends Overlay implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		preRoot.setBackground(Backgrounds.make(style.getBack1(), new CornerRadii(5, 5, 0, 0, false)));
-		bottom.setBackground(Backgrounds.make(style.getBack2(), new CornerRadii(0, 0, 5, 5, false)));
+		preRoot.setBackground(Backgrounds.make(style.getBackgroundPrimary(), new CornerRadii(5, 5, 0, 0, false)));
+		bottom.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(0, 0, 5, 5, false)));
 
-		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getText1())
-				.otherwise(style.getText1().deriveColor(0, 1, 1, .5)));
+		closeIcon.fillProperty().bind(Bindings.when(closeIcon.hoverProperty()).then(style.getHeaderPrimary())
+				.otherwise(style.getHeaderSecondary()));
 
-		head.setFill(style.getText1());
-		body.setFill(style.getText2());
+		head.setFill(style.getHeaderPrimary());
+		body.setFill(style.getTextNormal());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

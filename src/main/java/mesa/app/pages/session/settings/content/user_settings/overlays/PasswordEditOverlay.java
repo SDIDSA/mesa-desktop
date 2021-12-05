@@ -16,6 +16,8 @@ public class PasswordEditOverlay extends EditOverlay {
 		confNewPass = new TextInputField(session.getWindow(), "confirm_new_password", 408, true);
 		center.getChildren().addAll(currPass, newPass, confNewPass);
 		
+		addOnShown(currPass::requestFocus);
+		
 		form.addAll(currPass, newPass, confNewPass);
 	}
 	

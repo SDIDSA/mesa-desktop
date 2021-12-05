@@ -1,5 +1,6 @@
 package mesa.app.pages.session.types.home;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -47,7 +48,12 @@ public class HomeSideTop extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		ins.setBackground(Backgrounds.make(style.getBack3(), 4.0));
+		ins.setBackground(Backgrounds.make(style.getBackgroundTertiary(), 4.0));
 		lab.setFill(style.getTextMuted());
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }

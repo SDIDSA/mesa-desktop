@@ -6,6 +6,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
@@ -62,7 +63,7 @@ public class PhoneInput extends HBox implements Styleable {
 		send.setFont(new Font(13, FontWeight.BOLD));
 		setMargin(send, new Insets(6, 6, 6, 0));
 
-		country = new AbstractButton(3.0, 32);
+		country = new AbstractButton(window, 3.0, 32);
 		country.setContentPadding(new Insets(0, 12, 0, 12));
 		setMargin(country, new Insets(6, 0, 6, 6));
 
@@ -151,32 +152,37 @@ public class PhoneInput extends HBox implements Styleable {
 	public void startLoading() {
 		send.startLoading();
 	}
-	
+
 	public void stopLoading() {
 		send.stopLoading();
-	}
-	
-	@Override
-	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBack2(), 5.0));
-		setBorder(Borders.make(style.getTextBorder1(), 5.0));
-
-		country.setFill(style == Style.DARK ? Color.web("#4f545c") : null);
-		selectedCode.setFill(style.getText1());
-		showPop.setFill(style.getText1());
-
-		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getText1())
-				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
-
-		send.setTextFill(style.getText1());
-		send.setFill(style.getAccent());
-		setEffect(new DropShadow(8, Color.gray(0, .2)));
 	}
 
 	public void clear() {
 		field.clear();
 		selectedCode.setText("");
 		selectedCountry = null;
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 5.0));
+		setBorder(Borders.make(style.getDeprecatedTextInputBorder(), 5.0));
+
+		country.setFill(style.getSecondaryButtonBack());
+		selectedCode.setFill(Color.WHITE);
+		showPop.setFill(Color.WHITE);
+
+		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getTextNormal())
+				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
+
+		send.setTextFill(Color.WHITE);
+		send.setFill(style.getAccent());
+		setEffect(new DropShadow(8, Color.gray(0, .2)));
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 
 }

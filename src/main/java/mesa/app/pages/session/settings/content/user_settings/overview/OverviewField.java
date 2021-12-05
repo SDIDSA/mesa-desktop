@@ -32,7 +32,7 @@ public class OverviewField extends HBox implements Styleable {
 
 		VBox left = new VBox(4);
 
-		name = new Label(settings.getWindow(), key, new Font(12, FontWeight.BOLD));
+		name = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM ,12));
 		name.setTransform(TextTransform.UPPERCASE);
 
 		value = new HBox();
@@ -80,8 +80,13 @@ public class OverviewField extends HBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		name.setFill(style.getInteractiveNormal());
-		edit.setFill(style == Style.DARK ? Color.web("#4f545c") : Color.TRANSPARENT);
-		edit.setTextFill(style.getText1());
+		name.setFill(style.getHeaderSecondary());
+		edit.setFill(style.getSecondaryButtonBack());
+		edit.setTextFill(Color.WHITE);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
 	}
 }
