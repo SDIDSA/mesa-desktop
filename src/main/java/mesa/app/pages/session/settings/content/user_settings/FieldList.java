@@ -18,7 +18,6 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordOv
 import mesa.app.pages.session.settings.content.user_settings.overlays.phone.PhoneOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
 import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
-import mesa.app.utils.Colors;
 import mesa.data.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -68,9 +67,9 @@ public class FieldList extends VBox implements Styleable {
 
 		hash = new Text("#");
 		hash.setFont(new Font(15).getFont());
+		hash.setOpacity(.5);
 		tag = new Text(user.getId());
 		tag.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 15).getFont());
-		tag.setOpacity(.5);
 
 		helpEditTag = new StackPane();
 		helpEditTag.setCursor(Cursor.HAND);
@@ -78,8 +77,6 @@ public class FieldList extends VBox implements Styleable {
 		helpEditTag.setMinSize(32, 31);
 
 		helpEditTag.setFocusTraversable(true);
-		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
-				.then(Borders.make(Colors.LINK, 4.0)).otherwise(Border.EMPTY));
 
 		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!", Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
@@ -199,6 +196,10 @@ public class FieldList extends VBox implements Styleable {
 		helpEditTag.backgroundProperty()
 				.bind(Bindings.when(helpEditTag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
 						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
+
+		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
+				.then(Borders.make(style.getTextLink(), 4.0)).otherwise(Border.EMPTY));
+		
 		editTagIcon.setFill(Color.WHITE);
 	}
 

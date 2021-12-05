@@ -26,6 +26,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 		VBox top = new VBox(8);
 		top.setPadding(new Insets(26, 16, 26, 16));
 		top.setAlignment(Pos.CENTER);
+		top.setMouseTransparent(true);
 
 		head = new Label(session.getWindow(), "", new Font(24, FontWeight.BOLD));
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);

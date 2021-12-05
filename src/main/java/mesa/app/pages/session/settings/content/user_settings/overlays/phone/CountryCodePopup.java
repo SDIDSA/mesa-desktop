@@ -164,6 +164,9 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		root.setCacheHint(CacheHint.SPEED);
 		scaleShow.setOnFinished(e -> root.setCache(false));
 
+		search.applyLocale(owner.getLocale());
+		search.applyStyle(owner.getStyl());
+		
 		applyStyle(owner.getStyl());
 	}
 
@@ -206,13 +209,11 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 	public void applyStyle(Style style) {
 		root.setBackground(Backgrounds.make(style.getBackgroundPrimary(), 5.0));
 		root.setBorder(Borders.make(style.getBackgroundSecondary(), 4.0));
-
-		search.applyStyle(style);
 		
 		separator.setFill(style.getBackgroundModifierAccent());
 
-		scrollBar.setThumbFill(style.getScrollbarAutoScrollbarColorThumb());
-		scrollBar.setTrackFill(style.getScrollbarAutoScrollbarColorTrack());
+		scrollBar.setThumbFill(style.getScrollbarAutoThumb());
+		scrollBar.setTrackFill(style.getScrollbarAutoTrack());
 	}
 
 	@Override

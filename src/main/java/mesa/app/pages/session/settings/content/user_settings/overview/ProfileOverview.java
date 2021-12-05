@@ -81,6 +81,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 		more.setCursor(Cursor.HAND);
 		more.setTranslateY(11);
 		more.setPadding(4);
+		more.applyStyle(settings.getWindow().getStyl());
 
 		ContextMenu menu = new ContextMenu(settings.getSession().getWindow());
 		menu.addMenuItem("copy_id", () -> {

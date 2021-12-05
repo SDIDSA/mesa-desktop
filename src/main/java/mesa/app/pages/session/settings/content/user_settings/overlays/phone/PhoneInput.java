@@ -63,7 +63,7 @@ public class PhoneInput extends HBox implements Styleable {
 		send.setFont(new Font(13, FontWeight.BOLD));
 		setMargin(send, new Insets(6, 6, 6, 0));
 
-		country = new AbstractButton(3.0, 32);
+		country = new AbstractButton(window, 3.0, 32);
 		country.setContentPadding(new Insets(0, 12, 0, 12));
 		setMargin(country, new Insets(6, 0, 6, 6));
 
@@ -152,7 +152,7 @@ public class PhoneInput extends HBox implements Styleable {
 	public void startLoading() {
 		send.startLoading();
 	}
-	
+
 	public void stopLoading() {
 		send.stopLoading();
 	}
@@ -162,7 +162,7 @@ public class PhoneInput extends HBox implements Styleable {
 		selectedCode.setText("");
 		selectedCountry = null;
 	}
-	
+
 	@Override
 	public void applyStyle(Style style) {
 		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 5.0));

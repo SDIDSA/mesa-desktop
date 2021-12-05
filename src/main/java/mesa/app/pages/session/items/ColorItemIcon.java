@@ -68,8 +68,10 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		back.setFill(style.getBackgroundPrimary());
-		ic.setFill(to);
+		if(!selected) {
+			back.setFill(style.getBackgroundPrimary());
+			ic.setFill(to);
+		}
 
 		if (to != null) {
 			doCol = new Timeline(

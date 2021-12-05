@@ -11,7 +11,7 @@ import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 
 public class CriticalOverlay extends PasswordOverlay {
-
+	private TextFlow preWarning;
 	private Label warning;
 
 	public CriticalOverlay(SessionPage session, String headKey, String warningKey) {
@@ -19,10 +19,9 @@ public class CriticalOverlay extends PasswordOverlay {
 
 		warning = new Label(session.getWindow(), warningKey, new Font(Font.DEFAULT_FAMILY_MEDIUM, 14.5));
 
-		TextFlow preWarning = new TextFlow(warning);
+		preWarning = new TextFlow(warning);
 		preWarning.setLineSpacing(5);
 		preWarning.setPadding(new Insets(10));
-		preWarning.setBackground(Backgrounds.make(Color.web("#faa81a"), 5.0));
 
 		VBox.setMargin(preWarning, new Insets(0, 0, 20, 0));
 
@@ -35,8 +34,11 @@ public class CriticalOverlay extends PasswordOverlay {
 	public void applyStyle(Style style) {
 		super.applyStyle(style);
 
-		if (warning != null)
+		if (warning != null) {
+
 			warning.setFill(Color.WHITE);
+			preWarning.setBackground(Backgrounds.make(style.getTextWarning(), 5.0));
+		}
 	}
 
 }

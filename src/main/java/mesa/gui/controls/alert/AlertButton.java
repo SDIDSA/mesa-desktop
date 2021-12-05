@@ -27,6 +27,7 @@ public class AlertButton extends Button implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
+		super.applyStyle(style);
 		if(type.isFilled()) {
 			setTextFill(Color.WHITE);
 			if(type.getFill() == null) {
@@ -42,6 +43,9 @@ public class AlertButton extends Button implements Styleable {
 
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
+		if(type == null) {
+			return;
+		}
 		Styleable.bindStyle(this, style);
 	}
 

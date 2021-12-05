@@ -49,13 +49,17 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
+		closeIcon.applyStyle(session.getWindow().getStyl());
 
 		center = new VBox(16);
 		center.setPadding(new Insets(0, 16, 16, 16));
 
 		root.getChildren().add(center);
+		
+		root.setPickOnBounds(false);
+		center.setPickOnBounds(false);
 
-		preRoot.getChildren().addAll(root, closeIcon);
+		preRoot.getChildren().addAll(closeIcon ,root);
 
 		bottom = new HBox(8);
 		bottom.setMaxWidth(width);

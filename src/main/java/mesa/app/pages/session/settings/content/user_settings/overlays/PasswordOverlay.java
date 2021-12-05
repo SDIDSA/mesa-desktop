@@ -33,7 +33,8 @@ public class PasswordOverlay extends AbstractOverlay {
 		done.setKey(actionKey);
 
 		root.getChildren().addAll(head, password);
-
+		
+		addOnShown(password::requestFocus);
 		applyStyle(session.getWindow().getStyl());
 	}
 

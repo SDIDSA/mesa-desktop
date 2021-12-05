@@ -15,7 +15,7 @@ public class Button extends AbstractButton {
 	private boolean ulOnHover = false;
 
 	public Button(Window window, String key, double radius, double width, double height) {
-		super(radius, height);
+		super(window, radius, height);
 		
 		label = new Label(window, key);
 		

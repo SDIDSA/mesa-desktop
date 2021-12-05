@@ -31,7 +31,7 @@ public class Style {
 			key = CaseUtils.toCamelCase(key, false, '_');
 
 			try {
-				Color c = Color.web(value);
+				Color c = value.startsWith("hsl") ? parseHSL(value) : Color.web(value);
 				colors.put(key, c);
 			} catch (Exception x) {
 				// IGNORE
@@ -39,6 +39,57 @@ public class Style {
 		}
 
 		accent = Color.web("#5865f2");
+	}
+
+	private static Color parseHSL(String hslString) {
+		double[] vals = new double[4];
+
+		int pos = 0;
+		for (String preVal : hslString.substring(hslString.indexOf("(") + 1, hslString.indexOf(")")).split(",")) {
+			vals[pos++] = Double.parseDouble(preVal.replace("%", ""));
+		}
+
+		double hue = vals[0];
+		double saturation = vals[1] / 100;
+		double lightness = vals[2] / 100;
+		double alpha = vals[3] == 0 ? 1.0 : vals[3];
+
+		double c = (1 - Math.abs((2 * lightness) - 1)) * saturation;
+		double x = c * (1 - Math.abs((hue / 60) % 2 - 1));
+		double m = lightness - c / 2;
+
+		double[] dRgb = null;
+
+		int div = (int) hue / 60;
+		switch (div) {
+		case 0:
+			dRgb = new double[] { c, x, 0 };
+			break;
+		case 1:
+			dRgb = new double[] { x, c, 0 };
+			break;
+		case 2:
+			dRgb = new double[] { 0, c, x };
+			break;
+		case 3:
+			dRgb = new double[] { 0, x, c };
+			break;
+		case 4:
+			dRgb = new double[] { x, 0, c };
+			break;
+		case 5:
+			dRgb = new double[] { c, 0, x };
+			break;
+		default:
+			dRgb = new double[3];
+		}
+
+		int[] rgb = new int[dRgb.length];
+		for (int i = 0; i < dRgb.length; i++) {
+			rgb[i] = (int) ((dRgb[i] + m) * 255);
+		}
+
+		return Color.rgb(rgb[0], rgb[1], rgb[2], alpha);
 	}
 
 	public Color getAccent() {
@@ -304,7 +355,7 @@ public class Style {
 	}
 
 	public Color getLinkButtonText() {
-		return colors.get("linkButtonBack");
+		return colors.get("linkButtonText");
 	}
 
 	public Color getCountryCodeItemText() {

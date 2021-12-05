@@ -81,7 +81,7 @@ public class Window extends Stage {
 				});
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException | NoSuchMethodException | SecurityException x) {
-				ErrorHandler.handle(x, "create page " + type.getSimpleName());
+				ErrorHandler.handle(x, "create page (" + type.getSimpleName() + ".java:0)");
 			}
 		}).start();
 	}

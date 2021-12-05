@@ -17,7 +17,7 @@ public class ItemIcon extends StackPane {
 	
 	protected SessionPage session;
 
-	private boolean selected = false;
+	protected boolean selected = false;
 	
 	private Timeline doRad;
 	private Timeline undoRad;

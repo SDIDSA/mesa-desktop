@@ -26,7 +26,7 @@ public abstract class Page extends StackPane implements Styleable {
 		this.minSize = minSize;
 
 		Rectangle clipBottom = new Rectangle();
-		double arc = 20;
+		double arc = 17;
 		clipBottom.setArcHeight(arc);
 		clipBottom.setArcWidth(arc);
 

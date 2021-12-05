@@ -45,12 +45,15 @@ public class Alert extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
+		closeIcon.applyStyle(page.getWindow().getStyl());
 		StackPane.setMargin(closeIcon, new Insets(10));
 
 		root = new VBox();
 		root.setPadding(new Insets(16));
+		root.setPickOnBounds(false);
 
 		head = new Label(page.getWindow(), "", new Font(20, FontWeight.BOLD));
+		head.setMouseTransparent(true);
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 
 		body = new Label(page.getWindow(), "", new Font(15));
@@ -61,7 +64,7 @@ public class Alert extends Overlay implements Styleable {
 
 		root.getChildren().addAll(head, preBody);
 
-		preRoot.getChildren().addAll(root, closeIcon);
+		preRoot.getChildren().addAll(closeIcon, root);
 
 		bottom = new HBox(8);
 		bottom.setMaxWidth(width);

@@ -12,10 +12,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import mesa.app.utils.Colors;
 import mesa.gui.factory.Borders;
+import mesa.gui.style.Style;
+import mesa.gui.style.Styleable;
 
-public class ColorIcon extends StackPane {
+public class ColorIcon extends StackPane implements Styleable {
 	private ImageView view;
 	private Rectangle overlay;
 
@@ -32,10 +33,6 @@ public class ColorIcon extends StackPane {
 		setImage(name, size);
 
 		if (focusable) {
-			Border unfocused = Borders.make(Color.TRANSPARENT);
-			Border focused = Borders.make(Colors.LINK, 4.0);
-			borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
-
 			setFocusTraversable(true);
 
 			setOnMouseClicked(this::fire);
@@ -104,5 +101,17 @@ public class ColorIcon extends StackPane {
 
 	public void setFill(Paint fill) {
 		overlay.setFill(fill);
+	}
+
+	@Override
+	public void applyStyle(ObjectProperty<Style> style) {
+		Styleable.bindStyle(this, style);
+	}
+
+	@Override
+	public void applyStyle(Style style) {
+		Border unfocused = Borders.make(Color.TRANSPARENT);
+		Border focused = Borders.make(style.getTextLink(), 4.0);
+		borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
 	}
 }
