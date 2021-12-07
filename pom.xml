@@ -6,6 +6,7 @@
 	<artifactId>mesa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<dependencies>
+		<!-- JavaFX -->
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
@@ -17,16 +18,26 @@
 			<version>18-ea+7</version>
 		</dependency>
 
+		<!-- Connectivity -->
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20210307</version>
+			<groupId>io.socket</groupId>
+			<artifactId>socket.io-client</artifactId>
+			<version>2.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.13</version>
 		</dependency>
+
+		<!-- Data -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
+		</dependency>
+		
+		<!-- Utils -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -42,7 +53,6 @@
 			<artifactId>thumbnailator</artifactId>
 			<version>0.4.14</version>
 		</dependency>
-
 		<dependency>
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>

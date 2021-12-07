@@ -11,7 +11,7 @@ import mesa.gui.exception.LogHandler;
 public class API {
 	public static final JSONObject netErr = new JSONObject("{\"err\":[{\"key\":\"global\",\"value\":\"net_err\"}]}");
 
-	private static final String BASE = "http://localhost:4000/";
+	public static final String BASE = "http://localhost:4000/";
 
 	public static class Auth {
 		private static final String PREFIX = BASE + "auth/";

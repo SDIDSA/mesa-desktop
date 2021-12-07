@@ -135,6 +135,9 @@ public class PhoneOverlay extends Overlay implements Styleable {
 	@Override
 	public void hide() {
 		content.unload();
+		isoPhone.showNormal();
+		content.valid();
+		verify.clear();
 		super.hide();
 	}
 

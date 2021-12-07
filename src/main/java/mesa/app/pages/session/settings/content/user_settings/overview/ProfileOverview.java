@@ -11,7 +11,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import mesa.app.component.StatedPfp;
 import mesa.app.component.StatedPfp.PfpStatus;
@@ -70,7 +69,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 
 		userName = new Text();
 		userName.textProperty().bind(user.usernameProperty());
-		userName.setFont(new Font(Font.DEFAULT_FAMILY, 20, FontWeight.BOLD).getFont());
+		userName.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 20).getFont());
 		userName.setTranslateY(9);
 
 		id = new Text("#" + user.getId());

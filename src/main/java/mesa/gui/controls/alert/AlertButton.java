@@ -15,7 +15,7 @@ public class AlertButton extends Button implements Styleable {
 		super(alert.getWindow(), type.getKey(), 3, 24, 38);
 		this.type = type;
 		
-		setFont(new Font(14, FontWeight.BOLD));
+		setFont(type.isFilled() ? new Font(14, FontWeight.BOLD) : new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		
 		if(!type.isFilled()) {
 			setUlOnHover(true);

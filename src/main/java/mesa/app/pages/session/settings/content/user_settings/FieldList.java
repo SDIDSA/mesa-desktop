@@ -9,7 +9,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
@@ -97,7 +96,6 @@ public class FieldList extends VBox implements Styleable {
 				if (result.has("err")) {
 					editUsername.applyErrors(result.getJSONArray("err"));
 				} else {
-					user.setUsername(newUsername);
 					editUsername.hide();
 				}
 				editUsername.stopLoading();
@@ -113,8 +111,6 @@ public class FieldList extends VBox implements Styleable {
 				if (result.has("err")) {
 					editEmail.applyErrors(result.getJSONArray("err"));
 				} else {
-					user.setEmail(newEmail);
-					user.setEmailConfirmed(false);
 					editEmail.hide();
 				}
 				editEmail.stopLoading();
@@ -125,7 +121,7 @@ public class FieldList extends VBox implements Styleable {
 		email.setOverlay(editEmail);
 
 		removePhone = new Button(settings.getWindow(), "overview_remove", 3, 16, 32);
-		removePhone.setFont(new Font(14, FontWeight.BOLD));
+		removePhone.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		removePhone.setUlOnHover(true);
 
 		PasswordOverlay removePhoneOverlay = new PasswordOverlay(settings.getSession(), "remove_phone",
