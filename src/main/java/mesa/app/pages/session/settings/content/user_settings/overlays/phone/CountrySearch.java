@@ -34,7 +34,7 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 		field.setBackground(Background.EMPTY);
 		field.setBorder(Border.EMPTY);
 		field.setPadding(new Insets(0, 27, 0, 5));
-		field.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13).getFont());
+		field.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13.5).getFont());
 		field.setMinHeight(22);
 
 		field.textProperty().addListener((obs, ov, nv) -> {

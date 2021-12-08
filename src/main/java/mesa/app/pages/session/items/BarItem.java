@@ -13,6 +13,8 @@ public abstract class BarItem extends HBox {
 	private Runnable action;
 	
 	private Tooltip tip;
+	
+	private boolean selectable = true;
 
 	protected BarItem(SessionPage session) {
 		super(4);
@@ -24,6 +26,10 @@ public abstract class BarItem extends HBox {
 		getChildren().addAll(pill);
 	}
 
+	public void setSelectable(boolean selectable) {
+		this.selectable = selectable;
+	}
+	
 	public void setTooltip(Tooltip tip) {
 		this.tip = tip;
 		Tooltip.install(icon, tip);
@@ -37,13 +43,13 @@ public abstract class BarItem extends HBox {
 	protected synchronized void setIcon(ItemIcon icon) {
 		this.icon = icon;
 		icon.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
-			if (!icon.isSelected()) {
+			if (!icon.isSelected() && selectable) {
 				pill.enter();
 			}
 		});
 
 		icon.addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
-			if (!icon.isSelected()) {
+			if (!icon.isSelected() && selectable) {
 				pill.exit();
 			}
 		});
@@ -53,15 +59,17 @@ public abstract class BarItem extends HBox {
 				action.run();
 			}
 			
-			if(selected != null && selected != this) {
-				selected.icon.unselect();
-				selected.pill.exit();
-			}
-			
+			if(selectable) {
+				if(selected != null && selected != this) {
+					selected.icon.unselect();
+					selected.pill.exit();
+				}
+				
 
-			icon.select();
-			pill.select();
-			selected = this;
+				icon.select();
+				pill.select();
+				selected = this;
+			}
 		});
 
 		getChildren().add(icon);

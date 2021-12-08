@@ -76,8 +76,6 @@ public class VerifyPhone extends PhoneOverlayContent implements Styleable {
 					verifyHead.setKey("phone_changed");
 					finalize.hide();
 
-					owner.getUser().setPhone(result.getString("phone"));
-
 					onSuccess.run();
 				}
 

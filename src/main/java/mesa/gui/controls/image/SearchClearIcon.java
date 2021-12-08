@@ -24,8 +24,8 @@ public class SearchClearIcon extends StackPane {
 		
 		getChildren().addAll(clear, search);
 		
-		showSearch = animate(clear, search);
-		showClear = animate(search, clear);
+		showSearch = animate(clear, search, 1);
+		showClear = animate(search, clear, -1);
 		
 		search();
 	}
@@ -42,10 +42,10 @@ public class SearchClearIcon extends StackPane {
 		showClear.playFromStart();
 	}
 	
-	private Timeline animate(ColorIcon hide, ColorIcon show) {
+	private Timeline animate(ColorIcon hide, ColorIcon show, int by) {
 		return new Timeline(new KeyFrame(Duration.seconds(.1),
 				new KeyValue(hide.opacityProperty(), 0, Interpolator.EASE_BOTH),
-				new KeyValue(hide.rotateProperty(), 45, Interpolator.EASE_BOTH),
+				new KeyValue(hide.rotateProperty(), 45 * by, Interpolator.EASE_BOTH),
 				
 				new KeyValue(show.opacityProperty(), 1, Interpolator.EASE_BOTH),
 				new KeyValue(show.rotateProperty(), 0, Interpolator.EASE_BOTH)

@@ -5,7 +5,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.ObjectProperty;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -29,20 +28,6 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 		this.to = to;
 		back = new Rectangle(48, 48);
 
-		addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
-			if (!isSelected()) {
-				undoCol.stop();
-				doCol.playFromStart();
-			}
-		});
-
-		addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
-			if (!isSelected()) {
-				doCol.stop();
-				undoCol.playFromStart();
-			}
-		});
-
 		ic = new ColorIcon(icon, size);
 
 		getChildren().addAll(back, ic);
@@ -54,6 +39,24 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 		this(session, to, icon, 16);
 	}
 
+	@Override
+	public void hover() {
+		undoCol.stop();
+		doCol.playFromStart();
+		
+		super.hover();
+	}
+	
+	@Override
+	public void unhover() {
+		if(canUnhover) {
+			doCol.stop();
+			undoCol.playFromStart();
+		}
+		
+		super.unhover();
+	}
+	
 	@Override
 	public void unselect() {
 		super.unselect();

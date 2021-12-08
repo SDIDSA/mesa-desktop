@@ -133,7 +133,6 @@ public class FieldList extends VBox implements Styleable {
 				if(result.has("err")) {
 					removePhoneOverlay.applyErrors(result.getJSONArray("err"));
 				}else {
-					user.setPhone("");
 					removePhoneOverlay.hide();
 				}
 				

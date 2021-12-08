@@ -27,12 +27,20 @@ public class Overlay extends StackPane {
 	private Timeline hide;
 
 	private ArrayList<Runnable> onShown;
+	private ArrayList<Runnable> onShowing;
+	private ArrayList<Runnable> onHidden;
+	private ArrayList<Runnable> onHiding;
 
 	private boolean autoHide = true;
 
 	public Overlay(Page owner) {
 		this.owner = owner;
+		
 		onShown = new ArrayList<>();
+		onShowing = new ArrayList<>();
+		onHidden = new ArrayList<>();
+		onHiding = new ArrayList<>();
+		
 		back = new StackPane();
 		back.setBackground(Backgrounds.make(Color.gray(0, .8)));
 
@@ -67,13 +75,25 @@ public class Overlay extends StackPane {
 
 		getChildren().addAll(back, content);
 	}
-	
+
 	public void setAutoHide(boolean autoHide) {
 		this.autoHide = autoHide;
 	}
 
 	public void addOnShown(Runnable onShown) {
 		this.onShown.add(onShown);
+	}
+
+	public void addOnShowing(Runnable onShowing) {
+		this.onShowing.add(onShowing);
+	}
+
+	public void addOnHidden(Runnable onHidden) {
+		this.onHidden.add(onHidden);
+	}
+
+	public void addOnHiding(Runnable onHiding) {
+		this.onHiding.add(onHiding);
 	}
 
 	public void addOnShown(int index, Runnable onShown) {
@@ -94,6 +114,7 @@ public class Overlay extends StackPane {
 			owner.getChildren().add(this);
 		}
 		show.playFromStart();
+		onShowing.forEach(Runnable::run);
 	}
 
 	public void hide() {
@@ -102,8 +123,10 @@ public class Overlay extends StackPane {
 			owner.getChildren().remove(this);
 			last().setDisable(false);
 
+			onHidden.forEach(Runnable::run);
 		});
 		hide.playFromStart();
+		onHiding.forEach(Runnable::run);
 	}
 
 	private Node last() {

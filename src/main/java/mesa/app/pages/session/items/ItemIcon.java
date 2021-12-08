@@ -16,11 +16,12 @@ public class ItemIcon extends StackPane {
 	private static final double HOV_RAD = 30;
 	
 	protected SessionPage session;
-
 	protected boolean selected = false;
 	
 	private Timeline doRad;
 	private Timeline undoRad;
+	
+	protected boolean canUnhover = true;
 	public ItemIcon(SessionPage session) {
 		this.session = session;
 		setMinSize(SIZE, SIZE);
@@ -42,19 +43,33 @@ public class ItemIcon extends StackPane {
 
 		addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if(!selected) {
-				undoRad.stop();
-				doRad.playFromStart();
+				hover();
 			}
 		});
 		
 		addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
 			if(!selected) {
-				doRad.stop();
-				undoRad.playFromStart();
+				unhover();
 			}
 		});
 		
 		setClip(clip);
+	}
+	
+	public void setCanUnhover(boolean canUnhover) {
+		this.canUnhover = canUnhover;
+	}
+	
+	public void hover() {
+		undoRad.stop();
+		doRad.playFromStart();
+	}
+	
+	public void unhover() {
+		if(canUnhover) {
+			doRad.stop();
+			undoRad.playFromStart();
+		}
 	}
 	
 	public void select() {
