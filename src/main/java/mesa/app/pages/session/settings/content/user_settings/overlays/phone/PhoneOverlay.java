@@ -14,7 +14,7 @@ import javafx.util.Duration;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.alert.Overlay;
-import mesa.gui.controls.image.IsoPhone;
+import mesa.gui.controls.image.layer_icon.IsoPhone;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;

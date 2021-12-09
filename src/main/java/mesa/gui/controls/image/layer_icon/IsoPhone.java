@@ -1,4 +1,4 @@
-package mesa.gui.controls.image;
+package mesa.gui.controls.image.layer_icon;
 
 import java.util.ArrayList;
 

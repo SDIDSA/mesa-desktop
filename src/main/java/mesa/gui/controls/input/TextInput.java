@@ -67,6 +67,10 @@ public class TextInput extends Input {
 	public TextInput(Window window, Font font, String key) {
 		this(window, font, key, false);
 	}
+	
+	public void positionCaret(int pos) {
+		field.positionCaret(pos);
+	}
 
 	@Override
 	public void setFont(Font font) {

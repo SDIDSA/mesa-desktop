@@ -85,6 +85,17 @@
 	"not_sure": "Not sure? You can ",
 	"skip_question": "skip this question",
 	"for_now": " for now.",
+	
+	"customize_server": "Customize your server",
+	"server_name_icon": "Give your new server a personality with a name and an icon. You can always change it later.",
+	
+	"create": "Create",
+	"upload": "Upload",
+	
+	"server_name": "Server Name",
+	
+	"pre_guidelines": "By creating a server, you agree to Discord's ",
+	"guidelines": "Community Guidelines",
 
 	"mute_mic": "Mute",
 	"deafen": "Deafen",

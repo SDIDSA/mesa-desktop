@@ -1,6 +1,7 @@
 package mesa.gui.window;
 
 import mesa.app.pages.Page;
+import mesa.data.User;
 import mesa.gui.exception.ErrorHandler;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;
@@ -179,7 +180,20 @@ public class Window extends Stage {
 	public void putData(String key, Object value) {
 		data.put(key, value);
 	}
+	
+	private static final String LOGGED = "logged";
+	public void putLoggedUser(User user) {
+		putData(LOGGED, user);
+	}
+	
+	public void clearLoggedUser() {
+		data.remove(LOGGED);
+	}
 
+	public User getLoggedUser() {
+		return getOfType(LOGGED, User.class);
+	}
+	
 	public JSONObject getJsonData(String key) throws IllegalStateException {
 		return getOfType(key, JSONObject.class);
 	}

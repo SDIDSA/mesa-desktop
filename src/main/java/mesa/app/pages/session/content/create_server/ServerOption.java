@@ -9,8 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.FontWeight;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
-import mesa.gui.controls.image.LayerIcon;
+import mesa.gui.controls.image.layer_icon.LayerIcon;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
@@ -42,6 +43,7 @@ public class ServerOption extends HBox implements Styleable {
 
 		lab = new Label(owner, text);
 		lab.setFont(new Font(16, FontWeight.BOLD));
+		lab.setTransform(TextTransform.CAPITALIZE);
 
 		arrow = new ColorIcon("expand", 16);
 		arrow.setRotate(-90);

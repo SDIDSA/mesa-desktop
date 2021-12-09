@@ -1,10 +1,12 @@
-package mesa.app.pages.session.content.create_server;
+package mesa.app.pages.session.content.create_server.pages;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import mesa.app.pages.session.content.create_server.MultiOverlay;
+import mesa.app.pages.session.content.create_server.ServerOption;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.label.Label;
@@ -21,9 +23,6 @@ public class TellUsMorePage extends MultiOverlayPage {
 
 	public TellUsMorePage(MultiOverlay owner) {
 		super(owner, "server_tell_us_more", "server_scale");
-
-		setMinHeight(0);
-		setMaxHeight(392);
 		
 		VBox center = new VBox(8);
 		center.setPadding(new Insets(0, 16, 16, 16));
@@ -37,8 +36,10 @@ public class TellUsMorePage extends MultiOverlayPage {
 		textLine.setTextAlignment(TextAlignment.CENTER);
 		VBox.setMargin(textLine, new Insets(10, 0, 2, 0));
 		
-		center.getChildren().add(new ServerOption(owner.getWindow(), "for_me_and_friends", "friends2", "friends1"));
-		center.getChildren().add(new ServerOption(owner.getWindow(), "for_club_or_community", "commb", "commf"));
+		center.getChildren().addAll(
+				new ServerOption(owner.getWindow(), "for_me_and_friends", "friends2", "friends1").setAction(owner::next),
+				new ServerOption(owner.getWindow(), "for_club_or_community", "commb", "commf").setAction(owner::next)
+			);
 
 		center.getChildren().add(textLine);
 		

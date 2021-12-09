@@ -1,4 +1,4 @@
-package mesa.gui.controls.image;
+package mesa.gui.controls.image.layer_icon;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -8,6 +8,7 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import mesa.gui.controls.image.ColorIcon;
 
 public class SearchClearIcon extends StackPane {
 	private ColorIcon search;

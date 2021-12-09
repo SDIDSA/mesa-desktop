@@ -1,4 +1,4 @@
-package mesa.app.pages.session.content.create_server;
+package mesa.app.pages.session.content.create_server.pages;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -9,6 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
+import mesa.app.pages.session.content.create_server.MultiOverlay;
+import mesa.app.pages.session.content.create_server.ServerOption;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.label.Label;

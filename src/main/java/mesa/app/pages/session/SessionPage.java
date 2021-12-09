@@ -57,7 +57,8 @@ public class SessionPage extends Page {
 		super(window, new Dimension(970, 530));
 
 		user = new User(window.getJsonData("user"));
-
+		window.putLoggedUser(user);
+		
 		registerSocket(window);
 
 		root = new HBox();
@@ -179,6 +180,7 @@ public class SessionPage extends Page {
 		SectionItem.clearCache();
 		BarItem.clear();
 		Tooltip.clear();
+		window.clearLoggedUser();
 		window.loadPage(LoginPage.class);
 	}
 

@@ -11,7 +11,7 @@ import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.image.SearchClearIcon;
+import mesa.gui.controls.image.layer_icon.SearchClearIcon;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
