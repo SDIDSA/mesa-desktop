@@ -18,9 +18,9 @@ public class AlertButton extends Button implements Styleable {
 		setFont(type.isFilled() ? new Font(14, FontWeight.BOLD) : new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		
 		if(!type.isFilled()) {
+			setFill(Color.TRANSPARENT);
 			setUlOnHover(true);
 		}
-		
 		
 		applyStyle(alert.getWindow().getStyl());
 	}
@@ -36,7 +36,6 @@ public class AlertButton extends Button implements Styleable {
 				setFill(type.getFill());
 			}
 		}else {
-			setFill(Color.TRANSPARENT);
 			setTextFill(style.getLinkButtonText());
 		}
 	}

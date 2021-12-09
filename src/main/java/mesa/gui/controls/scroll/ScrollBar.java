@@ -27,6 +27,8 @@ public class ScrollBar extends StackPane {
 		setAlignment(Pos.TOP_CENTER);
 		double effectiveWidth = width - padding * 2;
 
+		StackPane.setAlignment(this, Pos.CENTER_RIGHT);
+		
 		setPadding(new Insets(padding));
 		position = new SimpleDoubleProperty(0);
 

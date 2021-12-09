@@ -67,6 +67,7 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 
 		cancel = new Button(session.getWindow(), "cancel", 3, 24, 38);
 		cancel.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
+		cancel.setFill(Color.TRANSPARENT);
 		cancel.setUlOnHover(true);
 		cancel.setAction(this::hide);
 
@@ -128,7 +129,6 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 		preRoot.setBackground(Backgrounds.make(style.getBackgroundPrimary(), new CornerRadii(5, 5, 0, 0, false)));
 		bottom.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(0, 0, 5, 5, false)));
 
-		cancel.setFill(Color.TRANSPARENT);
 		cancel.setTextFill(style.getLinkButtonText());
 
 		done.setFill(style.getAccent());

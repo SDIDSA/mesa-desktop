@@ -33,6 +33,9 @@ public class LayerIcon extends StackPane {
 	}
 	
 	public void setFill(int layer, Color fill) {
+		if(layers.size() <= layer) {
+			return;
+		}
 		layers.get(layer).setFill(fill);
 	}
 	

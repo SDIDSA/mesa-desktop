@@ -14,7 +14,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
@@ -74,7 +73,6 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		StackPane listCont = new StackPane();
 		listCont.setMinHeight(0);
 		listCont.setMaxHeight(196);
-		listCont.setAlignment(Pos.TOP_RIGHT);
 		listCont.setMaxWidth(220);
 		listCont.setClip(new Rectangle(400, 196));
 

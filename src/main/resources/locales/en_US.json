@@ -60,6 +60,32 @@
 	"discover": "Explore Public Servers",
 	"find_start": "Find or start a conversation",
 	
+	"create_server": "Create a server",
+	"create_server_sub": "Your server is where you and your friends hang out. Make yours and start talking.",
+	
+	"create_my_own": "Create My Own",
+	"start_from_template": "Start from a template",
+	
+	"gaming": "Gaming",
+	"school_club": "School Club",
+	"study_group": "Study Group",
+	"friends": "Friends",
+	"artists_and_creators": "Artists & Creators",
+	"local_community": "Local Community",
+	
+	"have_invite": "Have an invite already?",
+	"join_server": "Join a Server",
+	
+	"server_tell_us_more": "Tell us more about your server",
+	"server_scale": "In order to help you with your setup, is your new server for just a few friends or a larger community?",
+	
+	"for_me_and_friends": "For me and my friends",
+	"for_club_or_community": "For a club or community",
+	
+	"not_sure": "Not sure? You can ",
+	"skip_question": "skip this question",
+	"for_now": " for now.",
+
 	"mute_mic": "Mute",
 	"deafen": "Deafen",
 	

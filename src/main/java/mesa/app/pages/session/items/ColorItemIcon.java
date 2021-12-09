@@ -43,20 +43,20 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 	public void hover() {
 		undoCol.stop();
 		doCol.playFromStart();
-		
+
 		super.hover();
 	}
-	
+
 	@Override
 	public void unhover() {
-		if(canUnhover) {
+		if (canUnhover) {
 			doCol.stop();
 			undoCol.playFromStart();
 		}
-		
+
 		super.unhover();
 	}
-	
+
 	@Override
 	public void unselect() {
 		super.unselect();
@@ -71,7 +71,7 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		if(!selected) {
+		if (!selected) {
 			back.setFill(style.getBackgroundPrimary());
 			ic.setFill(to);
 		}
