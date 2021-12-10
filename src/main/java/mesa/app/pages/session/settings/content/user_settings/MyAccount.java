@@ -20,7 +20,7 @@ import mesa.app.utils.Colors;
 import mesa.data.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.image.LayerIcon;
+import mesa.gui.controls.image.layer_icon.LayerIcon;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.FixedVSpace;

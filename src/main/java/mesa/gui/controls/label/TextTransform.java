@@ -38,7 +38,7 @@ public abstract class TextTransform implements UnaryOperator<String> {
 				if (res.length() != 0) {
 					res.append(' ');
 				}
-				res.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1));
+				res.append(Character.toUpperCase(word.charAt(0))).append(word.substring(1).toLowerCase());
 			}
 
 			return res.toString();

@@ -42,10 +42,10 @@ public class SectionItem extends StackPane implements Styleable {
 	public SectionItem(Settings settings, String key) {
 		setAlignment(Pos.CENTER_LEFT);
 		setCursor(Cursor.HAND);
-		setPadding(new Insets(6, 10, 8, 10));
+		setPadding(new Insets(8, 10, 8, 10));
 
 		selectedProperty = new SimpleBooleanProperty(false);
-		lab = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 16));
+		lab = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 15));
 
 		getChildren().add(lab);
 

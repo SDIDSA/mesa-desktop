@@ -14,15 +14,19 @@ public class Bean {
 				return;
 			}
 			Object value = obj.get(key);
-			String setter = setterName(key);
-
-			try {
-				getClass().getMethod(setter, value.getClass()).invoke(this, value);
-			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException x) {
-				ErrorHandler.handle(x, "parse user json");
-			}
+			set(key, value);
 		});
+	}
+	
+	public void set(String key, Object value) {
+		String setter = setterName(key);
+
+		try {
+			getClass().getMethod(setter, value.getClass()).invoke(this, value);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException x) {
+			ErrorHandler.handle(x, "parse user json");
+		}
 	}
 
 	private static String setterName(String fieldName) {

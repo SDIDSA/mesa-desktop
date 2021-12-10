@@ -10,7 +10,7 @@ import javafx.scene.text.FontWeight;
 import mesa.gui.exception.ErrorHandler;
 
 public class Font {
-	public static final String DEFAULT_FAMILY = "Ubuntu";// Ubuntu
+	public static final String DEFAULT_FAMILY = "Roboto";// Ubuntu
 	public static final String DEFAULT_FAMILY_MEDIUM = DEFAULT_FAMILY + " Medium";
 	public static final FontWeight DEFAULT_WEIGHT = FontWeight.NORMAL;
 	public static final FontPosture DEFAULT_POSTURE = FontPosture.REGULAR;

@@ -74,8 +74,8 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		StackPane listCont = new StackPane();
 		listCont.setMinHeight(0);
 		listCont.setMaxHeight(196);
-		listCont.setAlignment(Pos.TOP_RIGHT);
 		listCont.setMaxWidth(220);
+		listCont.setAlignment(Pos.TOP_CENTER);
 		listCont.setClip(new Rectangle(400, 196));
 
 		VBox items = new VBox(4);

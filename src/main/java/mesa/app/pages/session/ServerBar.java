@@ -8,6 +8,8 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import mesa.app.pages.session.content.Content;
+import mesa.app.pages.session.content.OverlayItem;
+import mesa.app.pages.session.content.create_server.CreateServer;
 import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.items.ColorBarItem;
 import mesa.app.pages.session.types.home.Home;
@@ -25,10 +27,14 @@ public class ServerBar extends VBox implements Styleable {
 		setMinWidth(72);
 
 		seps = new ArrayList<>();
+		
 		Home home = new Home(session);
+		CreateServer createServer = new CreateServer(session);
+		
 		addContent(home);
 		separate();
-		addItem(new ColorBarItem(session, Colors.GREEN, "add_server", "plus", 16));
+		addOverlay(createServer);
+		
 		addItem(new ColorBarItem(session, Colors.GREEN, "discover", "compass", 20));
 
 		applyStyle(session.getWindow().getStyl());
@@ -36,6 +42,10 @@ public class ServerBar extends VBox implements Styleable {
 
 	public void addContent(Content content) {
 		addItem(content.getItem());
+	}
+
+	public void addOverlay(OverlayItem overlay) {
+		addItem(overlay.getItem());
 	}
 
 	public void addItem(BarItem item) {

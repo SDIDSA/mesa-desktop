@@ -1,13 +1,15 @@
-package mesa.gui.controls.image;
+package mesa.gui.controls.image.layer_icon;
 
 import java.util.ArrayList;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import mesa.gui.controls.image.ColorIcon;
 
 public class LayerIcon extends StackPane {
 	private ArrayList<ColorIcon> layers;
@@ -24,6 +26,10 @@ public class LayerIcon extends StackPane {
 	}
 	
 	public void addLayer(String name) {
+		addLayer(name, size);
+	}
+	
+	public void addLayer(String name, double size) {
 		ColorIcon layer = new ColorIcon(name, size);
 		
 		setMaxSize(layer.getMaxWidth(), layer.getMaxHeight());
@@ -32,7 +38,14 @@ public class LayerIcon extends StackPane {
 		getChildren().add(layer);
 	}
 	
+	public void setAlignment(int layer, Pos alignment) {
+		setAlignment(layers.get(layer), alignment);
+	}
+	
 	public void setFill(int layer, Color fill) {
+		if(layers.size() <= layer) {
+			return;
+		}
 		layers.get(layer).setFill(fill);
 	}
 	

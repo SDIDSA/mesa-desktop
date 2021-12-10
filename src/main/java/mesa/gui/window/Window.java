@@ -1,6 +1,7 @@
 package mesa.gui.window;
 
 import mesa.app.pages.Page;
+import mesa.data.User;
 import mesa.gui.exception.ErrorHandler;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;
@@ -12,10 +13,12 @@ import mesa.gui.window.helpers.TileHint;
 
 import java.awt.Dimension;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.json.JSONObject;
 
+import io.socket.client.Socket;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -28,20 +31,24 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Window extends Stage {
+	private static final String MAIN_SOCKET = "main_socket";
+	
 	private HashMap<String, Object> data = new HashMap<>();
+
+	private ArrayList<Runnable> onClose = new ArrayList<>();
 
 	private DoubleProperty borderWidth;
 
 	private ObjectProperty<Style> style;
 	private ObjectProperty<Locale> locale;
-	
+
 	private AppPreRoot root;
 
 	public Window(Style style, Locale locale) {
 		super();
 		this.style = new SimpleObjectProperty<>(style);
 		this.locale = new SimpleObjectProperty<>(locale);
-		
+
 		borderWidth = new SimpleDoubleProperty(0);
 
 		initStyle(StageStyle.TRANSPARENT);
@@ -58,6 +65,15 @@ public class Window extends Stage {
 		TransparentScene scene = new TransparentScene(root, 500, 500);
 
 		setScene(scene);
+
+		setOnCloseRequest(e -> {
+			e.consume();
+			close();
+		});
+	}
+
+	public void addOnClose(Runnable runnable) {
+		onClose.add(runnable);
 	}
 
 	public String getOsName() {
@@ -75,7 +91,7 @@ public class Window extends Stage {
 				Page page = type.getConstructor(Window.class).newInstance(this);
 				Platform.runLater(() -> {
 					root.setContent(page);
-					if(onFinish != null) {
+					if (onFinish != null) {
 						onFinish.run();
 					}
 				});
@@ -85,7 +101,7 @@ public class Window extends Stage {
 			}
 		}).start();
 	}
-	
+
 	public void loadPage(Class<? extends Page> type) {
 		loadPage(type, null);
 	}
@@ -147,17 +163,54 @@ public class Window extends Stage {
 		root.unTile();
 	}
 
+	@Override
+	public void close() {
+		onClose.forEach(Runnable::run);
+		super.close();
+	}
+	
+	public void putMainSocket(Socket socket) {
+		putData(MAIN_SOCKET, socket);
+	}
+	
+	public Socket getMainSocket() {
+		return getSocket(MAIN_SOCKET);
+	}
+
 	public void putData(String key, Object value) {
 		data.put(key, value);
 	}
+	
+	private static final String LOGGED = "logged";
+	public void putLoggedUser(User user) {
+		putData(LOGGED, user);
+	}
+	
+	public void clearLoggedUser() {
+		data.remove(LOGGED);
+	}
 
-	public JSONObject getJsonData(String key) {
+	public User getLoggedUser() {
+		return getOfType(LOGGED, User.class);
+	}
+	
+	public JSONObject getJsonData(String key) throws IllegalStateException {
+		return getOfType(key, JSONObject.class);
+	}
+
+	public Socket getSocket(String key) throws IllegalStateException {
+		return getOfType(key, Socket.class);
+	}
+
+	private <T> T getOfType(String key, Class<? extends T> type) {
 		Object obj = data.get(key);
 
-		if (obj instanceof JSONObject json) {
-			return json;
+		if (type.isInstance(obj)) {
+			return type.cast(obj);
 		} else {
-			throw new IllegalStateException("no json data was found at key " + key);
+			throw new IllegalStateException(
+					"no " + type.getSimpleName() + 
+					" was found at key " + key);
 		}
 	}
 

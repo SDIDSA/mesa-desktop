@@ -5,8 +5,8 @@ import javafx.animation.Interpolator;
 public class SplineInterpolator extends Interpolator {
 
 	public static final SplineInterpolator ANTICIPATEOVERSHOOT = new SplineInterpolator(0.68, -0.6, 0.32, 1.6);
-	public static final SplineInterpolator ANTICIPATE = new SplineInterpolator(.48, -0.52, .65, .47);
-	public static final SplineInterpolator OVERSHOOT = new SplineInterpolator(.19, .35, .63, 1.3);
+	public static final SplineInterpolator ANTICIPATE = new SplineInterpolator(0.36, 0, 0.66, -0.56);
+	public static final SplineInterpolator OVERSHOOT = new SplineInterpolator(0.34, 1.56, 0.64, 1);
 
 	private final double x1;
 	private final double y1;

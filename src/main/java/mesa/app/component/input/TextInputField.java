@@ -35,6 +35,10 @@ public class TextInputField extends InputField {
 	public void addPostField(Node...nodes) {
 		input.addPostField(nodes);
 	}
+	
+	public void positionCaret(int pos) {
+		input.positionCaret(pos);
+	}
 
 	@Override
 	public void setValue(String value) {
