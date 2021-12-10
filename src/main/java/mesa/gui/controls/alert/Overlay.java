@@ -54,7 +54,7 @@ public class Overlay extends StackPane {
 		content.setCache(true);
 		content.setCacheHint(CacheHint.SPEED);
 
-		show = new Timeline(new KeyFrame(Duration.seconds(.15),
+		show = new Timeline(new KeyFrame(Duration.seconds(.25),
 				new KeyValue(back.opacityProperty(), 1, SplineInterpolator.OVERSHOOT),
 				new KeyValue(content.opacityProperty(), 1, SplineInterpolator.OVERSHOOT),
 				new KeyValue(content.scaleXProperty(), 1, SplineInterpolator.OVERSHOOT),
@@ -62,7 +62,7 @@ public class Overlay extends StackPane {
 
 		show.setOnFinished(e -> onShown.forEach(Runnable::run));
 
-		hide = new Timeline(new KeyFrame(Duration.seconds(.15),
+		hide = new Timeline(new KeyFrame(Duration.seconds(.25),
 				new KeyValue(back.opacityProperty(), 0, SplineInterpolator.ANTICIPATE),
 				new KeyValue(content.opacityProperty(), 0, SplineInterpolator.ANTICIPATE),
 				new KeyValue(content.scaleXProperty(), .7, SplineInterpolator.ANTICIPATE),

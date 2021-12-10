@@ -5,10 +5,7 @@ import java.util.ArrayList;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -31,11 +28,12 @@ public class MultiOverlay extends Overlay implements Styleable {
 
 	public MultiOverlay(Page owner, double width) {
 		super(owner);
+		selected = 0;
 
 		clip = new Rectangle(width, 1000);
 		clip.setArcHeight(10);
 		clip.setArcWidth(10);
-		
+
 		clip.setY(15);
 
 		root = new StackPane();
@@ -45,6 +43,23 @@ public class MultiOverlay extends Overlay implements Styleable {
 		root.setClip(clip);
 
 		pages = new ArrayList<>();
+
+		addOnShowing(() -> {
+			for (int i = 0; i < pages.size(); i++) {
+				MultiOverlayPage page = pages.get(i);
+				if (i != selected) {
+					page.setTranslateX(width * (i > selected ? 1 : -1));
+				} else {
+					clip.heightProperty().bind(page.heightProp());
+					clip.yProperty().bind(root.heightProperty().subtract(page.heightProp()).divide(2));
+				}
+			}
+		});
+		
+		addOnHiding(() -> {
+			clip.yProperty().unbind();
+			clip.heightProperty().unbind();
+		});
 
 		setContent(root);
 
@@ -57,11 +72,7 @@ public class MultiOverlay extends Overlay implements Styleable {
 
 	public void addPage(MultiOverlayPage page) {
 		pages.add(page);
-		if (pages.size() == 1) {
-			selected = 0;
-			clip.heightProperty().bind(page.heightProp());
-			root.getChildren().setAll(page);
-		}
+		root.getChildren().add(page);
 	}
 
 	public void next() {
@@ -80,48 +91,27 @@ public class MultiOverlay extends Overlay implements Styleable {
 		MultiOverlayPage toLoad = pages.get(page);
 		toLoad.setTranslateX(root.getWidth() * direction);
 
-		root.getChildren().add(toLoad);
-
-		if (toLoad.isNeedsLayout()) {
-			toLoad.needsLayoutProperty().addListener(new ChangeListener<Boolean>() {
-				@Override
-				public void changed(ObservableValue<? extends Boolean> obs, Boolean ov, Boolean nv) {
-					if (!nv.booleanValue()) {
-						toLoad.needsLayoutProperty().removeListener(this);
-						Platform.runLater(() -> slide(toHide, toLoad, page, direction));
-					}
-
-				}
-			});
-		} else {
-			slide(toHide, toLoad, page, direction);
-		}
+		slide(toHide, toLoad, page, direction);
 	}
 
 	private void slide(MultiOverlayPage toHide, MultiOverlayPage toLoad, int page, int direction) {
 		double targetY = 0;
-		
+
 		toLoad.setup(getWindow());
-		
-		if (toLoad.height() > toHide.height()) {
-			clip.setY((toLoad.height() - toHide.height()) / 2 + 15);
-			targetY = 0;
-		} else {
-			targetY = (toHide.height() - toLoad.height()) / 2;
-		}
+
+		targetY = (root.getHeight() - toLoad.height()) / 2;
 
 		Timeline slide = new Timeline(new KeyFrame(Duration.seconds(.4),
-				new KeyValue(toLoad.translateXProperty(), 0, SplineInterpolator.ANTICIPATEOVERSHOOT),
-				new KeyValue(toHide.translateXProperty(), -direction * root.getWidth(),
-						SplineInterpolator.ANTICIPATEOVERSHOOT),
-				new KeyValue(clip.heightProperty(), toLoad.height(), SplineInterpolator.ANTICIPATEOVERSHOOT),
-				new KeyValue(clip.yProperty(), targetY + 15, SplineInterpolator.ANTICIPATEOVERSHOOT)));
+				new KeyValue(toLoad.translateXProperty(), 0, SplineInterpolator.OVERSHOOT),
+				new KeyValue(toHide.translateXProperty(), -direction * root.getWidth(), SplineInterpolator.OVERSHOOT),
+				new KeyValue(clip.heightProperty(), toLoad.height(), SplineInterpolator.OVERSHOOT),
+				new KeyValue(clip.yProperty(), targetY, SplineInterpolator.OVERSHOOT)));
 
 		slide.setOnFinished(e -> {
-			root.getChildren().remove(toHide);
-			clip.setY(15);
 			clip.heightProperty().bind(toLoad.heightProp());
+			clip.yProperty().bind(root.heightProperty().subtract(toLoad.heightProp()).divide(2));
 		});
+		clip.yProperty().unbind();
 		clip.heightProperty().unbind();
 		slide.playFromStart();
 		selected = page;

@@ -4,7 +4,7 @@ import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.items.ColorBarItem;
 import mesa.gui.controls.alert.Overlay;
 
-public class ItemOverlay {
+public class OverlayItem {
 	private Overlay overlay;
 	private ColorBarItem item;
 

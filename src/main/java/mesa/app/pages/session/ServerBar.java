@@ -8,7 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import mesa.app.pages.session.content.Content;
-import mesa.app.pages.session.content.ItemOverlay;
+import mesa.app.pages.session.content.OverlayItem;
 import mesa.app.pages.session.content.create_server.CreateServer;
 import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.items.ColorBarItem;
@@ -44,7 +44,7 @@ public class ServerBar extends VBox implements Styleable {
 		addItem(content.getItem());
 	}
 
-	public void addOverlay(ItemOverlay overlay) {
+	public void addOverlay(OverlayItem overlay) {
 		addItem(overlay.getItem());
 	}
 
