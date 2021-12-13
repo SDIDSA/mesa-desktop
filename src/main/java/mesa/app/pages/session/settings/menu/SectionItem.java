@@ -10,11 +10,13 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.SettingsContent;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.exception.ErrorHandler;
@@ -38,6 +40,7 @@ public class SectionItem extends StackPane implements Styleable {
 	private BooleanProperty selectedProperty;
 
 	private Runnable onSelected;
+	private Runnable action;
 
 	public SectionItem(Settings settings, String key) {
 		setAlignment(Pos.CENTER_LEFT);
@@ -47,15 +50,27 @@ public class SectionItem extends StackPane implements Styleable {
 		selectedProperty = new SimpleBooleanProperty(false);
 		lab = new Label(settings.getWindow(), key, new Font(Font.DEFAULT_FAMILY_MEDIUM, 15));
 
-		getChildren().add(lab);
+		setFocusTraversable(true);
 
+		setOnMouseClicked(e -> {
+			if (action != null) {
+				action.run();
+			}
+		});
+		setOnKeyPressed(e -> {
+			if (e.getCode().equals(KeyCode.SPACE) && action != null) {
+				action.run();
+			}
+		});
+
+		getChildren().add(lab);
 		applyStyle(settings.getWindow().getStyl());
 	}
 
 	public SectionItem(Settings settings, String key, Class<? extends SettingsContent> contentClass) {
 		this(settings, key);
 
-		setOnMouseClicked(e -> selectMe(this));
+		this.action = () -> selectMe(this);
 
 		setOnSelected(() -> {
 			if (contentClass != null) {
@@ -77,7 +92,7 @@ public class SectionItem extends StackPane implements Styleable {
 
 	public SectionItem(Settings settings, String key, Runnable onAction) {
 		this(settings, key);
-		setOnMouseClicked(e -> onAction.run());
+		this.action = onAction;
 	}
 
 	private static synchronized void selectMe(SectionItem item) {
@@ -136,6 +151,8 @@ public class SectionItem extends StackPane implements Styleable {
 			}
 			return Background.EMPTY;
 		}, hoverProperty(), selectedProperty, pressedProperty()));
+
+		NodeUtils.focusBorder(this, style.getTextLink());
 
 		if (!fillSet)
 			lab.fillProperty().bind(Bindings.createObjectBinding(() -> {

@@ -1,12 +1,14 @@
-package mesa.app.pages.session.content.create_server;
+package mesa.app.pages.session.content.create_server.pages;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.FontWeight;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.image.layer_icon.LayerIcon;
@@ -14,7 +16,6 @@ import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;
-import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -38,7 +39,14 @@ public class ServerOption extends HBox implements Styleable {
 				action.run();
 			}
 		});
-
+		setOnKeyPressed(e-> {
+			if(e.getCode().equals(KeyCode.SPACE) && action != null) {
+				action.run();
+			}
+		});
+		
+		setFocusTraversable(true);
+		
 		icon = new LayerIcon(42, iconLayers);
 
 		lab = new Label(owner, text);
@@ -63,7 +71,8 @@ public class ServerOption extends HBox implements Styleable {
 		backgroundProperty()
 				.bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getBackgroundModifierHover(), 8.0))
 						.otherwise(Backgrounds.make(style.getBackgroundPrimary(), 8.0)));
-		setBorder(Borders.make(style.getBackgroundModifierAccent(), 8.0));
+		
+		NodeUtils.focusBorder(this, style.getTextLink(), style.getBackgroundModifierAccent(), 8.0);
 
 		lab.setFill(style.getTextNormal());
 

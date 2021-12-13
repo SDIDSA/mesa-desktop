@@ -8,6 +8,8 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -72,6 +74,12 @@ public class Overlay extends StackPane {
 			if (autoHide)
 				hide();
 		});
+		
+		addEventFilter(KeyEvent.KEY_RELEASED, e-> {
+			if(e.getCode().equals(KeyCode.ESCAPE) && autoHide) {
+				hide();
+			}
+		});
 
 		getChildren().addAll(back, content);
 	}
@@ -105,6 +113,8 @@ public class Overlay extends StackPane {
 	}
 
 	public void show() {
+		owner.requestFocus();
+		
 		hide.stop();
 		back.setOpacity(0);
 		content.setScaleX(.7);

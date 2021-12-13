@@ -70,3 +70,5 @@ country-code-item-text: #f6f6f7;
 country-name-item-text: #b9bbbe;
 secondary-button-back: #4f545c;
 link-button-text : #ffffff;
+
+session-window-border: #3d3f40;

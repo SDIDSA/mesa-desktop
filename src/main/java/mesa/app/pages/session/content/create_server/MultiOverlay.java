@@ -49,11 +49,14 @@ public class MultiOverlay extends Overlay implements Styleable {
 				MultiOverlayPage page = pages.get(i);
 				if (i != selected) {
 					page.setTranslateX(width * (i > selected ? 1 : -1));
+					page.setDisable(true);
 				} else {
+					page.setDisable(false);
 					clip.heightProperty().bind(page.heightProp());
 					clip.yProperty().bind(root.heightProperty().subtract(page.heightProp()).divide(2));
 				}
 			}
+			requestFocus();
 		});
 		
 		addOnHiding(() -> {
@@ -108,9 +111,11 @@ public class MultiOverlay extends Overlay implements Styleable {
 				new KeyValue(clip.yProperty(), targetY, SplineInterpolator.OVERSHOOT)));
 
 		slide.setOnFinished(e -> {
+			toHide.setDisable(true);
 			clip.heightProperty().bind(toLoad.heightProp());
 			clip.yProperty().bind(root.heightProperty().subtract(toLoad.heightProp()).divide(2));
 		});
+		toLoad.setDisable(false);
 		clip.yProperty().unbind();
 		clip.heightProperty().unbind();
 		slide.playFromStart();

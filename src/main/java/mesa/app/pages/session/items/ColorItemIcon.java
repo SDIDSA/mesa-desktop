@@ -13,7 +13,7 @@ import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class ColorItemIcon extends ItemIcon implements Styleable {
+public class ColorItemIcon extends ItemIcon {
 
 	private Rectangle back;
 	private Color to;
@@ -30,7 +30,7 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 		ic = new ColorIcon(icon, size);
 
-		getChildren().addAll(back, ic);
+		content.getChildren().addAll(back, ic);
 
 		applyStyle(session.getWindow().getStyl());
 	}
@@ -71,6 +71,8 @@ public class ColorItemIcon extends ItemIcon implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
+		super.applyStyle(style);
+		
 		if (!selected) {
 			back.setFill(style.getBackgroundPrimary());
 			ic.setFill(to);

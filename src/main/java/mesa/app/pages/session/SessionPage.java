@@ -18,7 +18,6 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.app.pages.Page;
 import mesa.app.pages.login.LoginPage;
@@ -154,6 +153,8 @@ public class SessionPage extends Page {
 		settings.setMouseTransparent(false);
 		hideSettings.stop();
 		showSettings.playFromStart();
+		
+		settings.requestFocus();
 	}
 
 	public void hideSettings() {
@@ -195,7 +196,7 @@ public class SessionPage extends Page {
 	@Override
 	public void applyStyle(Style style) {
 		window.setFill(style.getBackgroundTertiary());
-		window.setBorder(Color.web("#494a4d"), 1);
+		window.setBorder(style.getSessionWindowBorder(), 1);
 
 		side.setBackground(Backgrounds.make(style.getBackgroundSecondary(), new CornerRadii(8.0, 0, 0, 0, false)));
 		main.setBackground(Backgrounds.make(style.getBackgroundPrimary()));

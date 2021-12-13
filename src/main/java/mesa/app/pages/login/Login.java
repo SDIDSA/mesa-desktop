@@ -29,6 +29,7 @@ public class Login extends LoginSubPage {
 	private Label etsya;
 	private Label needAcc;
 	private Button loginButton;
+	private Separator sep;
 
 	private Runnable onRegister;
 	private Consumer<JSONObject> onVerify;
@@ -36,6 +37,8 @@ public class Login extends LoginSubPage {
 
 	private Form form;
 
+	
+	private Label placeholder;
 	public Login(Window window) {
 		HBox root = new HBox(32);
 		setRoot(root);
@@ -72,9 +75,16 @@ public class Login extends LoginSubPage {
 		left.getChildren().addAll(web, etsya, email, password, recover, loginButton, bottom);
 
 		VBox right = new VBox(0);
+		right.setAlignment(Pos.CENTER);
 		right.setMinWidth(240);
+		
+		placeholder = new Label(window, "TODO : QR code Login");
+	
+		right.getChildren().add(placeholder);
 
-		root.getChildren().addAll(left, new Separator(Orientation.VERTICAL), right);
+		sep = new Separator(Orientation.VERTICAL);
+		
+		root.getChildren().addAll(left,sep, right);
 
 		getChildren().add(root);
 
@@ -138,6 +148,9 @@ public class Login extends LoginSubPage {
 		web.setFill(style.getHeaderPrimary());
 		etsya.setFill(style.getHeaderSecondary());
 		needAcc.setFill(style.getTextMuted());
+		sep.setFill(style.getBackgroundModifierAccent());
+		
+		placeholder.setFill(style.getHeaderSecondary());
 	}
 
 }

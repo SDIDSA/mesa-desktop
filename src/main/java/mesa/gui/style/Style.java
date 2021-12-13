@@ -365,4 +365,8 @@ public class Style {
 	public Color getCountryNameItemText() {
 		return colors.get("countryNameItemText");
 	}
+
+	public Color getSessionWindowBorder() {
+		return colors.get("sessionWindowBorder");
+	}
 }

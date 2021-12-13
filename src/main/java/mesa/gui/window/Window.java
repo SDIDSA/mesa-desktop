@@ -26,13 +26,15 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class Window extends Stage {
 	private static final String MAIN_SOCKET = "main_socket";
-	
+
 	private HashMap<String, Object> data = new HashMap<>();
 
 	private ArrayList<Runnable> onClose = new ArrayList<>();
@@ -64,7 +66,21 @@ public class Window extends Stage {
 
 		TransparentScene scene = new TransparentScene(root, 500, 500);
 
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.isControlDown()) {
+				if (e.getCode().equals(KeyCode.L)) {
+					this.style.set(Style.LIGHT);
+				} else if (e.getCode().equals(KeyCode.D)) {
+					this.style.set(Style.DARK);
+				}
+			}
+		});
+
 		setScene(scene);
+		
+		setOnShown(e-> {
+			root.requestFocus();
+		});
 
 		setOnCloseRequest(e -> {
 			e.consume();
@@ -168,11 +184,11 @@ public class Window extends Stage {
 		onClose.forEach(Runnable::run);
 		super.close();
 	}
-	
+
 	public void putMainSocket(Socket socket) {
 		putData(MAIN_SOCKET, socket);
 	}
-	
+
 	public Socket getMainSocket() {
 		return getSocket(MAIN_SOCKET);
 	}
@@ -180,12 +196,13 @@ public class Window extends Stage {
 	public void putData(String key, Object value) {
 		data.put(key, value);
 	}
-	
+
 	private static final String LOGGED = "logged";
+
 	public void putLoggedUser(User user) {
 		putData(LOGGED, user);
 	}
-	
+
 	public void clearLoggedUser() {
 		data.remove(LOGGED);
 	}
@@ -193,7 +210,7 @@ public class Window extends Stage {
 	public User getLoggedUser() {
 		return getOfType(LOGGED, User.class);
 	}
-	
+
 	public JSONObject getJsonData(String key) throws IllegalStateException {
 		return getOfType(key, JSONObject.class);
 	}
@@ -208,9 +225,7 @@ public class Window extends Stage {
 		if (type.isInstance(obj)) {
 			return type.cast(obj);
 		} else {
-			throw new IllegalStateException(
-					"no " + type.getSimpleName() + 
-					" was found at key " + key);
+			throw new IllegalStateException("no " + type.getSimpleName() + " was found at key " + key);
 		}
 	}
 

@@ -1,18 +1,15 @@
 package mesa.gui.controls.image;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import mesa.gui.factory.Borders;
+import mesa.gui.NodeUtils;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
@@ -110,8 +107,6 @@ public class ColorIcon extends StackPane implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		Border unfocused = Borders.make(Color.TRANSPARENT);
-		Border focused = Borders.make(style.getTextLink(), 4.0);
-		borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
+		NodeUtils.focusBorder(this, style.getTextLink());
 	}
 }

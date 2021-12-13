@@ -4,7 +4,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -18,6 +17,7 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.phone.Phon
 import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
 import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
 import mesa.data.User;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
@@ -26,7 +26,6 @@ import mesa.gui.controls.popup.Direction;
 import mesa.gui.controls.popup.tooltip.Tooltip;
 import mesa.gui.controls.space.FixedHSpace;
 import mesa.gui.factory.Backgrounds;
-import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
@@ -191,9 +190,8 @@ public class FieldList extends VBox implements Styleable {
 		helpEditTag.backgroundProperty()
 				.bind(Bindings.when(helpEditTag.focusedProperty()).then(Backgrounds.make(style.getAccent(), 2.0, 4.0))
 						.otherwise(Backgrounds.make(style.getAccent(), 2.0)));
-
-		helpEditTag.borderProperty().bind(Bindings.when(helpEditTag.focusedProperty())
-				.then(Borders.make(style.getTextLink(), 4.0)).otherwise(Border.EMPTY));
+		
+		NodeUtils.focusBorder(helpEditTag, style.getTextLink());
 		
 		editTagIcon.setFill(Color.WHITE);
 	}

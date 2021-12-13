@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
-import mesa.app.pages.session.content.create_server.ServerOption;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.label.Label;
@@ -39,6 +39,7 @@ public class CreateServerPage extends MultiOverlayPage {
 
 		center = new VBox(8);
 		center.setPadding(new Insets(0, 16, 16, 16));
+		NodeUtils.nestedFocus(center);
 
 		sb = new ScrollBar(8, 2);
 		sb.install(preCenter, center);

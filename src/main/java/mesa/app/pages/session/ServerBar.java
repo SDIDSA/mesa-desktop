@@ -14,6 +14,7 @@ import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.items.ColorBarItem;
 import mesa.app.pages.session.types.home.Home;
 import mesa.app.utils.Colors;
+import mesa.gui.NodeUtils;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
@@ -23,9 +24,11 @@ public class ServerBar extends VBox implements Styleable {
 	public ServerBar(SessionPage session) {
 		super(8);
 		setAlignment(Pos.TOP_CENTER);
-		setPadding(new Insets(4, 0, 0, 0));
+		setPadding(new Insets(8, 0, 0, 0));
 		setMinWidth(72);
 
+		NodeUtils.nestedFocus(this);
+		
 		seps = new ArrayList<>();
 		
 		Home home = new Home(session);

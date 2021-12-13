@@ -6,7 +6,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
-import mesa.app.pages.session.content.create_server.ServerOption;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.label.Label;

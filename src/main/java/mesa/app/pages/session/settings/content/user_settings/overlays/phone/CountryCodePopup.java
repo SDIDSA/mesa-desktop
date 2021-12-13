@@ -30,6 +30,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import mesa.app.utils.Threaded;
 import mesa.data.CountryCode;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.Separator;
@@ -65,6 +66,8 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		root.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		root.setMaxSize(USE_PREF_SIZE, USE_PREF_SIZE);
 		root.setPrefSize(240, 250);
+		
+		root.setOnMouseClicked(e-> root.requestFocus());
 
 		search = new CountrySearch();
 
@@ -98,8 +101,7 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 
 				CountryCodeItem item = cache.get(code);
 				if (item == null) {
-					item = new CountryCodeItem(code);
-					item.setOnMouseClicked(e -> onSelect.accept(code));
+					item = new CountryCodeItem(code, onSelect);
 					cache.put(code, item);
 				}
 				final CountryCodeItem fitem = item;
@@ -141,6 +143,7 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 
 		scrollBar = new ScrollBar(16, 4);
 		scrollBar.install(listCont, items);
+		NodeUtils.nestedFocus(items);
 
 		listCont.getChildren().addAll(items, scrollBar);
 
@@ -181,6 +184,7 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		scale.setY(.7);
 		root.setOpacity(0);
 		setOnShown(e -> {
+			search.requestFocus();
 			Bounds bounds = node.getBoundsInLocal();
 			Bounds screenBounds = node.localToScreen(bounds);
 

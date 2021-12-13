@@ -47,9 +47,12 @@ public class PhoneInput extends HBox implements Styleable {
 
 	private Consumer<String> onChange;
 
+	private Timeline onShown;
+	private Timeline onHidden;
+
 	public PhoneInput(Window window) {
 		setAlignment(Pos.CENTER);
-
+		
 		field = new TextField();
 		field.setBackground(Background.EMPTY);
 		field.setBorder(Border.EMPTY);
@@ -77,17 +80,25 @@ public class PhoneInput extends HBox implements Styleable {
 		showPop = new ColorIcon("expand", 8);
 		showPop.setRotate(-90);
 
+		onShown = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), 0)));
+		onHidden = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), -90)));
+
 		country.add(selectedCode, showPop);
 
 		country.setOnMousePressed(e -> pressed = true);
 
-		country.setAction(() -> {
+		country.setMouseAction(() -> {
 			if (!pressed)
 				countries.hide();
 			else
 				countries.showPop(this);
 
 			pressed = false;
+		});
+
+		country.setKeyAction(() -> {
+			requestFocus();
+			countries.showPop(this);
 		});
 
 		getChildren().addAll(country, field, send);
@@ -109,10 +120,6 @@ public class PhoneInput extends HBox implements Styleable {
 			return;
 		}
 
-		Timeline onShown = new Timeline(new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), 0)));
-		Timeline onHidden = new Timeline(
-				new KeyFrame(Duration.seconds(.1), new KeyValue(showPop.rotateProperty(), -90)));
-
 		countries = new CountryCodePopup(window);
 
 		countries.setOnShowing(e -> {
@@ -130,6 +137,7 @@ public class PhoneInput extends HBox implements Styleable {
 			selectedCode.setText(code.getCode());
 			countries.hide();
 			onChange();
+			field.requestFocus();
 		});
 	}
 

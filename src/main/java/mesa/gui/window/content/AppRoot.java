@@ -31,8 +31,6 @@ public class AppRoot extends BorderPane {
 		DropShadow ds = new DropShadow(15, Color.gray(0, .25));
 		setEffect(ds);
 
-		setFocusTraversable(true);
-
 		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> requestFocus());
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
@@ -60,13 +58,13 @@ public class AppRoot extends BorderPane {
 	}
 
 	public void setFill(Paint fill) {
-		setBackground(Backgrounds.make(fill, parent.isPadded() ? 11.0 : 0));
+		setBackground(Backgrounds.make(fill, parent.isPadded() ? 8.0 : 0));
 	}
 
 	public void setBorderFill(Paint fill, double width) {
 		borderFill = fill;
 		borderWidth = width;
-		setBorder(Borders.make(fill, parent.isPadded() ? 10.0 : 1, parent.isPadded() ? width : 0));
+		setBorder(Borders.make(fill, parent.isPadded() ? 7.0 : 1, parent.isPadded() ? width : 0));
 	}
 
 	private Page old = null;

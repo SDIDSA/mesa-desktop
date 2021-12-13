@@ -2,6 +2,7 @@ package mesa.app.pages.session.content;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -11,6 +12,7 @@ import mesa.app.component.StatedPfp;
 import mesa.app.component.StatedPfp.PfpStatus;
 import mesa.app.pages.session.SessionPage;
 import mesa.data.User;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.space.FixedHSpace;
 import mesa.gui.factory.Backgrounds;
@@ -54,7 +56,8 @@ public class UserBar extends HBox implements Styleable {
 		
 		settings.setAction(session::showSettings);
 		
-		getChildren().addAll(pfp, new FixedHSpace(8), nameId,mute, deafen, settings);
+		NodeUtils.nestedFocus(this, Orientation.HORIZONTAL);
+		getChildren().addAll(pfp, new FixedHSpace(8), nameId, mute, deafen, settings);
 
 		setMinHeight(52);
 

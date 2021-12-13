@@ -1,6 +1,7 @@
 package mesa.app.pages.session.items;
 
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import mesa.app.pages.session.SessionPage;
@@ -21,6 +22,22 @@ public abstract class BarItem extends HBox {
 		setMinHeight(48);
 		setAlignment(Pos.CENTER_LEFT);
 
+		setFocusTraversable(true);
+		
+		focusedProperty().addListener((obs, ov, nv) -> {
+			if(nv.booleanValue()) {
+				icon.focus();
+			}else {
+				icon.unfocus();
+			}
+		});
+		
+		setOnKeyPressed(e-> {
+			if(e.getCode().equals(KeyCode.SPACE)) {
+				fire();
+			}
+		});
+		
 		pill = new ItemPill(session);
 
 		getChildren().addAll(pill);
@@ -40,7 +57,7 @@ public abstract class BarItem extends HBox {
 	}
 	
 	private static BarItem selected;
-	protected synchronized void setIcon(ItemIcon icon) {
+	protected void setIcon(ItemIcon icon) {
 		this.icon = icon;
 		icon.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if (!icon.isSelected() && selectable) {
@@ -54,25 +71,28 @@ public abstract class BarItem extends HBox {
 			}
 		});
 
-		icon.setOnMouseClicked(e -> {
-			if(action != null)  {
-				action.run();
-			}
-			
-			if(selectable) {
-				if(selected != null && selected != this) {
-					selected.icon.unselect();
-					selected.pill.exit();
-				}
-				
-
-				icon.select();
-				pill.select();
-				selected = this;
-			}
-		});
+		icon.setOnMouseClicked(e -> fire());
 
 		getChildren().add(icon);
+	}
+	
+	private void fire() {
+		if(action != null)  {
+			action.run();
+		}
+		
+		icon.hover();
+		
+		if(selectable) {
+			if(selected != null && selected != this) {
+				selected.icon.unselect();
+				selected.pill.exit();
+			}
+			
+			icon.select();
+			pill.select();
+			selected = this;
+		}
 	}
 	
 	public void setAction(Runnable action) {

@@ -6,11 +6,9 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
-import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -85,10 +83,7 @@ public class Link extends StackPane implements Styleable {
 	public void applyStyle(Style style) {
 		label.setFill(style.getTextLink());
 
-		Border unfocused = Borders.make(Color.TRANSPARENT);
-		Border focused = Borders.make(style.getTextLink(), 4.0);
-
-		borderProperty().bind(Bindings.when(focusedProperty()).then(focused).otherwise(unfocused));
+		NodeUtils.focusBorder(this, style.getTextLink());
 	}
 
 	@Override

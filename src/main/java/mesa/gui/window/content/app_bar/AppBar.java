@@ -15,8 +15,8 @@ public class AppBar extends HBox implements Styleable {
 	private ColorIcon icon;
 
 	public AppBar(Window window, MoveResizeHelper helper) {
-		setPadding(new Insets(0, 8, 0, 10));
-		setMinHeight(28);
+		setPadding(new Insets(0, 4, 0, 10));
+		setMinHeight(21);
 		setAlignment(Pos.CENTER);
 
 		icon = new ColorIcon("mesa", 10);

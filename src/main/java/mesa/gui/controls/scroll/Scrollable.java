@@ -4,7 +4,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 
@@ -26,8 +25,6 @@ public class Scrollable extends StackPane {
 
 		sb.opacityProperty().bind(Bindings.when(sb.pressedProperty().or(sb.hoverProperty())).then(1)
 				.otherwise(Bindings.when(hoverProperty()).then(.4).otherwise(0)));
-
-		addEventFilter(ScrollEvent.ANY, e -> sb.scrollByPixels(e.getDeltaY(), contentCont.getHeight()));
 
 		contentCont.translateYProperty().bind(
 				sb.positionProperty().multiply(contentCont.heightProperty().subtract(heightProperty())).multiply(-1));

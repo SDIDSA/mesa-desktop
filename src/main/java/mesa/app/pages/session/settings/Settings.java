@@ -3,6 +3,8 @@ package mesa.app.pages.session.settings;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -41,7 +43,7 @@ public class Settings extends StackPane implements Styleable {
 		this.session = session;
 		setMinHeight(0);
 		maxHeightProperty().bind(session.heightProperty());
-
+		
 		HBox back = new HBox();
 		leftBack = new ExpandingHSpace();
 		rightBack = new ExpandingHSpace();
@@ -84,6 +86,12 @@ public class Settings extends StackPane implements Styleable {
 
 		getChildren().addAll(root, mainSb);
 
+		addEventFilter(KeyEvent.KEY_PRESSED, e-> {
+			if(e.getCode().equals(KeyCode.ESCAPE)) {
+				session.hideSettings();
+			}
+		});
+		
 		applyStyle(session.getWindow().getStyl());
 	}
 	

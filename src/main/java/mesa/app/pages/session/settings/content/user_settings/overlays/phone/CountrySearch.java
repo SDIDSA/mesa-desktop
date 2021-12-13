@@ -67,6 +67,11 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 	public void setSearch(Consumer<String> search) {
 		this.search = search;
 	}
+	
+	@Override
+	public void requestFocus() {
+		field.requestFocus();
+	}
 
 	@Override
 	public void applyStyle(Style style) {

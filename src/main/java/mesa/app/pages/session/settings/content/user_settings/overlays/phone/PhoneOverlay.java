@@ -41,6 +41,7 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		content = new EnterPhone(owner);
 
 		verify = new VerifyPhone(owner);
+		verify.setDisable(true);
 
 		Runnable onInvalid = isoPhone::showError;
 		Runnable onValid = isoPhone::showNormal;
@@ -80,6 +81,9 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		});
 
 		Runnable next = () -> {
+			verify.setDisable(false);
+			content.setDisable(true);
+			
 			verify.clear();
 
 			isoPhone.showSms();
@@ -95,6 +99,9 @@ public class PhoneOverlay extends Overlay implements Styleable {
 		};
 
 		Runnable previous = () -> {
+			verify.setDisable(true);
+			content.setDisable(false);
+			
 			isoPhone.showNormal();
 			content.setMouseTransparent(false);
 			verify.setMouseTransparent(true);

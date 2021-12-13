@@ -1,18 +1,26 @@
 package mesa.gui.controls.scroll;
 
+import java.lang.ref.WeakReference;
+import java.util.function.Consumer;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import mesa.gui.NodeUtils;
 
 public class ScrollBar extends StackPane {
 	private Rectangle track;
@@ -28,7 +36,7 @@ public class ScrollBar extends StackPane {
 		double effectiveWidth = width - padding * 2;
 
 		StackPane.setAlignment(this, Pos.CENTER_RIGHT);
-		
+
 		setPadding(new Insets(padding));
 		position = new SimpleDoubleProperty(0);
 
@@ -78,6 +86,41 @@ public class ScrollBar extends StackPane {
 		prefHeightProperty().bind(parent.heightProperty());
 
 		visibleProperty().bind(thumb.heightProperty().lessThan(track.heightProperty()));
+
+		Consumer<Node> onFocus = node -> {
+			Bounds b = child.sceneToLocal(node.localToScene(node.getBoundsInLocal()));
+			double minY = b.getMinY();
+			double maxY = b.getMaxY();
+
+			double minDY = -child.getTranslateY();
+			double maxDY = minDY + parent.getHeight();
+			if (minDY > minY) {
+				setPos(minY / (child.getHeight() - parent.getHeight()));
+			} else if (maxDY < maxY) {
+				setPos((maxY - parent.getHeight()) / (child.getHeight() - parent.getHeight()));
+			}
+		};
+
+		WeakReference<Node> weakChild = new WeakReference<>(child);
+		
+		child.sceneProperty().addListener(new ChangeListener<Scene>() {
+			public void changed(ObservableValue<? extends Scene> obs, Scene oldScene, Scene scene) {
+				if (scene != null) {
+					child.sceneProperty().removeListener(this);
+					scene.focusOwnerProperty().addListener(new ChangeListener<Node>() {
+						public void changed(ObservableValue<? extends Node> obn, Node oldFocused, Node focused) {
+							if (weakChild.get() == null) {
+								scene.focusOwnerProperty().removeListener(this);
+							} else {								
+								if(NodeUtils.isParentOf(focused, child)) {
+									onFocus.accept(focused);
+								}
+							}
+						}
+					});
+				}
+			}
+		});
 	}
 
 	public void scrollByPixels(double pixels, double relativeTo) {
@@ -106,7 +149,7 @@ public class ScrollBar extends StackPane {
 	public void setTrackFill(Paint fill) {
 		track.setFill(fill);
 	}
-	
+
 	public void top() {
 		setPos(0);
 	}

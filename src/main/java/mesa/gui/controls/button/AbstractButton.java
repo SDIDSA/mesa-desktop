@@ -18,7 +18,6 @@ import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -26,9 +25,9 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.util.Duration;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Loading;
-import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -38,7 +37,9 @@ public class AbstractButton extends StackPane implements Styleable {
 	private DoubleProperty radiusProperty;
 	private Timeline enter;
 	private Timeline exit;
-	private Runnable action;
+	
+	private Runnable mouseAction;
+	private Runnable keyAction;
 
 	private Loading load;
 
@@ -83,7 +84,7 @@ public class AbstractButton extends StackPane implements Styleable {
 		setOnMouseExited(this::onExit);
 
 		setOnMouseClicked(this::fire);
-		setOnKeyPressed(this::fire);
+		setOnKeyReleased(this::fire);
 
 		ColorAdjust bw = new ColorAdjust();
 		bw.setSaturation(-.5);
@@ -156,16 +157,16 @@ public class AbstractButton extends StackPane implements Styleable {
 	}
 
 	private void fire(MouseEvent dismiss) {
-		fire();
+		fire(mouseAction);
 	}
 
 	private void fire(KeyEvent e) {
 		if (e.getCode().equals(KeyCode.SPACE)) {
-			fire();
+			fire(keyAction);
 		}
 	}
 
-	public void fire() {
+	private void fire(Runnable action) {
 		if (isDisabled() || loading.get()) {
 			return;
 		}
@@ -173,9 +174,22 @@ public class AbstractButton extends StackPane implements Styleable {
 			action.run();
 		}
 	}
+	
+	public void fire() {
+		fire(keyAction);
+	}
 
 	public void setAction(Runnable action) {
-		this.action = action;
+		this.mouseAction = action;
+		this.keyAction = action;
+	}
+	
+	public void setMouseAction(Runnable mouseAction) {
+		this.mouseAction = mouseAction;
+	}
+	
+	public void setKeyAction(Runnable keyAction) {
+		this.keyAction = keyAction;
 	}
 
 	public void setTextFill(Paint fill) {
@@ -210,8 +224,7 @@ public class AbstractButton extends StackPane implements Styleable {
 	}
 
 	@Override
-	public void applyStyle(Style style) {
-		borderProperty().bind(Bindings.when(focusedProperty()).then(Borders.make(style.getTextLink(), radius))
-				.otherwise(Border.EMPTY));
+	public void applyStyle(Style style) {		
+		NodeUtils.focusBorder(this, style.getTextLink(), radius + 2);
 	}
 }

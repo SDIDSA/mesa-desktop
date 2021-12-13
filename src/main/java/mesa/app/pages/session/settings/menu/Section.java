@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.menu;
 
 import mesa.app.pages.session.settings.Settings;
+import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.TextTransform;
@@ -21,6 +22,7 @@ public class Section extends VBox implements Styleable {
 	public Section(Settings settings, String titleKey, boolean first) {
 
 		items = new VBox(2);
+		NodeUtils.nestedFocus(items);
 
 		if (titleKey != null) {
 			title = new Label(settings.getWindow(), titleKey, new Font(12, FontWeight.BOLD));
