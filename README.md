@@ -1,4 +1,5 @@
-# mesa-desktop
-The Desktop client for the Mesa Discord clone, written in java.
+## mesa-desktop
 
-This project is being developed on par with the [mesa-server](https://github.com/SDIDSA/mesa-server) project.
+The cross-platform desktop client for the Mesa Discord clone, written in Java using [javaFx](https://openjfx.io/).
+
+This project is part of the Mesa project, see the [SDIDSA/Mesa](https://github.com/SDIDSA/mesa) for more info.
