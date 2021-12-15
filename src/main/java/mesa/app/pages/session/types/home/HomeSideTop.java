@@ -7,7 +7,7 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.StackPane;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;

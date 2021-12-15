@@ -4,8 +4,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
+import mesa.gui.controls.label.keyed.Label;
+import mesa.gui.controls.label.unkeyed.Link;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -16,12 +16,12 @@ public class Credits extends Alert {
 	
 	public Credits(Pane owner, Window window) {
 		super(owner, window, AlertType.INFO);
-		setHead("About Mesa");
-		addLabel("Code is hosted at github ");
+		setHead("about");
+		addLabel("code_hosted");
 		addLink("SDIDSA/mesa-desktop");
 		setBodyAction(1, ()-> window.openLink("https://github.com/SDIDSA/mesa-desktop"));
 		
-		mostIcons = new Label(window, "Most icons on this app are from ", new Font(14));
+		mostIcons = new Label(window, "icons8_credits", new Font(14));
 		icons8 = new Link(window, "icons8", new Font(14));
 		icons8.setAction(()-> window.openLink("https://icons8.com"));
 		

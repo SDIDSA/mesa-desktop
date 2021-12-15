@@ -17,8 +17,8 @@ import mesa.app.component.input.TextInputField;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
+import mesa.gui.controls.label.keyed.KeyedLink;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
@@ -51,7 +51,7 @@ public class Register extends LoginSubPage {
 		haveAcc = new Label(window, "have_account", new Font(14));
 		haveAcc.setOpacity(.5);
 
-		Link login = new Link(window, "login", new Font(14));
+		KeyedLink login = new KeyedLink(window, "login", new Font(14));
 
 		bottom.getChildren().addAll(haveAcc, login);
 

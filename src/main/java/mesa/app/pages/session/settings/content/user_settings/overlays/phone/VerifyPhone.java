@@ -13,7 +13,7 @@ import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordOverlay;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 

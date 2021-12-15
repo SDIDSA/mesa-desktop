@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import org.json.JSONObject;
 
-import io.socket.client.Socket;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -17,7 +16,6 @@ import javafx.util.Duration;
 import mesa.app.pages.Page;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.DoubleParamFunc;
-import mesa.data.JsonUtils;
 import mesa.gui.controls.Loading;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.style.Style;
@@ -135,9 +133,6 @@ public class LoginPage extends Page {
 		});
 
 		DoubleParamFunc<JSONObject, Timeline, Void> onSuccess = (user, hide) -> {
-			Socket socket = window.getMainSocket();
-			socket.emit("user_sync_register", JsonUtils.make("user_id", user.getString("id"), "socket", socket.id()));
-
 			window.putData("user", user);
 			hide.setOnFinished(e -> window.loadPage(SessionPage.class));
 			hide.playFromStart();

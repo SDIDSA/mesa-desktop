@@ -12,9 +12,9 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.VerifyEmai
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
-import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;

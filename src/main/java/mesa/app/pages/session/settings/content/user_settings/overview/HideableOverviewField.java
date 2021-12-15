@@ -9,9 +9,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import mesa.app.pages.session.settings.Settings;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
 import mesa.gui.controls.label.TextTransform;
+import mesa.gui.controls.label.keyed.KeyedLink;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 
 public class HideableOverviewField extends OverviewField {
@@ -33,7 +33,7 @@ public class HideableOverviewField extends OverviewField {
 		this.value.setFont(new Font(16).getFont());
 		HBox.setMargin(this.value, new Insets(0, 4, 0, 0));
 
-		Link reveal = new Link(settings.getWindow(), "overview_reveal", new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
+		KeyedLink reveal = new KeyedLink(settings.getWindow(), "overview_reveal", new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
 		reveal.setAction(() -> hidden.set(!hidden.get()));
 

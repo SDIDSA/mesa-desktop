@@ -13,8 +13,8 @@ import mesa.api.Auth;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
 import mesa.gui.controls.label.MultiText;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 

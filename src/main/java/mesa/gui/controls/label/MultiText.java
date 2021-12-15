@@ -6,6 +6,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.keyed.KeyedLink;
+import mesa.gui.controls.label.keyed.KeyedTextNode;
+import mesa.gui.controls.label.keyed.Label;
+import mesa.gui.controls.label.unkeyed.Link;
+import mesa.gui.controls.label.unkeyed.Text;
+import mesa.gui.controls.label.unkeyed.TextNode;
 import mesa.gui.window.Window;
 
 public class MultiText extends TextFlow {
@@ -29,14 +35,18 @@ public class MultiText extends TextFlow {
 	public void setFill(Color fill) {
 		this.fill = fill;
 		nodes.forEach(node -> {
-			if(node instanceof Label label) {
+			if(node instanceof Text label) {
 				label.setFill(fill);
 			}
 		});
 	}
 
 	public void setKey(int index, String key) {
-		nodes.get(index).setKey(key);
+		if(nodes.get(index) instanceof KeyedTextNode node) {
+			node.setKey(key);
+		}else {
+			throw new IllegalArgumentException("the TextNode at " + index + " is not a KeyedTextNode");
+		}
 	}
 
 	public void setAction(int index, Runnable action) {
@@ -65,6 +75,10 @@ public class MultiText extends TextFlow {
 
 	public void addLink(String key, Font font) {
 		addNode(new Link(window, key, font));
+	}
+
+	public void addKeyedLink(String key, Font font) {
+		addNode(new KeyedLink(window, key, font));
 	}
 
 	public void addLink(String key) {

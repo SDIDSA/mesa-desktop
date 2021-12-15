@@ -1,4 +1,4 @@
-package mesa.gui.controls.label;
+package mesa.gui.controls.label.unkeyed;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -10,20 +10,20 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
 public class Link extends StackPane implements Styleable, TextNode {
-	private Label label;
+	protected Text label;
 
 	private Runnable action;
 
-	public Link(Window window, String key, Font font) {
-		super();
-		getStyleClass().addAll("link", key);
+	public Link(Window window, String val, Font font, boolean keyed) {
+		getStyleClass().addAll("link", val);
 
-		label = new Label(window, key, font);
+		label = keyed ? new Label(window, val, font):new Text(val, font);
 
 		label.underlineProperty().bind(hoverProperty());
 		getChildren().add(label);
@@ -48,11 +48,23 @@ public class Link extends StackPane implements Styleable, TextNode {
 		applyStyle(window.getStyl());
 	}
 
-	private void fire(MouseEvent dismiss) {
+	public Link(Window window, String key, boolean keyed) {
+		this(window, key, Font.DEFAULT, keyed);
+	}
+
+	public Link(Window window, String key, Font font) {
+		this(window, key, font, false);
+	}
+
+	public Link(Window window, String key) {
+		this(window, key, Font.DEFAULT);
+	}
+
+	protected void fire(MouseEvent dismiss) {
 		fire();
 	}
 
-	private void fire(KeyEvent e) {
+	protected void fire(KeyEvent e) {
 		if (e.getCode().equals(KeyCode.SPACE)) {
 			fire();
 		}
@@ -70,15 +82,6 @@ public class Link extends StackPane implements Styleable, TextNode {
 
 	public void setFont(Font font) {
 		label.setFont(font);
-	}
-
-	@Override
-	public void setKey(String key) {
-		label.setKey(key);
-	}
-
-	public Link(Window window, String key) {
-		this(window, key, Font.DEFAULT);
 	}
 
 	@Override

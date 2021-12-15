@@ -1,43 +1,28 @@
-package mesa.gui.controls.label;
+package mesa.gui.controls.label.keyed;
 
 import java.util.ArrayList;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.scene.Node;
-import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
 import mesa.gui.window.Window;
 
-public class Label extends Text implements Localized, TextNode {
+public class Label extends Text implements Localized, KeyedTextNode {
 	private Window window;
-
-	private TextTransform transform = TextTransform.NONE;
-
 	private String key;
-
 	private ArrayList<String> params = new ArrayList<>();
 
 	public Label(Window window, String key, Font font) {
-		super();
+		super(null, font);
 		this.window = window;
 		this.key = key;
-		setFont(font);
 		applyLocale(window.getLocale());
 	}
 
 	public Label(Window window, String key) {
 		this(window, key, Font.DEFAULT);
-	}
-
-	public void setFont(Font font) {
-		setFont(font.getFont());
-	}
-
-	public void setTransform(TextTransform transform) {
-		this.transform = transform;
-		setText(transform.apply(getText()));
 	}
 
 	public String getKey() {
@@ -59,11 +44,6 @@ public class Label extends Text implements Localized, TextNode {
 	}
 
 	@Override
-	public Node getNode() {
-		return this;
-	}
-
-	@Override
 	public void applyLocale(Locale locale) {
 		if (key != null && !key.isEmpty()) {
 			String val = locale.get(key);
@@ -72,7 +52,7 @@ public class Label extends Text implements Localized, TextNode {
 				param = (param.charAt(0) == '&' && param.length() > 1) ? locale.get(param.substring(1)) : param;
 				val = val.replace("{$" + i + "}", param);
 			}
-			setText(transform.apply(val));
+			set(val);
 		} else {
 			setText("");
 		}

@@ -17,8 +17,9 @@ import mesa.app.component.input.TextInputField;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
+import mesa.gui.controls.label.keyed.KeyedLink;
+import mesa.gui.controls.label.keyed.Label;
+import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.controls.space.Separator;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -37,8 +38,8 @@ public class Login extends LoginSubPage {
 
 	private Form form;
 
+	private Text placeholder;
 	
-	private Label placeholder;
 	public Login(Window window) {
 		HBox root = new HBox(32);
 		setRoot(root);
@@ -59,7 +60,7 @@ public class Login extends LoginSubPage {
 		TextInputField password = new TextInputField(window, "password", 414, true);
 		VBox.setMargin(password, new Insets(0, 0, 4, 0));
 
-		Link recover = new Link(window, "recover", new Font(14));
+		KeyedLink recover = new KeyedLink(window, "recover", new Font(14));
 		VBox.setMargin(recover, new Insets(0, 0, 20, 0));
 
 		HBox bottom = new HBox(5);
@@ -68,7 +69,7 @@ public class Login extends LoginSubPage {
 		needAcc = new Label(window, "need_account", new Font(14));
 		needAcc.setOpacity(.5);
 
-		Link register = new Link(window, "register", new Font(14));
+		KeyedLink register = new KeyedLink(window, "register", new Font(14));
 
 		bottom.getChildren().addAll(needAcc, register);
 
@@ -78,7 +79,7 @@ public class Login extends LoginSubPage {
 		right.setAlignment(Pos.CENTER);
 		right.setMinWidth(240);
 		
-		placeholder = new Label(window, "TODO : QR code Login");
+		placeholder = new Text("TODO : QR code Login");
 	
 		right.getChildren().add(placeholder);
 
@@ -96,7 +97,7 @@ public class Login extends LoginSubPage {
 			if (form.check()) {
 				loginButton.startLoading();
 
-				Auth.auth(email.getValue(), password.getValue(), result -> {
+				Auth.auth(email.getValue(), password.getValue(), window.getMainSocket().id(), result -> {
 					if (result.has("err")) {
 						form.applyErrors(result.getJSONArray("err"));
 					} else {

@@ -90,7 +90,6 @@ public class SessionPage extends Page {
 			afterTransition();
 			getChildren().remove(root);
 		});
-
 		hideSettings = new Timeline(
 				new KeyFrame(Duration.seconds(duration), new KeyValue(root.opacityProperty(), 1, inter),
 						new KeyValue(root.scaleXProperty(), 1, inter), new KeyValue(root.scaleYProperty(), 1, inter),

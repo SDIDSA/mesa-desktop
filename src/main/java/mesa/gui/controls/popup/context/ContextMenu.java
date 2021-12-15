@@ -108,8 +108,8 @@ public class ContextMenu extends PopupControl implements Styleable {
 		});
 	}
 
-	public void addMenuItem(String item, Runnable onAction, Color fill) {
-		ContextMenuItem i = new ContextMenuItem(this, item, fill);
+	public void addMenuItem(String item, Runnable onAction, Color fill, boolean keyed) {
+		ContextMenuItem i = new ContextMenuItem(this, item, fill, keyed);
 		i.setAction(onAction);
 
 		i.setOnMouseClicked(e -> i.fire());
@@ -119,16 +119,28 @@ public class ContextMenu extends PopupControl implements Styleable {
 		items.add(i);
 	}
 
+	public void addMenuItem(String item, Color fill, boolean keyed) {
+		addMenuItem(item, null, fill, keyed);
+	}
+
 	public void addMenuItem(String item, Color fill) {
-		addMenuItem(item, null, fill);
+		addMenuItem(item, fill, false);
+	}
+
+	public void addMenuItem(String item, Runnable onAction, boolean keyed) {
+		addMenuItem(item, onAction, null, keyed);
 	}
 
 	public void addMenuItem(String item, Runnable onAction) {
-		addMenuItem(item, onAction, null);
+		addMenuItem(item, onAction, false);
+	}
+
+	public void addMenuItem(String item, boolean keyed) {
+		addMenuItem(item, null, null, keyed);
 	}
 
 	public void addMenuItem(String item) {
-		addMenuItem(item, null, null);
+		addMenuItem(item, false);
 	}
 
 	public void separate() {

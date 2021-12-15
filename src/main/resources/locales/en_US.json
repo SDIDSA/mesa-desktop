@@ -1,4 +1,8 @@
 {
+	"about": "About Mesa",
+	"code_hosted": "Code is hosted at github ",
+	"icons8_credits": "Most icons on this app are from ",
+
 	"field_required": "This field is required",
 	"email_used": "Email is already registered",
 	"email_invalid": "Invalid Email Address",

@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.FontWeight;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.window.Window;
 
 public class Button extends AbstractButton {

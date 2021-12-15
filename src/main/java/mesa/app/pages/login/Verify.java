@@ -20,9 +20,9 @@ import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
 import mesa.gui.controls.label.TextTransform;
+import mesa.gui.controls.label.keyed.KeyedLink;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.style.Style;
@@ -56,8 +56,8 @@ public class Verify extends LoginSubPage {
 		code = new ConfCode(window, "verification_code", 8, 500);
 
 		HBox bottom = new HBox();
-		Link resend = new Link(window, "resend_code", new Font(14));
-		Link hide = new Link(window, "hide", new Font(14));
+		KeyedLink resend = new KeyedLink(window, "resend_code", new Font(14));
+		KeyedLink hide = new KeyedLink(window, "hide", new Font(14));
 
 		bottom.getChildren().addAll(resend, new ExpandingHSpace(), hide);
 
@@ -75,7 +75,7 @@ public class Verify extends LoginSubPage {
 		verifyNow = new Button(window, "verify_now", 500);
 		later = new Button(window, "verify_later", 500);
 
-		Link logout = new Link(window, "logout", new Font(14));
+		KeyedLink logout = new KeyedLink(window, "logout", new Font(14));
 
 		buttons.getChildren().addAll(verifyNow, later, logout);
 

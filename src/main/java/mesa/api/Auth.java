@@ -14,10 +14,11 @@ public class Auth {
 		
 	}
 	
-	public static void auth(String email, String password, Consumer<JSONObject> onResult) {
+	public static void auth(String email, String password, String socket, Consumer<JSONObject> onResult) {
 		API.asyncPost(API.Auth.LOGIN, "login with credentials", onResult,
 				new Param("email_phone", email),
-				new Param(PASSWORD, hashPassword(password)));
+				new Param(PASSWORD, hashPassword(password)),
+				new Param("socket", socket));
 	}
 
 	public static void register(String email, String username, String password, String birthDate,

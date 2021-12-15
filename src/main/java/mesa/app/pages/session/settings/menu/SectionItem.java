@@ -18,7 +18,7 @@ import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.SettingsContent;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.exception.ErrorHandler;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
