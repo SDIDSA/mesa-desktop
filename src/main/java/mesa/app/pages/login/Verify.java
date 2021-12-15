@@ -20,7 +20,6 @@ import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.keyed.KeyedLink;
 import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -149,11 +148,7 @@ public class Verify extends LoginSubPage {
 
 	public void loadData(JSONObject user) {
 		this.user = user;
-		info.addParam(0, hideMail(user.getString("email")));
-	}
-
-	private String hideMail(String email) {
-		return TextTransform.HIDE_EMAIL.apply(email);
+		info.addParam(0, user.getString("email"));
 	}
 
 	@Override
@@ -165,7 +160,7 @@ public class Verify extends LoginSubPage {
 		verifyButton.setFill(style.getAccent());
 		verifyNow.setTextFill(Color.WHITE);
 		verifyNow.setFill(style.getAccent());
-		later.setTextFill(Color.WHITE);
+		later.setTextFill(style.getTextNormal());
 		later.setFill(style.getBackgroundSecondaryAlt());
 	}
 }

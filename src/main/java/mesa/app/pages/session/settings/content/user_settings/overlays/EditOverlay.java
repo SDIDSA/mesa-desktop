@@ -4,7 +4,7 @@ import mesa.app.pages.session.SessionPage;
 
 public abstract class EditOverlay extends BasicOverlay {
 
-	protected EditOverlay(SessionPage session, String editWhat) {
+	protected EditOverlay(SessionPage session, String editWhat, boolean fem) {
 		super(session);
 		
 		head.setKey("change_attr");
@@ -12,5 +12,10 @@ public abstract class EditOverlay extends BasicOverlay {
 
 		subHead.setKey("enter_attr");
 		subHead.addParam(0, "&" + editWhat);
+		subHead.addParam(1, "&a_new_" + (fem ? "fem" : "mal"));
+	}
+	
+	protected EditOverlay(SessionPage session, String editWhat) {
+		this(session, editWhat, false);
 	}
 }

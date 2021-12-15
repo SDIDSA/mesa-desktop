@@ -21,6 +21,8 @@ public class IsoPhone extends LayerIcon {
 	private Timeline shake;
 
 	private ArrayList<Transition> transitions;
+	
+	private boolean colored = false;
 
 	public IsoPhone(double size) {
 		super(size, "ips", "ipf", "ipc", "ipe", "ipr", "ipm", "ipt", "ipi");
@@ -95,7 +97,12 @@ public class IsoPhone extends LayerIcon {
 	public void applyStyle(Style style) {
 		setFill(0, style.getBackgroundTertiary());
 		setFill(1, style.getInteractiveNormal());
-		setFill(2, style.getAccent());
+		
+		if(!colored) {
+			colored =true;
+			setFill(2, style.getAccent());
+		}
+		
 		setFill(3, style.getBackgroundFloating());
 		setFill(4, Color.WHITE);
 		setFill(5, Color.WHITE);

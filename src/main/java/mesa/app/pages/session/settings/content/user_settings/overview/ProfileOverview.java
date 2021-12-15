@@ -70,11 +70,9 @@ public class ProfileOverview extends StackPane implements Styleable {
 		userName = new Text();
 		userName.textProperty().bind(user.usernameProperty());
 		userName.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 20).getFont());
-		userName.setTranslateY(9);
 
 		id = new Text("#" + user.getId());
-		id.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 20).getFont());
-		id.setTranslateY(9);
+		id.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 16).getFont());
 
 		more = new ColorIcon("more", 24, true);
 		more.setCursor(Cursor.HAND);
@@ -96,7 +94,11 @@ public class ProfileOverview extends StackPane implements Styleable {
 		editUserProfile.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		editUserProfile.setTranslateY(9);
 
-		userInfo.getChildren().addAll(pfpCont, new FixedHSpace(10), userName, id, new FixedHSpace(8), more,
+		VBox nameId = new VBox(userName, id);
+		nameId.setAlignment(Pos.BOTTOM_LEFT);
+		nameId.setTranslateY(-13);
+		
+		userInfo.getChildren().addAll(pfpCont, new FixedHSpace(10), nameId, new FixedHSpace(8), more,
 				new ExpandingHSpace(), editUserProfile);
 
 		content.getChildren().addAll(userInfo, new FieldList(settings));

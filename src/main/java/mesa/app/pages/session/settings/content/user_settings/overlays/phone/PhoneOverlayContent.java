@@ -14,5 +14,6 @@ public class PhoneOverlayContent extends VBox {
 		setAlignment(Pos.BOTTOM_CENTER);
 		setPadding(new Insets(106, 16, 16, 16));
 		setMinHeight(310);
+		setMaxWidth(472);
 	}
 }

@@ -57,7 +57,6 @@ public class Settings extends StackPane implements Styleable {
 
 		content = new StackPane();
 		HBox.setHgrow(content, Priority.ALWAYS);
-		content.setPadding(new Insets(60, 40, 80, 40));
 		content.setMaxWidth(740);
 
 		sideBar = new SettingsMenu(this);

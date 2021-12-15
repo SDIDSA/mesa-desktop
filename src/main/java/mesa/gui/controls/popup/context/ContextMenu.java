@@ -97,10 +97,10 @@ public class ContextMenu extends PopupControl implements Styleable {
 
 		applyStyle(window.getStyl());
 	}
-	
+
 	public void install(Node node) {
-		node.addEventFilter(MouseEvent.MOUSE_PRESSED, e-> {
-			if(e.getButton() == MouseButton.SECONDARY) {
+		node.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+			if (e.getButton() == MouseButton.SECONDARY) {
 				setX(e.getScreenX() - 15);
 				setY(e.getScreenY() - 15);
 				show(owner);
@@ -119,28 +119,20 @@ public class ContextMenu extends PopupControl implements Styleable {
 		items.add(i);
 	}
 
-	public void addMenuItem(String item, Color fill, boolean keyed) {
-		addMenuItem(item, null, fill, keyed);
+	public void addMenuItem(String item, Runnable onAction, Color fill) {
+		addMenuItem(item, onAction, fill, true);
 	}
 
 	public void addMenuItem(String item, Color fill) {
-		addMenuItem(item, fill, false);
-	}
-
-	public void addMenuItem(String item, Runnable onAction, boolean keyed) {
-		addMenuItem(item, onAction, null, keyed);
+		addMenuItem(item, null, fill);
 	}
 
 	public void addMenuItem(String item, Runnable onAction) {
-		addMenuItem(item, onAction, false);
-	}
-
-	public void addMenuItem(String item, boolean keyed) {
-		addMenuItem(item, null, null, keyed);
+		addMenuItem(item, onAction, null);
 	}
 
 	public void addMenuItem(String item) {
-		addMenuItem(item, false);
+		addMenuItem(item, null, null);
 	}
 
 	public void separate() {
@@ -153,7 +145,7 @@ public class ContextMenu extends PopupControl implements Styleable {
 
 		root.getChildren().add(preSep);
 		separators.add(sep);
-		
+
 		applyStyle(owner.getStyl().get());
 	}
 
@@ -215,14 +207,14 @@ public class ContextMenu extends PopupControl implements Styleable {
 		root.setBackground(Backgrounds.make(style.getBackgroundFloating(), 5.0));
 		root.setBorder(Borders.make(style.getBackgroundFloating(), 4.0));
 
-		if(!separators.isEmpty()) {
+		if (!separators.isEmpty()) {
 			Background sepBac = Backgrounds.make(style.getBackgroundModifierAccent());
 			for (StackPane sep : separators) {
 				sep.setBackground(sepBac);
 			}
 		}
 	}
-	
+
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);

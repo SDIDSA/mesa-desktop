@@ -25,7 +25,7 @@ public class TellUsMorePage extends MultiOverlayPage {
 
 		skip = new MultiText(owner.getWindow());
 		skip.addLabel("not_sure", font);
-		skip.addLink("skip_question", font);
+		skip.addKeyedLink("skip_question", font);
 		skip.addLabel("for_now", font);
 		
 		skip.center();

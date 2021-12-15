@@ -9,15 +9,19 @@ public class KeyValueEditOverlay extends EditOverlay {
 	private TextInputField field;
 	private TextInputField password;
 
-	public KeyValueEditOverlay(SessionPage session, String key) {
-		super(session, key);
+	public KeyValueEditOverlay(SessionPage session, String key, boolean fem) {
+		super(session, key, fem);
 		field = new TextInputField(session.getWindow(), key, 408);
 		password = new TextInputField(session.getWindow(), "current_password", 408, true);
 		center.getChildren().addAll(field, password);
-		
+
 		form.addAll(field, password);
-		
+
 		addOnShown(field::requestFocus);
+	}
+
+	public KeyValueEditOverlay(SessionPage session, String key) {
+		this(session, key, false);
 	}
 
 	public String getValue() {

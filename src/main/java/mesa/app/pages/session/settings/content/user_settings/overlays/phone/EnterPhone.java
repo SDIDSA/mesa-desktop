@@ -24,7 +24,7 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 	private Label head;
 	private Label smsCodeNode;
 	private MultiText phoneUse;
-	private Label invalid;
+	private MultiText invalid;
 
 	private PhoneInput input;
 
@@ -48,7 +48,8 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 		phoneUse.addLabel("one_account", new Font(15, FontWeight.BOLD));
 		phoneUse.addLabel("phone_use_post", new Font(15));
 
-		invalid = new Label(owner.getWindow(), "phone_invalid", new Font(15));
+		invalid = new MultiText(owner.getWindow(), "phone_invalid", new Font(15));
+		invalid.center();
 		invalid.setFill(Colors.Error);
 		VBox.setMargin(invalid, new Insets(0, 0, 20, 0));
 

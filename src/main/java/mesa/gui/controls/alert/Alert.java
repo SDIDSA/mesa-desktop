@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.FontWeight;
 import mesa.app.pages.Page;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
@@ -54,7 +53,7 @@ public class Alert extends Overlay implements Styleable {
 		root.setPadding(new Insets(16));
 		root.setPickOnBounds(false);
 
-		head = new Label(window, "", new Font(20, FontWeight.BOLD));
+		head = new Label(window, "", new Font(Font.DEFAULT_FAMILY_MEDIUM, 20));
 		head.setMouseTransparent(true);
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 

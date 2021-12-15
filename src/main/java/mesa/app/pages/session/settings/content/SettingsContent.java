@@ -17,6 +17,7 @@ public class SettingsContent extends VBox implements Styleable {
 	private ArrayList<Separator> separators;
 
 	public SettingsContent() {
+		setPadding(new Insets(60, 40, 80, 40));
 		separators = new ArrayList<>();
 	}
 

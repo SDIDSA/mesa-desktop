@@ -29,7 +29,9 @@ public class Section extends VBox implements Styleable {
 			title.setTransform(TextTransform.UPPERCASE);
 			StackPane titCont = new StackPane(title);
 			titCont.setAlignment(Pos.CENTER_LEFT);
-			titCont.setPadding(new Insets(first ? 0 : 6, 10, 6, 10));
+			titCont.setPadding(new Insets(first ? 0 : 6, 0, 6, 10));
+			titCont.setMaxWidth(192);
+			titCont.setMinWidth(0);
 			getChildren().add(titCont);
 		}
 

@@ -52,7 +52,10 @@ public class ConfCode extends InputField {
 			}
 		});
 
-		setOnMousePressed(e -> requestFocus());
+		setOnMousePressed(e -> {
+			e.consume();
+			requestFocus();
+		});
 
 		setOnKeyTyped(e -> {
 			char c = e.getCharacter().charAt(0);

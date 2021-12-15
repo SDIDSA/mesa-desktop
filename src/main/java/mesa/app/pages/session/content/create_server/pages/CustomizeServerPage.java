@@ -57,7 +57,7 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 		guidelines = new MultiText(owner.getWindow());
 		guidelines.addLabel("pre_guidelines", new Font(12));
-		guidelines.addLink("guidelines", new Font(Font.DEFAULT_FAMILY_MEDIUM, 12));
+		guidelines.addKeyedLink("guidelines", new Font(Font.DEFAULT_FAMILY_MEDIUM, 12));
 
 		center.getChildren().addAll(icon, field, guidelines);
 

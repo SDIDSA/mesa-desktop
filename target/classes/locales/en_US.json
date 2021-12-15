@@ -8,7 +8,7 @@
 	"email_invalid": "Invalid Email Address",
 	"password_short": "Must be 6 or more in length",
 	"username_short": "Invalid username (too short)",
-	"username_invalid_char" : "invalid char {$0}",
+	"username_invalid_char" : "invalid character {$0}",
 	"birth_date_invalid": "Please enter a valid date of birth",
 	"login_invalid": "Login or password is invalid.",
 	"incorrect_password": "Incorrect password",
@@ -140,7 +140,7 @@
 	"overview_empty": "You haven't added a {$0} yet.",
 	
 	"change_attr": "Change your {$0}",
-	"enter_attr": "Enter a new {$0} and your existing password",
+	"enter_attr": "Enter {$1} {$0} and your existing password",
 	"current_password": "Current Password",
 	"cancel": "Cancel",
 	"done": "Done",
@@ -180,5 +180,10 @@
 	"delete_account": "Delete Account",
 	
 	"disable_warning": "Are you sure that you want to disable your account? This will immediately log you out and make your account inaccessible to anyone.",
-	"delete_warning": "Are you sure that you want to delete your account? This will immediately log you out of your account and you will not be able to log in again."
+	"delete_warning": "Are you sure that you want to delete your account? This will immediately log you out of your account and you will not be able to log in again.",
+
+	"a_new_fem": "a new",
+	"a_new_mal": "a new",
+	
+	"get_black_to_modify_id": "Get Black Mesa to modify your tag!"
 }

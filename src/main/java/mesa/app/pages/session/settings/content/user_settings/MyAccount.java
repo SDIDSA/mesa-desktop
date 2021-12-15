@@ -33,7 +33,7 @@ public class MyAccount extends SettingsContent {
 	private Label twoFactAuthHead;
 	private MultiText twoFactAuthBody;
 	private Label accountRemovalHead;
-	private Label accountRemovalBody;
+	private MultiText accountRemovalBody;
 
 	private Button changePass;
 	private Button enable2fa;
@@ -108,7 +108,7 @@ public class MyAccount extends SettingsContent {
 		accountRemovalHead.setTransform(TextTransform.UPPERCASE);
 		accountRemovalHead.setFont(twoFactAuthHead.getFont());
 
-		accountRemovalBody = new Label(window, "disable_note", new Font(13));
+		accountRemovalBody = new MultiText(window, "disable_note", new Font(13));
 
 		HBox accountButtons = new HBox(16);
 

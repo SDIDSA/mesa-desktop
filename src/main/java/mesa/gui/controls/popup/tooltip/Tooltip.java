@@ -131,16 +131,20 @@ public class Tooltip extends PopupControl implements Styleable {
 		text.setText(txt);
 	}
 
+	private void position(Node node) {
+		double[] pos = direction.calcPos(this, node, offset);
+
+		double px = pos[0];
+		double py = pos[1];
+
+		setX(px);
+		setY(py);
+	}
+	
 	protected void showPop(Node node) {
 		fadeOut.stop();
 		Runnable adjust = () -> {			
-			double[] pos = direction.calcPos(this, node, offset);
-
-			double px = pos[0];
-			double py = pos[1];
-
-			setX(px);
-			setY(py);
+			position(node);
 			fadeIn.playFromStart();
 		};
 		if (isShowing()) {

@@ -33,9 +33,13 @@ public class HideableOverviewField extends OverviewField {
 		this.value.setFont(new Font(16).getFont());
 		HBox.setMargin(this.value, new Insets(0, 4, 0, 0));
 
-		KeyedLink reveal = new KeyedLink(settings.getWindow(), "overview_reveal", new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
+		KeyedLink reveal = new KeyedLink(settings.getWindow(), "overview_reveal",
+				new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
-		reveal.setAction(() -> hidden.set(!hidden.get()));
+		reveal.setAction(() -> {
+			reveal.setKey(hidden.get() ? "overview_hide" : "overview_reveal");
+			hidden.set(!hidden.get());
+		});
 
 		value.textProperty().bind(
 				Bindings.createStringBinding(() -> hidden.get() ? hide.apply(full.get()) : full.get(), hidden, full));

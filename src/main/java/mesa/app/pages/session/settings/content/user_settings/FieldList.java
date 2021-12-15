@@ -23,6 +23,7 @@ import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.popup.Direction;
+import mesa.gui.controls.popup.tooltip.KeyedTooltip;
 import mesa.gui.controls.popup.tooltip.Tooltip;
 import mesa.gui.controls.space.FixedHSpace;
 import mesa.gui.factory.Backgrounds;
@@ -56,7 +57,7 @@ public class FieldList extends VBox implements Styleable {
 				TextTransform.HIDE_PHONE);
 
 		KeyValueEditOverlay editUsername = new KeyValueEditOverlay(settings.getSession(), "username");
-		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings.getSession(), "email_address");
+		KeyValueEditOverlay editEmail = new KeyValueEditOverlay(settings.getSession(), "email_address", true);
 
 		editUsername.addOnShown(0, () -> editUsername.setValue(user.getUsername()));
 
@@ -76,7 +77,7 @@ public class FieldList extends VBox implements Styleable {
 
 		helpEditTag.setFocusTraversable(true);
 
-		Tooltip tip = new Tooltip(settings.getWindow(), "Get Black Mesa to modify your tag!", Direction.LEFT);
+		Tooltip tip = new KeyedTooltip(settings.getWindow(), "get_black_to_modify_id", Direction.LEFT);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		Tooltip.install(helpEditTag, tip);
 

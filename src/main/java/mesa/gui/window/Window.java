@@ -48,7 +48,7 @@ public class Window extends Stage {
 	private AppPreRoot root;
 
 	private Application app;
-	
+
 	public Window(Application app, Style style, Locale locale) {
 		super();
 		this.app = app;
@@ -76,13 +76,17 @@ public class Window extends Stage {
 					this.style.set(Style.LIGHT);
 				} else if (e.getCode().equals(KeyCode.D)) {
 					this.style.set(Style.DARK);
+				} else if (e.getCode().equals(KeyCode.F)) {
+					this.locale.set(Locale.FR_FR);
+				} else if (e.getCode().equals(KeyCode.E)) {
+					this.locale.set(Locale.EN_US);
 				}
 			}
 		});
 
 		setScene(scene);
-		
-		setOnShown(e-> {
+
+		setOnShown(e -> {
 			root.requestFocus();
 		});
 
@@ -95,7 +99,7 @@ public class Window extends Stage {
 	public void openLink(String link) {
 		app.getHostServices().showDocument(link);
 	}
-	
+
 	public void addOnClose(Runnable runnable) {
 		onClose.add(runnable);
 	}
