@@ -31,10 +31,10 @@ public class ColorIcon extends StackPane implements Styleable {
 
 		if (focusable) {
 			setFocusTraversable(true);
-
-			setOnMouseClicked(this::fire);
-			setOnKeyPressed(this::fire);
 		}
+
+		setOnMouseClicked(this::fire);
+		setOnKeyPressed(this::fire);
 
 		getChildren().addAll(overlay);
 	}

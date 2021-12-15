@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationExtension;
-import org.testfx.framework.junit5.Init;
 import org.testfx.framework.junit5.Start;
 import org.testfx.framework.junit5.Stop;
 import org.testfx.util.WaitForAsyncUtils;
@@ -23,17 +22,11 @@ import javafx.stage.Stage;
 import mesa.app.component.input.InputField;
 import mesa.app.pages.login.LoginPage;
 import mesa.gui.controls.button.AbstractButton;
-import mesa.gui.locale.Locale;
-import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 @ExtendWith(ApplicationExtension.class)
 class RegisterTest {
 
-	@Init
-	private void init() throws TimeoutException {
-		FxToolkit.registerStage(()-> new Window(Style.DARK, Locale.EN_US));
-	}
 	@Start
 	private void start(Stage stage) {
 		Window window = (Window) stage;

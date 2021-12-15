@@ -188,7 +188,7 @@ public class SessionPage extends Page {
 	public void logoutPrompt() {
 		Alert confirm = new Alert(this, AlertType.LOGOUT);
 		confirm.setHead("log_out");
-		confirm.setBody("logout_confirm");
+		confirm.addLabel("logout_confirm");
 		confirm.addAction(ButtonType.LOGOUT, this::logout);
 		confirm.show();
 	}

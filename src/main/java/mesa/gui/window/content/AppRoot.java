@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import mesa.app.pages.Page;
 import mesa.app.utils.Colors;
+import mesa.gui.controls.alert.Alert;
+import mesa.gui.controls.alert.Credits;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.window.Window;
@@ -55,6 +57,10 @@ public class AppRoot extends BorderPane {
 
 		bar = new AppBar(window, helper);
 		setTop(bar);
+		
+		Alert credits = new Credits(parent, window);
+		
+		bar.setOnInfo(credits::show);
 	}
 
 	public void setFill(Paint fill) {

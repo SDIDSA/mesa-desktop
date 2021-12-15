@@ -33,8 +33,7 @@ public class HideableOverviewField extends OverviewField {
 		this.value.setFont(new Font(16).getFont());
 		HBox.setMargin(this.value, new Insets(0, 4, 0, 0));
 
-		Link reveal = new Link(settings.getWindow(), "overview_reveal");
-		reveal.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
+		Link reveal = new Link(settings.getWindow(), "overview_reveal", new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
 		reveal.setAction(() -> hidden.set(!hidden.get()));
 

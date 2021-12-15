@@ -7,20 +7,23 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextFlow;
 import mesa.app.pages.Page;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
+import mesa.gui.window.Window;
 
 public class Alert extends Overlay implements Styleable {
 	private StackPane preRoot;
@@ -30,13 +33,12 @@ public class Alert extends Overlay implements Styleable {
 	protected VBox root;
 
 	private Label head;
-	private Label body;
+	private MultiText body;
 
 	private EnumMap<ButtonType, Runnable> actions;
 
-	public Alert(Page page, AlertType type, double width) {
-		super(page);
-
+	public Alert(Pane owner, Window window , AlertType type, double width) {
+		super(owner, window);
 		preRoot = new StackPane();
 		preRoot.setAlignment(Pos.TOP_RIGHT);
 		preRoot.setMaxWidth(width);
@@ -45,24 +47,22 @@ public class Alert extends Overlay implements Styleable {
 		closeIcon.setPadding(8);
 		closeIcon.setAction(this::hide);
 		closeIcon.setCursor(Cursor.HAND);
-		closeIcon.applyStyle(page.getWindow().getStyl());
+		closeIcon.applyStyle(window.getStyl());
 		StackPane.setMargin(closeIcon, new Insets(10));
 
 		root = new VBox();
 		root.setPadding(new Insets(16));
 		root.setPickOnBounds(false);
 
-		head = new Label(page.getWindow(), "", new Font(20, FontWeight.BOLD));
+		head = new Label(window, "", new Font(20, FontWeight.BOLD));
 		head.setMouseTransparent(true);
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 
-		body = new Label(page.getWindow(), "", new Font(15));
+		body = new MultiText(window);
+		body.setLineSpacing(5);
+		body.setMinHeight(60);
 
-		TextFlow preBody = new TextFlow(body);
-		preBody.setLineSpacing(5);
-		preBody.setMinHeight(60);
-
-		root.getChildren().addAll(head, preBody);
+		root.getChildren().addAll(head, body);
 
 		preRoot.getChildren().addAll(closeIcon, root);
 
@@ -88,11 +88,19 @@ public class Alert extends Overlay implements Styleable {
 
 		setContent(preRoot, bottom);
 
-		applyStyle(page.getWindow().getStyl());
+		applyStyle(window.getStyl());
 	}
-
-	public void addAction(ButtonType type, Runnable action) {
-		actions.put(type, action);
+	
+	public void addToBody(Node...node) {
+		root.getChildren().addAll(node);
+	}
+	
+	public Alert(Page page, AlertType type, double width) {
+		this(page, page.getWindow(), type, width);
+	}
+	
+	public Alert(Pane owner, Window window, AlertType type) {
+		this(owner, window, type, 440);
 	}
 	
 	public Alert(Page page, AlertType type) {
@@ -103,12 +111,28 @@ public class Alert extends Overlay implements Styleable {
 		this(page, AlertType.DEFAULT, 440);
 	}
 
+	public void addAction(ButtonType type, Runnable action) {
+		actions.put(type, action);
+	}
+
 	public void setHead(String key) {
 		head.setKey(key);
 	}
 
-	public void setBody(String key) {
-		body.setKey(key);
+	public void addLabel(String key) {
+		body.addLabel(key, new Font(15));
+	}
+	
+	public void addLink(String key) {
+		body.addLink(key, new Font(15));
+	}
+	
+	public void setBodyAction(int index, Runnable action) {
+		body.setAction(index, action);
+	}
+	
+	public void centerBody() {
+		body.center();
 	}
 
 	@Override

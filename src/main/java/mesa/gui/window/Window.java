@@ -19,6 +19,7 @@ import java.util.HashMap;
 import org.json.JSONObject;
 
 import io.socket.client.Socket;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
@@ -46,8 +47,11 @@ public class Window extends Stage {
 
 	private AppPreRoot root;
 
-	public Window(Style style, Locale locale) {
+	private Application app;
+	
+	public Window(Application app, Style style, Locale locale) {
 		super();
+		this.app = app;
 		this.style = new SimpleObjectProperty<>(style);
 		this.locale = new SimpleObjectProperty<>(locale);
 
@@ -88,6 +92,10 @@ public class Window extends Stage {
 		});
 	}
 
+	public void openLink(String link) {
+		app.getHostServices().showDocument(link);
+	}
+	
 	public void addOnClose(Runnable runnable) {
 		onClose.add(runnable);
 	}

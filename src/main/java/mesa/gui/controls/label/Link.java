@@ -3,6 +3,7 @@ package mesa.gui.controls.label;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -13,7 +14,7 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class Link extends StackPane implements Styleable {
+public class Link extends StackPane implements Styleable, TextNode {
 	private Label label;
 
 	private Runnable action;
@@ -67,16 +68,22 @@ public class Link extends StackPane implements Styleable {
 		this.action = action;
 	}
 
-	public void setKey(String key) {
-		label.setKey(key);
-	}
-
 	public void setFont(Font font) {
 		label.setFont(font);
 	}
 
+	@Override
+	public void setKey(String key) {
+		label.setKey(key);
+	}
+
 	public Link(Window window, String key) {
 		this(window, key, Font.DEFAULT);
+	}
+
+	@Override
+	public Node getNode() {
+		return this;
 	}
 
 	@Override

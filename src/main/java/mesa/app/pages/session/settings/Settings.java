@@ -86,6 +86,8 @@ public class Settings extends StackPane implements Styleable {
 
 		getChildren().addAll(root, mainSb);
 
+		setOnMousePressed(e-> requestFocus());
+		
 		addEventFilter(KeyEvent.KEY_PRESSED, e-> {
 			if(e.getCode().equals(KeyCode.ESCAPE)) {
 				session.hideSettings();

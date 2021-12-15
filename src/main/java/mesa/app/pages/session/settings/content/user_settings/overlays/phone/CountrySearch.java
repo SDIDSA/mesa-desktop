@@ -55,7 +55,7 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 
 		icon = new SearchClearIcon(12);
 		icon.setTranslateX(-6);
-		icon.setOnMouseClicked(e -> field.clear());
+		icon.setOnClear(field::clear);
 
 		getChildren().addAll(field, icon);
 	}
@@ -83,6 +83,7 @@ public class CountrySearch extends StackPane implements Styleable, Localized {
 				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
 
 		icon.setFill(tx);
+		icon.applyStyle(style);
 	}
 
 	@Override

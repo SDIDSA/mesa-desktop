@@ -24,7 +24,6 @@ public class AppBarButton extends ColorIcon implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		fillProperty().unbind();
 		fillProperty()
 				.bind(Bindings.when(hoverProperty()).then(style.getInteractiveHover()).otherwise(style.getInteractiveNormal()));
 	}

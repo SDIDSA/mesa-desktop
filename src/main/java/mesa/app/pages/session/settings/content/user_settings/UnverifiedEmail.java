@@ -6,7 +6,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextFlow;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.user_settings.overlays.VerifyEmailOverlay;
@@ -14,6 +13,7 @@ import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.factory.Backgrounds;
@@ -24,7 +24,7 @@ import mesa.gui.style.Styleable;
 public class UnverifiedEmail extends VBox implements Styleable {
 	private HBox root;
 	private Label head;
-	private Label body;
+	private MultiText body;
 	private Button resend;
 	private Button verify;
 
@@ -40,9 +40,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		head = new Label(settings.getWindow(), "unverified_email", new Font(12, FontWeight.BOLD));
 		head.setTransform(TextTransform.UPPERCASE);
 
-		body = new Label(settings.getWindow(), "email_verification_warning", new Font(13));
-		TextFlow preBody = new TextFlow();
-		preBody.getChildren().add(body);
+		body = new MultiText(settings.getWindow(), "email_verification_warning", new Font(13));
 
 		resend = new Button(settings.getWindow(), "resend_verification_email", 3.0, 16, 32);
 		resend.setFont(new Font(13, FontWeight.BOLD));
@@ -73,7 +71,7 @@ public class UnverifiedEmail extends VBox implements Styleable {
 		
 		buttons.getChildren().addAll(resend, verify);
 		
-		right.getChildren().addAll(head, new FixedVSpace(8), preBody, new FixedVSpace(18), buttons);
+		right.getChildren().addAll(head, new FixedVSpace(8), body, new FixedVSpace(18), buttons);
 
 		root.getChildren().addAll(icon, right);
 

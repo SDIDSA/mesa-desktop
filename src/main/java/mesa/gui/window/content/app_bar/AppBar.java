@@ -12,11 +12,12 @@ import mesa.gui.window.Window;
 import mesa.gui.window.helpers.MoveResizeHelper;
 
 public class AppBar extends HBox implements Styleable {
+	private AppBarButton info;
 	private ColorIcon icon;
 
 	public AppBar(Window window, MoveResizeHelper helper) {
-		setPadding(new Insets(0, 4, 0, 10));
-		setMinHeight(21);
+		setPadding(new Insets(0, 5, 0, 10));
+		setMinHeight(23);
 		setAlignment(Pos.CENTER);
 
 		icon = new ColorIcon("mesa", 10);
@@ -26,15 +27,18 @@ public class AppBar extends HBox implements Styleable {
 		buttons.setAlignment(Pos.CENTER);
 
 		AppBarButton minimize = new AppBarButton(window, "minimize");
-		minimize.setOnMouseClicked(e -> window.setIconified(true));
+		minimize.setAction(() -> window.setIconified(true));
 
 		AppBarButton maxRest = new AppBarButton(window, "maximize");
-		maxRest.setOnMouseClicked(e -> window.maxRestore());
+		maxRest.setAction(window::maxRestore);
 
 		AppBarButton exit = new AppBarButton(window, "close");
-		exit.setOnMouseClicked(e -> window.close());
+		exit.setAction(window::close);
 
-		buttons.getChildren().addAll(minimize, maxRest, exit);
+		info = new AppBarButton(window, "info");
+		HBox.setMargin(info, new Insets(0, 8, 0, 0));
+		
+		buttons.getChildren().addAll(info, minimize, maxRest, exit);
 
 		getChildren().addAll(icon, new ExpandingHSpace(), buttons);
 
@@ -45,6 +49,10 @@ public class AppBar extends HBox implements Styleable {
 		applyStyle(window.getStyl());
 	}
 
+	public void setOnInfo(Runnable action) {
+		info.setAction(action);
+	}
+	
 	@Override
 	public void applyStyle(Style style) {
 		icon.setFill(style.getInteractiveNormal());

@@ -9,6 +9,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.gui.controls.image.ColorIcon;
+import mesa.gui.style.Style;
 
 public class SearchClearIcon extends StackPane {
 	private ColorIcon search;
@@ -19,9 +20,12 @@ public class SearchClearIcon extends StackPane {
 	
 	public SearchClearIcon(double size) {
 		search = new ColorIcon("search", size);
-		clear = new ColorIcon("clear", size);
+		search.setMouseTransparent(true);
+		clear = new ColorIcon("clear", size, true);
+		clear.setCursor(Cursor.HAND);
 		
-		setMaxSize(search.getMaxWidth(), search.getMaxHeight());
+		clear.setPadding(4);
+		setMaxSize(clear.getMaxWidth(), clear.getMaxHeight());
 		
 		getChildren().addAll(clear, search);
 		
@@ -32,15 +36,19 @@ public class SearchClearIcon extends StackPane {
 	}
 	
 	public void search() {
-		setCursor(Cursor.DEFAULT);
+		clear.setDisable(true);
 		showClear.stop();
 		showSearch.playFromStart();
 	}
 	
 	public void clear() {
-		setCursor(Cursor.HAND);
+		clear.setDisable(false);
 		showSearch.stop();
 		showClear.playFromStart();
+	}
+	
+	public void setOnClear(Runnable onClear) {
+		clear.setAction(onClear);
 	}
 	
 	private Timeline animate(ColorIcon hide, ColorIcon show, int by) {
@@ -56,5 +64,9 @@ public class SearchClearIcon extends StackPane {
 	public void setFill(Color fill) {
 		search.setFill(fill);
 		clear.setFill(fill);
+	}
+	
+	public void applyStyle(Style style) {
+		clear.applyStyle(style);
 	}
 }

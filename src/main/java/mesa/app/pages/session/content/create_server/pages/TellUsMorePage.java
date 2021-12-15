@@ -3,22 +3,17 @@ package mesa.app.pages.session.content.create_server.pages;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
-import mesa.gui.controls.label.Label;
-import mesa.gui.controls.label.Link;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.style.Style;
 
 public class TellUsMorePage extends MultiOverlayPage {
 
 	private Button back;
 
-	private Label preSkip;
-	private Link skip;
-	private Label postSkip;
+	private MultiText skip;
 
 	public TellUsMorePage(MultiOverlay owner) {
 		super(owner, "server_tell_us_more", "server_scale");
@@ -27,20 +22,21 @@ public class TellUsMorePage extends MultiOverlayPage {
 		center.setPadding(new Insets(0, 16, 16, 16));
 
 		Font font = new Font(14);
-		preSkip = new Label(owner.getWindow(), "not_sure", font);
-		skip = new Link(owner.getWindow(), "skip_question", font);
-		postSkip = new Label(owner.getWindow(), "for_now", font);
 
-		TextFlow textLine = new TextFlow(preSkip, skip, postSkip);
-		textLine.setTextAlignment(TextAlignment.CENTER);
-		VBox.setMargin(textLine, new Insets(10, 0, 2, 0));
+		skip = new MultiText(owner.getWindow());
+		skip.addLabel("not_sure", font);
+		skip.addLink("skip_question", font);
+		skip.addLabel("for_now", font);
+		
+		skip.center();
+		VBox.setMargin(skip, new Insets(10, 0, 2, 0));
 		
 		center.getChildren().addAll(
 				new ServerOption(owner.getWindow(), "for_me_and_friends", "friends2", "friends1").setAction(owner::next),
 				new ServerOption(owner.getWindow(), "for_club_or_community", "commb", "commf").setAction(owner::next)
 			);
 
-		center.getChildren().add(textLine);
+		center.getChildren().add(skip);
 		
 		root.getChildren().add(center);
 
@@ -58,8 +54,8 @@ public class TellUsMorePage extends MultiOverlayPage {
 
 	@Override
 	public void applyStyle(Style style) {
-		preSkip.setFill(style.getHeaderSecondary());
-		postSkip.setFill(style.getHeaderSecondary());
+		skip.setFill(style.getHeaderSecondary());
+		skip.setFill(style.getHeaderSecondary());
 		
 		back.setTextFill(style.getTextNormal());
 

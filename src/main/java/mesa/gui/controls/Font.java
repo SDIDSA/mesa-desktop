@@ -54,7 +54,7 @@ public class Font {
 		this(DEFAULT_FAMILY, size, weight, DEFAULT_POSTURE);
 	}
 
-	public Font() {
+	private Font() {
 		this(DEFAULT_FAMILY, DEFAULT_SIZE, DEFAULT_WEIGHT, DEFAULT_POSTURE);
 	}
 

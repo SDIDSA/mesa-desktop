@@ -10,6 +10,7 @@ import javafx.scene.CacheHint;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -20,7 +21,8 @@ import mesa.gui.factory.Backgrounds;
 import mesa.gui.window.Window;
 
 public class Overlay extends StackPane {
-	private Page owner;
+	private Pane owner;
+	private Window window;
 
 	private StackPane back;
 	private VBox content;
@@ -35,8 +37,9 @@ public class Overlay extends StackPane {
 
 	private boolean autoHide = true;
 
-	public Overlay(Page owner) {
+	public Overlay(Pane owner, Window window) {
 		this.owner = owner;
+		this.window = window;
 		
 		onShown = new ArrayList<>();
 		onShowing = new ArrayList<>();
@@ -75,6 +78,8 @@ public class Overlay extends StackPane {
 				hide();
 		});
 		
+		content.setOnMousePressed(e-> requestFocus());
+		
 		addEventFilter(KeyEvent.KEY_RELEASED, e-> {
 			if(e.getCode().equals(KeyCode.ESCAPE) && autoHide) {
 				hide();
@@ -82,6 +87,10 @@ public class Overlay extends StackPane {
 		});
 
 		getChildren().addAll(back, content);
+	}
+	
+	public Overlay(Page owner) {
+		this(owner, owner.getWindow());
 	}
 
 	public void setAutoHide(boolean autoHide) {
@@ -112,9 +121,7 @@ public class Overlay extends StackPane {
 		this.content.getChildren().setAll(cont);
 	}
 
-	public void show() {
-		owner.requestFocus();
-		
+	public void show() {		
 		hide.stop();
 		back.setOpacity(0);
 		content.setScaleX(.7);
@@ -125,6 +132,7 @@ public class Overlay extends StackPane {
 		}
 		show.playFromStart();
 		onShowing.forEach(Runnable::run);
+		requestFocus();
 	}
 
 	public void hide() {
@@ -143,11 +151,11 @@ public class Overlay extends StackPane {
 		return owner.getChildren().get(owner.getChildren().size() - 1);
 	}
 
-	public Page getOwner() {
+	public Pane getOwner() {
 		return owner;
 	}
 
 	public Window getWindow() {
-		return owner.getWindow();
+		return window;
 	}
 }

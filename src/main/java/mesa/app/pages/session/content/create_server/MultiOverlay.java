@@ -56,7 +56,6 @@ public class MultiOverlay extends Overlay implements Styleable {
 					clip.yProperty().bind(root.heightProperty().subtract(page.heightProp()).divide(2));
 				}
 			}
-			requestFocus();
 		});
 		
 		addOnHiding(() -> {

@@ -9,7 +9,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextFlow;
 import mesa.api.Auth;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.SettingsContent;
@@ -22,6 +21,7 @@ import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.layer_icon.LayerIcon;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.space.FixedVSpace;
 import mesa.gui.style.Style;
@@ -31,7 +31,7 @@ public class MyAccount extends SettingsContent {
 	private Label myAccountLab;
 	private Label passAuth;
 	private Label twoFactAuthHead;
-	private Label twoFactAuthBody;
+	private MultiText twoFactAuthBody;
 	private Label accountRemovalHead;
 	private Label accountRemovalBody;
 
@@ -76,10 +76,8 @@ public class MyAccount extends SettingsContent {
 		twoFactAuthHead = new Label(window, "2_fact_auth", new Font(12, FontWeight.BOLD));
 		twoFactAuthHead.setTransform(TextTransform.UPPERCASE);
 
-		twoFactAuthBody = new Label(window, "", new Font(13));
-		TextFlow preBody = new TextFlow();
-		preBody.setLineSpacing(4);
-		preBody.getChildren().add(twoFactAuthBody);
+		twoFactAuthBody = new MultiText(window, "", new Font(13));
+		twoFactAuthBody.setLineSpacing(4);
 
 		enable2fa = new Button(window, "2_fact_auth_enable", 3.0, 16, 32);
 		enable2fa.setFont(new Font(13, FontWeight.BOLD));
@@ -87,7 +85,7 @@ public class MyAccount extends SettingsContent {
 		twoFactAuthLeft = new VBox(14);
 		HBox.setHgrow(twoFactAuthLeft, Priority.ALWAYS);
 
-		twoFactAuthLeft.getChildren().addAll(twoFactAuthHead, preBody);
+		twoFactAuthLeft.getChildren().addAll(twoFactAuthHead, twoFactAuthBody);
 
 		StackPane twoFactAuthRight = new StackPane();
 		twoFactAuthRight.setAlignment(Pos.BOTTOM_CENTER);
@@ -110,8 +108,7 @@ public class MyAccount extends SettingsContent {
 		accountRemovalHead.setTransform(TextTransform.UPPERCASE);
 		accountRemovalHead.setFont(twoFactAuthHead.getFont());
 
-		accountRemovalBody = new Label(window, "disable_note");
-		accountRemovalBody.setFont(twoFactAuthBody.getFont());
+		accountRemovalBody = new Label(window, "disable_note", new Font(13));
 
 		HBox accountButtons = new HBox(16);
 

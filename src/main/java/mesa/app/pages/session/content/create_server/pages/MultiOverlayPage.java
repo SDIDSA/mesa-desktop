@@ -10,12 +10,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.style.Style;
@@ -30,7 +29,8 @@ public class MultiOverlayPage extends VBox implements Styleable {
 	protected ColorIcon closeIcon;
 
 	protected Label head;
-	protected Label subHead;
+	protected MultiText subHead;
+	
 
 	protected VBox root;
 
@@ -61,13 +61,11 @@ public class MultiOverlayPage extends VBox implements Styleable {
 		head = new Label(owner.getWindow(), headKey, new Font(24, FontWeight.BOLD));
 		head.setTransform(TextTransform.CAPITALIZE_PHRASE);
 
-		subHead = new Label(owner.getWindow(), subHeadKey, new Font(15));
+		subHead = new MultiText(owner.getWindow(), subHeadKey, new Font(15));
+		subHead.center();
+		subHead.setLineSpacing(4);
 
-		TextFlow preSubHead = new TextFlow(subHead);
-		preSubHead.setTextAlignment(TextAlignment.CENTER);
-		preSubHead.setLineSpacing(4);
-
-		top.getChildren().addAll(head, preSubHead);
+		top.getChildren().addAll(head, subHead);
 
 		root.getChildren().add(0, top);
 

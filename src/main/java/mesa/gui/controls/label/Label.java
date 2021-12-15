@@ -3,13 +3,14 @@ package mesa.gui.controls.label;
 import java.util.ArrayList;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
 import mesa.gui.window.Window;
 
-public class Label extends Text implements Localized {
+public class Label extends Text implements Localized, TextNode {
 	private Window window;
 
 	private TextTransform transform = TextTransform.NONE;
@@ -55,6 +56,11 @@ public class Label extends Text implements Localized {
 			params.set(i, param);
 		}
 		applyLocale(window.getLocale());
+	}
+
+	@Override
+	public Node getNode() {
+		return this;
 	}
 
 	@Override

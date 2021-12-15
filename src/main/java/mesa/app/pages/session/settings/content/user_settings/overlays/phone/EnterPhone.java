@@ -9,63 +9,58 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.text.TextFlow;
 import mesa.api.Auth;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.Label;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class EnterPhone extends PhoneOverlayContent implements Styleable {	
+public class EnterPhone extends PhoneOverlayContent implements Styleable {
 	private String pending;
-	
+
 	private Label head;
 	private Label smsCodeNode;
-	private Label phoneUsePre;
-	private Label oneAccount;
-	private Label phoneUsePost;
+	private MultiText phoneUse;
 	private Label invalid;
-	
-	private TextFlow phoneUse;
 
 	private PhoneInput input;
-	
+
 	private PhoneNumberUtil phoneUtil;
-	
+
 	public EnterPhone(SessionPage owner) {
 		super(owner);
-		
+
 		head = new Label(owner.getWindow(), "enter_phone", new Font(20, FontWeight.BOLD));
 		VBox.setMargin(head, new Insets(0, 0, 14, 0));
-		
+
 		smsCodeNode = new Label(owner.getWindow(), "sms_code_note", new Font(Font.DEFAULT_FAMILY_MEDIUM, 15));
 		VBox.setMargin(smsCodeNode, new Insets(0, 0, 24, 0));
 
-		phoneUsePre = new Label(owner.getWindow(), "phone_use_pre", new Font(15));
-		oneAccount = new Label(owner.getWindow(), "one_account", new Font(15, FontWeight.BOLD));
-		phoneUsePost = new Label(owner.getWindow(), "phone_use_post", new Font(15));
-
-		phoneUse = new TextFlow(phoneUsePre, oneAccount, phoneUsePost);
+		phoneUse = new MultiText(owner.getWindow());
 		VBox.setMargin(phoneUse, new Insets(0, 0, 22, 0));
-		phoneUse.setTextAlignment(TextAlignment.CENTER);
+		phoneUse.center();
 		phoneUse.setLineSpacing(7);
+
+		phoneUse.addLabel("phone_use_pre", new Font(15));
+		phoneUse.addLabel("one_account", new Font(15, FontWeight.BOLD));
+		phoneUse.addLabel("phone_use_post", new Font(15));
 
 		invalid = new Label(owner.getWindow(), "phone_invalid", new Font(15));
 		invalid.setFill(Colors.Error);
 		VBox.setMargin(invalid, new Insets(0, 0, 20, 0));
 
 		input = new PhoneInput(owner.getWindow());
-		
+
 		getChildren().addAll(head, smsCodeNode, phoneUse, input);
-		
+
 		phoneUtil = PhoneNumberUtil.getInstance();
-		
+
 		applyStyle(owner.getWindow().getStyl());
 	}
-	
+
 	public void valid() {
 		if (getChildren().contains(invalid)) {
 			getChildren().remove(invalid);
@@ -73,14 +68,14 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 			getChildren().add(2, phoneUse);
 		}
 	}
-	
+
 	public void invalid() {
 		if (getChildren().contains(smsCodeNode)) {
 			getChildren().removeAll(smsCodeNode, phoneUse);
 			getChildren().add(1, invalid);
 		}
 	}
-	
+
 	public void setAction(Runnable onValid, Runnable onInvalid, Runnable next) {
 		input.setAction(value -> {
 			try {
@@ -109,7 +104,7 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 			}
 		});
 	}
-	
+
 	public String getPending() {
 		return pending;
 	}
@@ -127,10 +122,7 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 		head.setFill(style.getHeaderPrimary());
 		smsCodeNode.setFill(style.getTextNormal());
 
-		phoneUsePre.setFill(style.getTextNormal());
-		oneAccount.setFill(style.getTextNormal());
-		phoneUsePost.setFill(style.getTextNormal());
-
+		phoneUse.setFill(style.getTextNormal());
 	}
 
 	@Override
