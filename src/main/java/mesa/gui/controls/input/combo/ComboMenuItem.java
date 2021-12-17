@@ -1,6 +1,7 @@
 package mesa.gui.controls.input.combo;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -31,7 +32,12 @@ public abstract class ComboMenuItem extends StackPane implements Styleable {
 		backgroundProperty().bind(Bindings.when(hoverProperty()).then(hover).otherwise(Background.EMPTY));
 	}
 	
-	public abstract String getDisplay();
-	public abstract String getValue();
+	public abstract StringProperty getDisplay();
+	public abstract StringProperty getValue();
+	
+	public boolean match(String toMatch) {
+		return getValue().get().toLowerCase().contains(toMatch.toLowerCase())
+				|| getDisplay().get().toLowerCase().contains(toMatch.toLowerCase());
+	}
 	
 }

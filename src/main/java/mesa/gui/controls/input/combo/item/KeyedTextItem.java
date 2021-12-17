@@ -1,34 +1,26 @@
 package mesa.gui.controls.input.combo.item;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.scene.text.Text;
-import mesa.gui.controls.Font;
-import mesa.gui.controls.input.combo.ComboMenuItem;
+import javafx.beans.property.StringProperty;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public abstract class KeyedTextItem extends ComboMenuItem implements Styleable, Localized {
+public abstract class KeyedTextItem extends TextItem implements Localized {
 	protected String key;
-	private Text lab;
 	
 	protected KeyedTextItem(Window window, String key) {
+		super(window, key);
 		this.key = key;
 		
-		lab = new Text();
-		lab.setFont(new Font(16).getFont());
-		
-		getChildren().add(lab);
-		
-		applyStyle(window.getStyl());
 		applyLocale(window.getLocale());
 	}
 
 	@Override
-	public String getDisplay() {
-		return lab.getText();
+	public StringProperty getDisplay() {
+		return lab.textProperty();
 	}
 	
 	@Override
@@ -39,7 +31,7 @@ public abstract class KeyedTextItem extends ComboMenuItem implements Styleable, 
 	
 	@Override
 	public void applyLocale(Locale locale) {
-		lab.setText(locale.get(key));
+		lab.set(locale.get(key));
 	}
 
 	@Override

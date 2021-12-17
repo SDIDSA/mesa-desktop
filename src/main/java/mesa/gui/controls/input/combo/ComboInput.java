@@ -131,14 +131,13 @@ public class ComboInput extends Input implements Localized {
 	public void setValue(ComboMenuItem value) {
 		selected = value;
 
-		base.setText(value.getDisplay());
-		this.value.set(value.getValue());
+		base.textProperty().bind(value.getDisplay());
+		this.value = value.getValue();
 	}
 
 	private void search(String value) {
 		for (ComboMenuItem item : items) {
-			if (item.getValue().toLowerCase().contains(value.toLowerCase())
-					|| item.getDisplay().toLowerCase().contains(value.toLowerCase())) {
+			if (item.match(value)) {
 				setValue(item);
 				return;
 			}
@@ -170,7 +169,7 @@ public class ComboInput extends Input implements Localized {
 			this.value.set(value);
 		} else
 			for (ComboMenuItem item : items) {
-				if (item.getValue().equals(value)) {
+				if (item.getValue().get().equals(value)) {
 					setValue(item);
 					return;
 				}

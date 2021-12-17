@@ -1,9 +1,11 @@
 package mesa.gui.controls.input.combo.item;
 
 import javafx.beans.property.ObjectProperty;
-import javafx.scene.text.Text;
+import javafx.beans.property.StringProperty;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.combo.ComboMenuItem;
+import mesa.gui.controls.label.TextTransform;
+import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -13,6 +15,7 @@ public class TextItem extends ComboMenuItem implements Styleable {
 	
 	public TextItem(Window window, String value) {
 		lab = new Text(value);
+		lab.setTransform(TextTransform.CAPITALIZE);
 		lab.setFont(new Font(16).getFont());
 		
 		getChildren().add(lab);
@@ -21,13 +24,13 @@ public class TextItem extends ComboMenuItem implements Styleable {
 	}
 
 	@Override
-	public String getDisplay() {
-		return lab.getText();
+	public StringProperty getDisplay() {
+		return lab.textProperty();
 	}
 
 	@Override
-	public String getValue() {
-		return lab.getText();
+	public StringProperty getValue() {
+		return lab.textProperty();
 	}
 	
 	@Override

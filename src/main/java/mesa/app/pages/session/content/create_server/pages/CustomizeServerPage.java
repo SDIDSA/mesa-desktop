@@ -14,7 +14,7 @@ import mesa.gui.controls.image.layer_icon.CircledAdd;
 import mesa.gui.controls.image.layer_icon.LayerIcon;
 import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
-import mesa.gui.controls.label.keyed.Label;
+import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -22,7 +22,7 @@ import mesa.gui.window.Window;
 public class CustomizeServerPage extends MultiOverlayPage {
 	private LayerIcon icon;
 	private CircledAdd addIcon;
-	private Label upload;
+	private Text upload;
 
 	private TextInputField field;
 
@@ -43,7 +43,7 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 		icon.setTranslateY(1, -12);
 
-		upload = new Label(owner.getWindow(), "upload", new Font(12, FontWeight.BOLD));
+		upload = new Text("upload", new Font(12, FontWeight.BOLD));
 		upload.setTransform(TextTransform.UPPERCASE);
 		upload.setTranslateY(12);
 
