@@ -18,8 +18,8 @@ public class Credits extends Alert {
 		super(owner, window, AlertType.INFO);
 		setHead("about");
 		addLabel("code_hosted");
-		addLink("SDIDSA/mesa-desktop");
-		setBodyAction(1, ()-> window.openLink("https://github.com/SDIDSA/mesa-desktop"));
+		addLink("SDIDSA/mesa");
+		setBodyAction(1, ()-> window.openLink("https://github.com/SDIDSA/mesa"));
 		
 		mostIcons = new Label(window, "icons8_credits", new Font(14));
 		icons8 = new Link(window, "icons8", new Font(14));
