@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
-import mesa.data.CountryCode;
+import mesa.data.bean.CountryCode;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.AbstractButton;
 import mesa.gui.controls.button.Button;

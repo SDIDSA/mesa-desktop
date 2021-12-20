@@ -1,4 +1,4 @@
-package mesa.data;
+package mesa.data.bean;
 
 public class CountryCode {
 	private String name;

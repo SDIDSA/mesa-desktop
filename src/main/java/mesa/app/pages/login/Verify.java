@@ -14,8 +14,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import mesa.api.Auth;
+import mesa.api.Session;
 import mesa.app.component.Form;
 import mesa.app.component.input.ConfCode;
+import mesa.data.SessionManager;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
 import mesa.gui.controls.Font;
@@ -84,25 +86,27 @@ public class Verify extends LoginSubPage {
 
 		setRoot(root);
 
-		logout.setAction(() -> {
+		logout.setAction(() -> Session.logout(user.getString("id"), e -> {
+			window.getMainSocket().io().off("reconnect");
+			SessionManager.clearSession();
 			if (onLogout != null) {
 				onLogout.run();
 			}
-		});
+		}));
 
 		now.setTranslateY(-163);
-		
+
 		Timeline preShow = new Timeline(
 				new KeyFrame(Duration.seconds(.2), new KeyValue(now.translateYProperty(), 0, Interpolator.EASE_BOTH)));
-		
-		Timeline preHide = new Timeline(
-				new KeyFrame(Duration.seconds(.2), new KeyValue(now.translateYProperty(), -163, Interpolator.EASE_BOTH)));
+
+		Timeline preHide = new Timeline(new KeyFrame(Duration.seconds(.2),
+				new KeyValue(now.translateYProperty(), -163, Interpolator.EASE_BOTH)));
 
 		verifyNow.setAction(() -> {
 			Animator.show(now, 163);
 			Animator.show(root, 307);
 			verifyNow.hide();
-			
+
 			preShow.playFromStart();
 		});
 

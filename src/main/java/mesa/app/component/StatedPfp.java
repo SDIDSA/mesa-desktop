@@ -1,5 +1,7 @@
 package mesa.app.component;
 
+import java.util.function.BiFunction;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,7 +15,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.Colors;
-import mesa.app.utils.DoubleParamFunc;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.image.Icon;
 import mesa.gui.style.Style;
@@ -101,14 +102,14 @@ public class StatedPfp extends StackPane {
 			return res;
 		});
 
-		private DoubleParamFunc<Window, PfpSize, Node> display;
+		private BiFunction<Window, PfpSize, Node> display;
 
-		private PfpStatus(DoubleParamFunc<Window, PfpSize, Node> init) {
+		private PfpStatus(BiFunction<Window, PfpSize, Node> init) {
 			display = init;
 		}
 
 		public Node getDisplay(Window window, PfpSize size) {
-			return display.execute(window, size);
+			return display.apply(window, size);
 		}
 	}
 	

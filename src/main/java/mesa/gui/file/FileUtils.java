@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.json.JSONObject;
 
-import mesa.data.CountryCode;
+import mesa.data.bean.CountryCode;
 import mesa.gui.exception.ErrorHandler;
 
 public class FileUtils {

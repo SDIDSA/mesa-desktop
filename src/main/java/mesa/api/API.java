@@ -42,8 +42,20 @@ public class API {
 			
 		}
 	}
+	
+	public static class Session {
+		private static final String PREFIX = BASE + "session/";
 
-	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
+		public static final String LOGOUT = PREFIX + "logout";
+		
+		public static final String GET_USER = PREFIX + "getUser";
+		
+		private Session() {
+			
+		}
+	}
+
+	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, String session, Param... params) {
 		new Thread() {
 			@Override
 			public void run() {
@@ -51,13 +63,16 @@ public class API {
 					new ApiCall(path, params).execute(result -> {
 						LogHandler.log(result.toString(4));
 						onResult.accept(result);
-					});
+					}, session);
 				} catch (Exception x) {
 					ErrorHandler.handle(x, action);
 					Platform.runLater(() -> onResult.accept(netErr));
 				}
 			}
 		}.start();
+	}
+	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
+		asyncPost(path, action, onResult, null, params);
 	}
 
 	private API() {

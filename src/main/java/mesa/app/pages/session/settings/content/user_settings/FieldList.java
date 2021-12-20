@@ -16,7 +16,7 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordOv
 import mesa.app.pages.session.settings.content.user_settings.overlays.phone.PhoneOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.HideableOverviewField;
 import mesa.app.pages.session.settings.content.user_settings.overview.OverviewField;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;

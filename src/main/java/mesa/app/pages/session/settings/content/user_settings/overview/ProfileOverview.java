@@ -16,7 +16,7 @@ import mesa.app.component.StatedPfp;
 import mesa.app.component.StatedPfp.PfpStatus;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.content.user_settings.FieldList;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
