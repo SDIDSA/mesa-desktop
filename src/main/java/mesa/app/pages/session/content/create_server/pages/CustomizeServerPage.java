@@ -2,6 +2,8 @@ package mesa.app.pages.session.content.create_server.pages;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,6 +32,9 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 	private Button back;
 	private Button create;
+	
+	private StackPane pane;
+	private ImageView serverIcon;
 
 	public CustomizeServerPage(MultiOverlay owner) {
 		super(owner, "customize_server", "server_name_icon");
@@ -53,13 +58,21 @@ public class CustomizeServerPage extends MultiOverlayPage {
 		icon.getChildren().addAll(upload, addIcon);
 
 		field = new TextInputField(owner.getWindow(), "server_name", 408);
-		VBox.setMargin(field, new Insets(28, 0, 8, 0));
+		VBox.setMargin(field, new Insets(22, 0, 8, 0));
+		
+		icon.setCursor(Cursor.HAND);
+		icon.setOnMouseClicked(getOnDragDetected());
 
 		guidelines = new MultiText(owner.getWindow());
 		guidelines.addLabel("pre_guidelines", new Font(12));
 		guidelines.addKeyedLink("guidelines", new Font(Font.DEFAULT_FAMILY_MEDIUM, 12));
 
-		center.getChildren().addAll(icon, field, guidelines);
+		StackPane iconPane = new StackPane(icon);
+		iconPane.setMaxSize(80, 80);
+		
+		
+		
+		center.getChildren().addAll(iconPane, field, guidelines);
 
 		root.getChildren().add(center);
 

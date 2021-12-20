@@ -176,6 +176,7 @@ public class SessionPage extends Page {
 
 	public void logout(Runnable onDone) {
 		Session.logout(user.getId(), e -> {
+			window.getMainSocket().off("user_sync");
 			window.getMainSocket().io().off("reconnect");
 			SessionManager.clearSession();
 			SectionItem.clearCache();
