@@ -28,11 +28,15 @@ public class ApiCall {
 
 	//"
 	
-	public void execute(Consumer<JSONObject> onResult) throws IOException  {
+	public void execute(Consumer<JSONObject> onResult, String token) throws IOException  {
 		long start = System.currentTimeMillis();
 		
 		HttpPost httpPost = new HttpPost(path);
 		httpPost.addHeader("Accept", "application/json");
+		
+		if(token != null) {
+			httpPost.addHeader("token", token);
+		}
 
 		JSONObject paramsToSend = new JSONObject();
 		for (Param param : ApiCall.this.params) {

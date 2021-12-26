@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.TextInputField;
+import mesa.data.SessionManager;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -97,16 +98,18 @@ public class Login extends LoginSubPage {
 			if (form.check()) {
 				loginButton.startLoading();
 
-				Auth.auth(email.getValue(), password.getValue(), window.getMainSocket().id(), result -> {
+				Auth.auth(email.getValue(), password.getValue(), result -> {
 					if (result.has("err")) {
 						form.applyErrors(result.getJSONArray("err"));
 					} else {
 						JSONObject user = result.getJSONObject("user");
-						String next = result.getString("next");
-						if (next.equals("verify")) {
-							onVerify.accept(user);
-						} else if (next.equals("success")) {
+						
+						SessionManager.storeSession(result.getString("token"), window);
+						
+						if (user.getBoolean("email_confirmed")) {
 							onSuccess.accept(user);
+						} else {
+							onVerify.accept(user);
 						}
 					}
 

@@ -1,21 +1,31 @@
 package mesa.app.pages.session.content.create_server.pages;
 
+import java.io.File;
+
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
 import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
+import mesa.gui.controls.image.ImageProxy;
 import mesa.gui.controls.image.layer_icon.CircledAdd;
 import mesa.gui.controls.image.layer_icon.LayerIcon;
 import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.controls.space.ExpandingHSpace;
+import mesa.gui.file.FileUtils;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
@@ -30,6 +40,9 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 	private Button back;
 	private Button create;
+
+	private StackPane imagePane;
+	private ImageView serverIcon;
 
 	public CustomizeServerPage(MultiOverlay owner) {
 		super(owner, "customize_server", "server_name_icon");
@@ -53,13 +66,47 @@ public class CustomizeServerPage extends MultiOverlayPage {
 		icon.getChildren().addAll(upload, addIcon);
 
 		field = new TextInputField(owner.getWindow(), "server_name", 408);
-		VBox.setMargin(field, new Insets(28, 0, 8, 0));
+		VBox.setMargin(field, new Insets(22, 0, 8, 0));
 
 		guidelines = new MultiText(owner.getWindow());
 		guidelines.addLabel("pre_guidelines", new Font(12));
 		guidelines.addKeyedLink("guidelines", new Font(Font.DEFAULT_FAMILY_MEDIUM, 12));
 
-		center.getChildren().addAll(icon, field, guidelines);
+		serverIcon = new ImageView();
+		serverIcon.setFitHeight(80);
+		serverIcon.setFitWidth(80);
+		imagePane = new StackPane(serverIcon);
+
+		Rectangle clip = new Rectangle(80, 80);
+		clip.setArcHeight(80);
+		clip.setArcWidth(80);
+		imagePane.setClip(clip);
+
+		StackPane iconPane = new StackPane(icon);
+		iconPane.setMaxSize(80, 80);
+
+		iconPane.setCursor(Cursor.HAND);
+		icon.opacityProperty().bind(Bindings.when(icon.hoverProperty()).then(1).otherwise(.8));
+
+		iconPane.setOnMouseClicked(e -> {
+			File file = FileUtils.selectImage(owner.getWindow());
+
+			if (file != null) {
+				Image image = ImageProxy.load(file.getAbsolutePath(), 80, true);
+				serverIcon.setImage(image);
+				iconPane.getChildren().setAll(imagePane);
+
+				if (image.getWidth() > 80.0) {
+					serverIcon.setViewport(new Rectangle2D((image.getWidth() - 80) / 2, 0, 80, 80));
+				} else if (image.getHeight() > 80.0) {
+					serverIcon.setViewport(new Rectangle2D(0, (image.getHeight() - 80) / 2, 80, 80));
+				} else {
+					serverIcon.setViewport(null);
+				}
+			}
+		});
+
+		center.getChildren().addAll(iconPane, field, guidelines);
 
 		root.getChildren().add(center);
 

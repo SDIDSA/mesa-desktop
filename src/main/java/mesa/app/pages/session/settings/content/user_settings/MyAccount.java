@@ -16,7 +16,7 @@ import mesa.app.pages.session.settings.content.user_settings.overlays.CriticalOv
 import mesa.app.pages.session.settings.content.user_settings.overlays.PasswordEditOverlay;
 import mesa.app.pages.session.settings.content.user_settings.overview.ProfileOverview;
 import mesa.app.utils.Colors;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.layer_icon.LayerIcon;

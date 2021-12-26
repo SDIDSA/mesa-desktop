@@ -14,7 +14,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import mesa.data.CountryCode;
+import mesa.data.bean.CountryCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.space.ExpandingHSpace;

@@ -2,6 +2,7 @@ package mesa.app.pages.login;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 import org.json.JSONObject;
 
@@ -13,9 +14,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import mesa.api.Session;
 import mesa.app.pages.Page;
 import mesa.app.pages.session.SessionPage;
-import mesa.app.utils.DoubleParamFunc;
+import mesa.data.SessionManager;
 import mesa.gui.controls.Loading;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.style.Style;
@@ -132,15 +134,18 @@ public class LoginPage extends Page {
 			hideVerify.playFromStart();
 		});
 
-		DoubleParamFunc<JSONObject, Timeline, Void> onSuccess = (user, hide) -> {
+		BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> {
 			window.putData("user", user);
-			hide.setOnFinished(e -> window.loadPage(SessionPage.class));
-			hide.playFromStart();
-			return null;
+			if(hide != null) {
+				hide.setOnFinished(e -> window.loadPage(SessionPage.class));
+				hide.playFromStart();
+			}else {
+				window.loadPage(SessionPage.class);
+			}
 		};
 
-		login.setOnSuccess(user -> onSuccess.execute(user, hide(login)));
-		verify.setOnSuccess(user -> onSuccess.execute(user, hide(verify)));
+		login.setOnSuccess(user -> onSuccess.accept(user, hide(login)));
+		verify.setOnSuccess(user -> onSuccess.accept(user, hide(verify)));
 
 		getChildren().addAll(login);
 		prepare(login);
@@ -192,16 +197,27 @@ public class LoginPage extends Page {
 
 		login.setMouseTransparent(true);
 
-		Timeline showLogin = show(login);
-		showLogin.setDelay(Duration.seconds(2));
-		login.preTransition();
-		showLogin.playFromStart();
-		showLogin.setOnFinished(e -> {
-			login.setMouseTransparent(false);
-			login.postTransition();
-			loading.stop();
-			getChildren().remove(loading);
-		});
+		String token = SessionManager.getSession();
+		if (token != null) {
+			Session.getUser(result -> {
+				if(result.has("user")) {
+					window.putData("user", result.getJSONObject("user"));
+					window.loadPage(SessionPage.class);
+					SessionManager.registerSocket(window.getMainSocket(), token);
+				}
+			});
+		} else {
+			Timeline showLogin = show(login);
+			showLogin.setDelay(Duration.seconds(1));
+			login.preTransition();
+			showLogin.playFromStart();
+			showLogin.setOnFinished(e -> {
+				login.setMouseTransparent(false);
+				login.postTransition();
+				loading.stop();
+				getChildren().remove(loading);
+			});
+		}
 	}
 
 	@Override

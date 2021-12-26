@@ -13,7 +13,7 @@ import javafx.scene.text.Text;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.settings.content.SettingsContent;
 import mesa.app.pages.session.settings.menu.SettingsMenu;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.ExpandingHSpace;

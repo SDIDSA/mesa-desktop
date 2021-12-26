@@ -1,4 +1,4 @@
-package mesa.data;
+package mesa.data.bean;
 
 import java.lang.reflect.InvocationTargetException;
 

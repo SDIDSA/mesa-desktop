@@ -19,13 +19,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import mesa.api.Session;
 import mesa.app.pages.Page;
 import mesa.app.pages.login.LoginPage;
 import mesa.app.pages.session.content.Content;
 import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.menu.SectionItem;
-import mesa.data.User;
+import mesa.data.SessionManager;
+import mesa.data.bean.User;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.alert.Alert;
 import mesa.gui.controls.alert.AlertType;
@@ -57,7 +59,7 @@ public class SessionPage extends Page {
 
 		user = new User(window.getJsonData("user"));
 		window.putLoggedUser(user);
-		
+
 		registerSocket(window);
 
 		root = new HBox();
@@ -113,11 +115,7 @@ public class SessionPage extends Page {
 		socket.on("user_sync", data -> {
 			JSONObject obj = new JSONObject(data[0].toString());
 
-			obj.keySet().forEach(key -> 
-				Platform.runLater(() -> 
-					user.set(key, obj.get(key))
-				)
-			);
+			obj.keySet().forEach(key -> Platform.runLater(() -> user.set(key, obj.get(key))));
 		});
 	}
 
@@ -152,7 +150,7 @@ public class SessionPage extends Page {
 		settings.setMouseTransparent(false);
 		hideSettings.stop();
 		showSettings.playFromStart();
-		
+
 		settings.requestFocus();
 	}
 
@@ -176,19 +174,34 @@ public class SessionPage extends Page {
 		main.getChildren().setAll(content.getMain());
 	}
 
+	public void logout(Runnable onDone) {
+		Session.logout(user.getId(), e -> {
+			window.getMainSocket().off("user_sync");
+			window.getMainSocket().io().off("reconnect");
+			SessionManager.clearSession();
+			SectionItem.clearCache();
+			BarItem.clear();
+			Tooltip.clear();
+			window.clearLoggedUser();
+			window.loadPage(LoginPage.class);
+			if (onDone != null) {
+				onDone.run();
+			}
+		});
+	}
+
 	public void logout() {
-		SectionItem.clearCache();
-		BarItem.clear();
-		Tooltip.clear();
-		window.clearLoggedUser();
-		window.loadPage(LoginPage.class);
+		logout(null);
 	}
 
 	public void logoutPrompt() {
 		Alert confirm = new Alert(this, AlertType.LOGOUT);
 		confirm.setHead("log_out");
 		confirm.addLabel("logout_confirm");
-		confirm.addAction(ButtonType.LOGOUT, this::logout);
+		confirm.addAction(ButtonType.LOGOUT, () -> {
+			confirm.startLoading(ButtonType.LOGOUT);
+			logout(() -> confirm.stopLoading(ButtonType.LOGOUT));
+		});
 		confirm.show();
 	}
 

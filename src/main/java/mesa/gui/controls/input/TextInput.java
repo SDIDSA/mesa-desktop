@@ -74,7 +74,6 @@ public class TextInput extends Input {
 
 	@Override
 	public void setFont(Font font) {
-		this.font = font;
 		field.setFont(font.getFont());
 	}
 

@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import mesa.app.component.StatedPfp;
 import mesa.app.component.StatedPfp.PfpStatus;
 import mesa.app.pages.session.SessionPage;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.space.FixedHSpace;
@@ -31,7 +31,7 @@ public class UserBar extends HBox implements Styleable {
 
 		User user = session.getUser();
 
-		pfp = new StatedPfp(session, user.getAvatar() == null ? null : user.getAvatar(), StatedPfp.SMALL);
+		pfp = new StatedPfp(session, user.getAvatar(), StatedPfp.SMALL);
 		pfp.setStatus(PfpStatus.ONLINE);
 
 		VBox nameId = new VBox();

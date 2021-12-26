@@ -7,7 +7,7 @@ import mesa.gui.controls.input.combo.item.MonthItem;
 import mesa.gui.controls.input.combo.item.TextItem;
 import mesa.gui.window.Window;
 
-public class DateInputField extends InputField {	
+public class DateInputField extends InputField {
 	private ComboInput month;
 	private ComboInput day;
 	private ComboInput year;
@@ -32,14 +32,11 @@ public class DateInputField extends InputField {
 		}
 
 		value.bind(Bindings
-				.when(
-						day.valueProperty().isNotEmpty().and(
-						month.valueProperty().isNotEmpty()).and(
-						year.valueProperty().isNotEmpty()))
-				.then(
-						day.valueProperty().concat('/').concat(
-						month.valueProperty()).concat('/').concat(
-						year.valueProperty())).otherwise(""));
+				.when(day.valueProperty().isNotEmpty()
+						.and(month.valueProperty().isNotEmpty().and(year.valueProperty().isNotEmpty())))
+				.then(day.valueProperty().concat('/').concat(month.valueProperty()).concat('/')
+						.concat(year.valueProperty()))
+				.otherwise(""));
 
 		addInputs(month, day, year);
 

@@ -74,45 +74,48 @@ public class ScrollBar extends StackPane {
 		setCursor(Cursor.DEFAULT);
 	}
 
-	public void install(Region parent, Region child) {
-		thumb.heightProperty().bind(Bindings.max(40,
-				parent.heightProperty().divide(child.heightProperty()).multiply(track.heightProperty())));
+	private static void install(Region parent, Region child, ScrollBar sb) {
+		sb.thumb.heightProperty().bind(Bindings.max(40,
+				parent.heightProperty().divide(child.heightProperty()).multiply(sb.track.heightProperty())));
 
 		child.translateYProperty().bind(
-				positionProperty().multiply(child.heightProperty().subtract(parent.heightProperty())).multiply(-1));
+				sb.positionProperty().multiply(child.heightProperty().subtract(parent.heightProperty())).multiply(-1));
 
-		child.addEventFilter(ScrollEvent.ANY, e -> scrollByPixels(e.getDeltaY(), child.getHeight()));
+		child.addEventFilter(ScrollEvent.ANY, e -> sb.scrollByPixels(e.getDeltaY(), child.getHeight()));
 
-		prefHeightProperty().bind(parent.heightProperty());
+		sb.prefHeightProperty().bind(parent.heightProperty());
 
-		visibleProperty().bind(thumb.heightProperty().lessThan(track.heightProperty()));
+		sb.visibleProperty().bind(sb.thumb.heightProperty().lessThan(sb.track.heightProperty()));
+
+		WeakReference<Region> weakChild = new WeakReference<>(child);
+		WeakReference<Region> weakParent = new WeakReference<>(parent);
+		WeakReference<ScrollBar> weakThis = new WeakReference<>(sb);
 
 		Consumer<Node> onFocus = node -> {
-			Bounds b = child.sceneToLocal(node.localToScene(node.getBoundsInLocal()));
+			Bounds b = weakChild.get().sceneToLocal(node.localToScene(node.getBoundsInLocal()));
 			double minY = b.getMinY();
 			double maxY = b.getMaxY();
 
-			double minDY = -child.getTranslateY();
-			double maxDY = minDY + parent.getHeight();
+			double minDY = -weakChild.get().getTranslateY();
+			double maxDY = minDY + weakParent.get().getHeight();
 			if (minDY > minY) {
-				setPos(minY / (child.getHeight() - parent.getHeight()));
+				weakThis.get().setPos(minY / (weakChild.get().getHeight() - weakParent.get().getHeight()));
 			} else if (maxDY < maxY) {
-				setPos((maxY - parent.getHeight()) / (child.getHeight() - parent.getHeight()));
+				weakThis.get().setPos((maxY - weakParent.get().getHeight())
+						/ (weakChild.get().getHeight() - weakParent.get().getHeight()));
 			}
 		};
 
-		WeakReference<Node> weakChild = new WeakReference<>(child);
-		
 		child.sceneProperty().addListener(new ChangeListener<Scene>() {
 			public void changed(ObservableValue<? extends Scene> obs, Scene oldScene, Scene scene) {
 				if (scene != null) {
-					child.sceneProperty().removeListener(this);
+					weakChild.get().sceneProperty().removeListener(this);
 					scene.focusOwnerProperty().addListener(new ChangeListener<Node>() {
 						public void changed(ObservableValue<? extends Node> obn, Node oldFocused, Node focused) {
-							if (weakChild.get() == null) {
+							if (weakChild.get() == null || weakParent.get() == null || weakThis.get() == null) {
 								scene.focusOwnerProperty().removeListener(this);
-							} else {								
-								if(NodeUtils.isParentOf(focused, child)) {
+							} else {
+								if (weakThis.get().getScene() != null && NodeUtils.isParentOf(focused, weakChild.get())) {
 									onFocus.accept(focused);
 								}
 							}
@@ -121,6 +124,10 @@ public class ScrollBar extends StackPane {
 				}
 			}
 		});
+	}
+	
+	public void install(Region parent, Region child) {
+		install(parent, child, this);
 	}
 
 	public void scrollByPixels(double pixels, double relativeTo) {

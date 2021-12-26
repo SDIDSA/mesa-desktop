@@ -1,7 +1,7 @@
 package mesa.gui.window;
 
 import mesa.app.pages.Page;
-import mesa.data.User;
+import mesa.data.bean.User;
 import mesa.gui.exception.ErrorHandler;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;

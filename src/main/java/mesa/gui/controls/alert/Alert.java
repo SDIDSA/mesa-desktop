@@ -35,6 +35,7 @@ public class Alert extends Overlay implements Styleable {
 	private MultiText body;
 
 	private EnumMap<ButtonType, Runnable> actions;
+	private EnumMap<ButtonType, AlertButton> buttons;
 
 	public Alert(Pane owner, Window window , AlertType type, double width) {
 		super(owner, window);
@@ -72,6 +73,7 @@ public class Alert extends Overlay implements Styleable {
 		bottom.getChildren().add(new ExpandingHSpace());
 
 		actions = new EnumMap<>(ButtonType.class);
+		buttons = new EnumMap<>(ButtonType.class);
 		for (ButtonType buttonType : type.getButtons()) {
 			AlertButton button = new AlertButton(this, buttonType);
 			button.setAction(() -> {
@@ -83,11 +85,25 @@ public class Alert extends Overlay implements Styleable {
 				}
 			});
 			bottom.getChildren().add(button);
+			buttons.put(buttonType, button);
 		}
 
 		setContent(preRoot, bottom);
-
 		applyStyle(window.getStyl());
+	}
+	
+	public void startLoading(ButtonType type) {
+		AlertButton button= buttons.get(type);
+		if(button != null) {
+			button.startLoading();
+		}
+	}
+	
+	public void stopLoading(ButtonType type) {
+		AlertButton button= buttons.get(type);
+		if(button != null) {
+			button.stopLoading();
+		}
 	}
 	
 	public void addToBody(Node...node) {

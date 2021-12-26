@@ -1,4 +1,4 @@
-package mesa.data;
+package mesa.data.bean;
 
 import org.json.JSONObject;
 

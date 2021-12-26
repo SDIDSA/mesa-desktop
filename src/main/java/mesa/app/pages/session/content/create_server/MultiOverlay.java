@@ -47,15 +47,11 @@ public class MultiOverlay extends Overlay implements Styleable {
 		addOnShowing(() -> {
 			for (int i = 0; i < pages.size(); i++) {
 				MultiOverlayPage page = pages.get(i);
-				if (i != selected) {
-					page.setTranslateX(width * (i > selected ? 1 : -1));
-					page.setDisable(true);
-				} else {
-					page.setDisable(false);
-					clip.heightProperty().bind(page.heightProp());
-					clip.yProperty().bind(root.heightProperty().subtract(page.heightProp()).divide(2));
-				}
+				page.setTranslateX(width * (i > selected ? 1 : -1));
+				page.setDisable(true);
 			}
+			
+			slide(selected);
 		});
 		
 		addOnHiding(() -> {
@@ -97,11 +93,9 @@ public class MultiOverlay extends Overlay implements Styleable {
 	}
 
 	private void slide(MultiOverlayPage toHide, MultiOverlayPage toLoad, int page, int direction) {
-		double targetY = 0;
-
 		toLoad.setup(getWindow());
 
-		targetY = (root.getHeight() - toLoad.height()) / 2;
+		double targetY = (root.getHeight() - toLoad.height()) / 2;
 
 		Timeline slide = new Timeline(new KeyFrame(Duration.seconds(.4),
 				new KeyValue(toLoad.translateXProperty(), 0, SplineInterpolator.OVERSHOOT),
@@ -119,6 +113,22 @@ public class MultiOverlay extends Overlay implements Styleable {
 		clip.heightProperty().unbind();
 		slide.playFromStart();
 		selected = page;
+	}
+	
+
+
+	private void slide(int page) {
+		MultiOverlayPage toLoad = pages.get(page);
+		toLoad.setup(getWindow());
+
+		toLoad.setTranslateX(0);
+		toLoad.setDisable(false);
+
+		clip.yProperty().unbind();
+		clip.heightProperty().unbind();
+		clip.yProperty().bind(root.heightProperty().subtract(toLoad.heightProp()).divide(2));
+		clip.heightProperty().bind(toLoad.heightProp());
+		
 	}
 
 	@Override

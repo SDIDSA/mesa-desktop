@@ -1,5 +1,7 @@
 package mesa.app.component;
 
+import java.util.function.BiFunction;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -13,10 +15,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.Colors;
-import mesa.app.utils.DoubleParamFunc;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.image.Icon;
-import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class StatedPfp extends StackPane {
@@ -34,13 +34,7 @@ public class StatedPfp extends StackPane {
 
 		status = new SimpleObjectProperty<>(null);
 
-		pfp = null;
-		if (path != null) {
-			pfp = new Icon(session.getWindow(), path, size.size, true);
-		} else {
-			pfp = new Icon(session.getWindow(), "user", size.size);
-			pfp.brightnessProperty().bind(Bindings.when(session.getWindow().getStyl().isEqualTo(Style.DARK)).then(1).otherwise(-.6));
-		}
+		pfp = new Icon(session.getWindow(), path, size.size, true);
 
 		Rectangle keep = new Rectangle(size.size, size.size);
 		double offset = size.size - size.clip + size.offset;
@@ -101,14 +95,14 @@ public class StatedPfp extends StackPane {
 			return res;
 		});
 
-		private DoubleParamFunc<Window, PfpSize, Node> display;
+		private BiFunction<Window, PfpSize, Node> display;
 
-		private PfpStatus(DoubleParamFunc<Window, PfpSize, Node> init) {
+		private PfpStatus(BiFunction<Window, PfpSize, Node> init) {
 			display = init;
 		}
 
 		public Node getDisplay(Window window, PfpSize size) {
-			return display.execute(window, size);
+			return display.apply(window, size);
 		}
 	}
 	

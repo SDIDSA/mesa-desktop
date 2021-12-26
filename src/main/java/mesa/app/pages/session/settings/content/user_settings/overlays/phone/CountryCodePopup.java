@@ -29,7 +29,7 @@ import javafx.stage.Screen;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import mesa.app.utils.Threaded;
-import mesa.data.CountryCode;
+import mesa.data.bean.CountryCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.scroll.ScrollBar;
