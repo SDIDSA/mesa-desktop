@@ -46,8 +46,15 @@ public class ImageProxy {
 
 	private static Image resize(Image img, double size) {
 		double ratio = img.getWidth() / img.getHeight();
-		double nh = size;
-		double nw = size * ratio;
+		double nh = 0;
+		double nw = 0;
+		if(ratio >= 1) {
+			nh = size;
+			nw = size * ratio;
+		}else {
+			nw = size;
+			nh = size / ratio;
+		}
 		
 		Resizer resizer = DefaultResizerFactory.getInstance().getResizer(
 				new Dimension((int) img.getWidth(), (int) img.getHeight()), new Dimension((int) nw, (int) nh));

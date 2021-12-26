@@ -31,7 +31,7 @@ public class UserBar extends HBox implements Styleable {
 
 		User user = session.getUser();
 
-		pfp = new StatedPfp(session, user.getAvatar() == null ? null : user.getAvatar(), StatedPfp.SMALL);
+		pfp = new StatedPfp(session, user.getAvatar(), StatedPfp.SMALL);
 		pfp.setStatus(PfpStatus.ONLINE);
 
 		VBox nameId = new VBox();

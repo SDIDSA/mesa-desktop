@@ -39,6 +39,8 @@ public class ProfileOverview extends StackPane implements Styleable {
 	private Button editUserProfile;
 
 	public ProfileOverview(Settings settings) {
+		User user = settings.getSession().getUser();
+
 		back = new StackPane();
 		back.setAlignment(Pos.TOP_CENTER);
 
@@ -60,12 +62,10 @@ public class ProfileOverview extends StackPane implements Styleable {
 
 		pfpCont = new StackPane();
 		pfpCont.setPadding(new Insets(7));
-		StatedPfp pfp = new StatedPfp(settings.getSession(), null, StatedPfp.BIG);
+		StatedPfp pfp = new StatedPfp(settings.getSession(), user.getAvatar(), StatedPfp.BIG);
 		pfp.setStatus(PfpStatus.ONLINE);
 
 		pfpCont.getChildren().add(pfp);
-
-		User user = settings.getSession().getUser();
 
 		userName = new Text();
 		userName.textProperty().bind(user.usernameProperty());
@@ -97,7 +97,7 @@ public class ProfileOverview extends StackPane implements Styleable {
 		VBox nameId = new VBox(userName, id);
 		nameId.setAlignment(Pos.BOTTOM_LEFT);
 		nameId.setTranslateY(-13);
-		
+
 		userInfo.getChildren().addAll(pfpCont, new FixedHSpace(10), nameId, new FixedHSpace(8), more,
 				new ExpandingHSpace(), editUserProfile);
 

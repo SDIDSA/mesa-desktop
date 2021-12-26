@@ -17,7 +17,6 @@ import mesa.app.pages.session.SessionPage;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.image.Icon;
-import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class StatedPfp extends StackPane {
@@ -35,13 +34,7 @@ public class StatedPfp extends StackPane {
 
 		status = new SimpleObjectProperty<>(null);
 
-		pfp = null;
-		if (path != null) {
-			pfp = new Icon(session.getWindow(), path, size.size, true);
-		} else {
-			pfp = new Icon(session.getWindow(), "user", size.size);
-			pfp.brightnessProperty().bind(Bindings.when(session.getWindow().getStyl().isEqualTo(Style.DARK)).then(1).otherwise(-.6));
-		}
+		pfp = new Icon(session.getWindow(), path, size.size, true);
 
 		Rectangle keep = new Rectangle(size.size, size.size);
 		double offset = size.size - size.clip + size.offset;

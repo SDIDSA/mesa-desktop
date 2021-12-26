@@ -10,8 +10,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import mesa.gui.controls.Font;
 import mesa.gui.factory.Backgrounds;
@@ -20,8 +18,6 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public abstract class Input extends StackPane implements Styleable {
-
-	protected Font font;
 
 	private ObjectProperty<Color> borderProperty;
 
@@ -85,22 +81,6 @@ public abstract class Input extends StackPane implements Styleable {
 	public abstract void setFont(Font font);
 
 	protected abstract boolean isFocus();
-
-	public void setFontFamily(String family) {
-		setFont(font.setFamily(family));
-	}
-
-	public void setFontSize(int size) {
-		setFont(font.setSize(size));
-	}
-
-	public void setFontWeight(FontWeight weight) {
-		setFont(font.setWeight(weight));
-	}
-
-	public void setFontPosture(FontPosture posture) {
-		setFont(font.setPosture(posture));
-	}
 
 	private void setBack(Color fill) {
 		applyBack(fill);

@@ -132,7 +132,7 @@ public class ComboInput extends Input implements Localized {
 		selected = value;
 
 		base.textProperty().bind(value.getDisplay());
-		this.value = value.getValue();
+		this.value.bind(value.getValue());
 	}
 
 	private void search(String value) {
@@ -146,7 +146,6 @@ public class ComboInput extends Input implements Localized {
 
 	@Override
 	public void setFont(Font font) {
-		this.font = font;
 		base.setFont(font.getFont());
 		prompt.setFont(font.getFont());
 	}
@@ -158,13 +157,14 @@ public class ComboInput extends Input implements Localized {
 
 	@Override
 	public String getValue() {
-		return base.getText();
+		return selected != null ? selected.getValue().get() : "";
 	}
 
 	@Override
 	public void setValue(String value) {
 		if (value.isEmpty()) {
 			selected = null;
+			base.textProperty().unbind();
 			base.setText(value);
 			this.value.set(value);
 		} else

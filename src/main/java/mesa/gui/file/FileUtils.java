@@ -1,14 +1,20 @@
 package mesa.gui.file;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
 
+import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import mesa.data.bean.CountryCode;
+import mesa.gui.controls.image.ImageProxy;
 import mesa.gui.exception.ErrorHandler;
+import mesa.gui.window.Window;
 
 public class FileUtils {
 	private FileUtils() {
@@ -37,6 +43,7 @@ public class FileUtils {
 	}
 
 	private static List<CountryCode> countryCodes;
+
 	public static List<CountryCode> readCountryCodes() {
 		if (countryCodes == null) {
 			countryCodes = new ArrayList<>();
@@ -48,5 +55,28 @@ public class FileUtils {
 			}
 		}
 		return countryCodes;
+	}
+
+	public static Image selectImage(Window window, int size) {
+		try {
+			File f = selectFile(window, "Image", "*.png", "*.jpg");
+			return ImageProxy.load(f.getAbsolutePath(), size, true);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public static File selectImage(Window window) {
+		try {
+			return selectFile(window, "Image", "*.png", "*.jpg");
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	private static File selectFile(Window window, String type, String... extensions) {
+		FileChooser fc = new FileChooser();
+		fc.getExtensionFilters().add(new ExtensionFilter(type, extensions));
+		return fc.showOpenDialog(window);
 	}
 }

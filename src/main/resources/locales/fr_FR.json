@@ -1,7 +1,7 @@
 {
 	"2_fact_auth": "Authentification à deux facteurs",
 	"2_fact_auth_enable": "Activer l'authentification à deux facteurs",
-	"2_fact_auth_note": "Protège ton compte Discord avec une couche de sécurité en plus. Une fois mise en place, tu devras entrer à la fois ton mot de passe ainsi qu'un code d'authentification venant de ton téléphone pour te connecter.",
+	"2_fact_auth_note": "Protège ton compte Mesa avec une couche de sécurité en plus. Une fois mise en place, tu devras entrer à la fois ton mot de passe ainsi qu'un code d'authentification venant de ton téléphone pour te connecter.",
 	"2_fact_auth_verify_account": "Vous devez vérifier ton compte avant de pouvoir activer l'authentification à deux facteurs.",
 	"about": "À propos de Mesa",
 	"accessibility": "Accessibilité",
