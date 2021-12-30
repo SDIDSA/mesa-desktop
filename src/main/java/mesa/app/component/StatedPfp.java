@@ -34,7 +34,7 @@ public class StatedPfp extends StackPane {
 
 		status = new SimpleObjectProperty<>(null);
 
-		pfp = new Icon(session.getWindow(), path, size.size, true);
+		pfp = new Icon(session.getWindow(), path, size.size);
 
 		Rectangle keep = new Rectangle(size.size, size.size);
 		double offset = size.size - size.clip + size.offset;

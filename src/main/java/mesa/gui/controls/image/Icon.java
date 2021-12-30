@@ -13,26 +13,20 @@ public class Icon extends ImageView implements Styleable {
 
 	private String name;
 	private double size;
-	private boolean fullPath;
 
 	private ColorAdjust ca;
 
-	public Icon(Window window, String name, double size, boolean fullPath) {
+	public Icon(Window window, String name, double size) {
 		setPreserveRatio(true);
 		this.window = window;
 		this.name = name;
 		this.size = size;
-		this.fullPath = fullPath;
 
 		ca = new ColorAdjust();
 
 		setEffect(ca);
 
 		applyStyle(window.getStyl());
-	}
-
-	public Icon(Window window, String name, double size) {
-		this(window, name, size, false);
 	}
 
 	public void setIcon(String name) {
@@ -52,7 +46,7 @@ public class Icon extends ImageView implements Styleable {
 	public void applyStyle(Style style) {
 		StringBuilder path = new StringBuilder();
 		path.append("/images/icons/").append(name).append('_').append(size).append(".png");
-		setImage(ImageProxy.load(name, size, fullPath));
+		ImageProxy.asyncLoad(name, size, this::setImage);
 	}
 
 	@Override

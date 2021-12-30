@@ -3,6 +3,7 @@ package mesa.gui.controls.image;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -38,6 +39,23 @@ public class ImageProxy {
 		}
 
 		return found;
+	}
+	
+	public static void asyncLoad(String path, double size, Consumer<Image> onLoad) {
+		new Thread() {
+			@Override
+			public void run() {
+				Image found = cache.get(size + "_" + path);
+				if(found == null) {
+					found = new Image(path);
+					if (found.getHeight() != size) {
+						found = resize(found, size);
+					}
+					cache.put(size + "_" + path, found);
+				}
+				onLoad.accept(found);
+			}
+		}.start();
 	}
 
 	public static Image load(String name, double size) {
