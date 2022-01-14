@@ -1,4 +1,4 @@
-package mesa.app.pages.session.items;
+package mesa.app.pages.session.items.color;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.items.ItemIcon;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;

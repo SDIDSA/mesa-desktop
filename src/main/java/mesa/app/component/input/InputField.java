@@ -58,7 +58,7 @@ public abstract class InputField extends VBox implements Styleable {
 
 		lab = new Label(window, key, new Font(12, FontWeight.BOLD));
 		lab.setTransform(TextTransform.UPPERCASE);
-		lab.setOpacity(.7);
+		lab.setOpacity(.8);
 
 		labs.getChildren().addAll(lab, t, err);
 
@@ -110,7 +110,7 @@ public abstract class InputField extends VBox implements Styleable {
 		err.setKey(null);
 		applyStyle(window.getStyl());
 
-		forEach(in -> in.applyStyle(window.getStyl()));
+		forEach(in -> in.applyStyle(window.getStyl().get()));
 	}
 
 	protected void addInput(Input in) {

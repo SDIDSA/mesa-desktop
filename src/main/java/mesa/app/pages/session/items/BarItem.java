@@ -49,6 +49,7 @@ public abstract class BarItem extends HBox {
 	
 	public void setTooltip(Tooltip tip) {
 		this.tip = tip;
+		tip.setOffset(15);
 		Tooltip.install(icon, tip);
 	}
 	

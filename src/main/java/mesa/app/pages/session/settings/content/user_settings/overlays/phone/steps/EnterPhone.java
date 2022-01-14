@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
+package mesa.app.pages.session.settings.content.user_settings.overlays.phone.steps;
 
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.PhoneNumberUtil.PhoneNumberFormat;
@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.api.Auth;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.settings.content.user_settings.overlays.phone.PhoneInput;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.MultiText;
@@ -70,11 +71,12 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 		}
 	}
 
-	public void invalid() {
+	public void invalid(Runnable onInvalid) {
 		if (getChildren().contains(smsCodeNode)) {
 			getChildren().removeAll(smsCodeNode, phoneUse);
 			getChildren().add(1, invalid);
 		}
+		onInvalid.run();
 	}
 
 	public void setAction(Runnable onValid, Runnable onInvalid, Runnable next) {
@@ -91,17 +93,18 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 					Auth.sendPhoneCode(owner.getUser().getId(), pending, result -> {
 						if (!result.has("err")) {
 							next.run();
+						} else {
+							invalid.setKey(result.getString("err"));
+							invalid(onInvalid);
 						}
 
 						input.stopLoading();
 					});
 				} else {
-					invalid();
-					onInvalid.run();
+					invalid(onInvalid);
 				}
 			} catch (Exception e) {
-				invalid();
-				onInvalid.run();
+				invalid(onInvalid);
 			}
 		});
 	}

@@ -16,11 +16,11 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class TextInput extends Input {
+public class DeprecatedTextInput extends DeprecatedInput {
 	private TextInputControl field;
 	private HBox preField;
 
-	public TextInput(Window window, Font font, String key, boolean hidden) {
+	public DeprecatedTextInput(Window window, Font font, String key, boolean hidden) {
 		super(key);
 
 		field = hidden ? new PasswordField() : new TextField();
@@ -64,7 +64,7 @@ public class TextInput extends Input {
 		}
 	}
 
-	public TextInput(Window window, Font font, String key) {
+	public DeprecatedTextInput(Window window, Font font, String key) {
 		this(window, font, key, false);
 	}
 	

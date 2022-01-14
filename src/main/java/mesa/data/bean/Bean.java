@@ -17,15 +17,16 @@ public class Bean {
 			set(key, value);
 		});
 	}
-	
+
 	public void set(String key, Object value) {
 		String setter = setterName(key);
 
 		try {
 			getClass().getMethod(setter, value.getClass()).invoke(this, value);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException x) {
-			ErrorHandler.handle(x, "parse user json");
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+				| SecurityException x) {
+			ErrorHandler.handle(x, "parse " + key + " of type " + value.getClass().getSimpleName());
+			x.printStackTrace();
 		}
 	}
 

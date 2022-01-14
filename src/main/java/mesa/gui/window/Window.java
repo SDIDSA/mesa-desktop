@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import io.socket.client.Socket;
@@ -35,6 +36,8 @@ import javafx.stage.StageStyle;
 
 public class Window extends Stage {
 	private static final String MAIN_SOCKET = "main_socket";
+	private static final String SERVERS = "servers";
+	private static final String LOGGED = "logged";
 
 	private HashMap<String, Object> data = new HashMap<>();
 
@@ -209,10 +212,16 @@ public class Window extends Stage {
 		data.put(key, value);
 	}
 
-	private static final String LOGGED = "logged";
-
 	public void putLoggedUser(User user) {
 		putData(LOGGED, user);
+	}
+	
+	public void putServers(JSONArray servers) {
+		data.put(SERVERS, servers);
+	}
+	
+	public JSONArray getServers() {
+		return getJSONArray(SERVERS);
 	}
 
 	public void clearLoggedUser() {
@@ -225,6 +234,10 @@ public class Window extends Stage {
 
 	public JSONObject getJsonData(String key) throws IllegalStateException {
 		return getOfType(key, JSONObject.class);
+	}
+
+	public JSONArray getJSONArray(String key) throws IllegalStateException {
+		return getOfType(key, JSONArray.class);
 	}
 
 	public Socket getSocket(String key) throws IllegalStateException {

@@ -1,4 +1,4 @@
-package mesa.api;
+package mesa.api.json;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

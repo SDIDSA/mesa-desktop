@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.settings.content.user_settings.overlays.phone.steps.EnterPhone;
+import mesa.app.pages.session.settings.content.user_settings.overlays.phone.steps.VerifyPhone;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.alert.Overlay;
 import mesa.gui.controls.image.layer_icon.IsoPhone;

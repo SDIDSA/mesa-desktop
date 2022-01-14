@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.function.BiConsumer;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javafx.animation.Interpolator;
@@ -135,13 +136,18 @@ public class LoginPage extends Page {
 		});
 
 		BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> {
-			window.putData("user", user);
-			if(hide != null) {
-				hide.setOnFinished(e -> window.loadPage(SessionPage.class));
-				hide.playFromStart();
-			}else {
-				window.loadPage(SessionPage.class);
-			}
+			Session.getServers(servers -> {
+				JSONArray servarr = servers.getJSONArray("servers");
+				window.putServers(servarr);
+				window.putData("user", user);
+				if (hide != null) {
+					hide.setOnFinished(e -> window.loadPage(SessionPage.class));
+					hide.playFromStart();
+				} else {
+					window.loadPage(SessionPage.class);
+				}
+			});
+			
 		};
 
 		login.setOnSuccess(user -> onSuccess.accept(user, hide(login)));
@@ -200,10 +206,15 @@ public class LoginPage extends Page {
 		String token = SessionManager.getSession();
 		if (token != null) {
 			Session.getUser(result -> {
-				if(result.has("user")) {
-					window.putData("user", result.getJSONObject("user"));
-					window.loadPage(SessionPage.class);
-					SessionManager.registerSocket(window.getMainSocket(), token);
+				if (result.has("user")) {
+					Session.getServers(servers -> {
+						JSONArray servarr = servers.getJSONArray("servers");
+						window.putServers(servarr);
+						window.putData("user", result.getJSONObject("user"));
+						window.loadPage(SessionPage.class);
+						SessionManager.registerSocket(window.getMainSocket(), token);
+						loading.stop();
+					});
 				}
 			});
 		} else {

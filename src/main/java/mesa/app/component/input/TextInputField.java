@@ -2,16 +2,16 @@ package mesa.app.component.input;
 
 import javafx.scene.Node;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.input.TextInput;
+import mesa.gui.controls.input.DeprecatedTextInput;
 import mesa.gui.window.Window;
 
 public class TextInputField extends InputField {
-	private TextInput input;
+	private DeprecatedTextInput input;
 
 	public TextInputField(Window window, String key, double width, boolean hidden) {
 		super(window, key, width);
 
-		input = new TextInput(window, new Font(16), key, hidden);
+		input = new DeprecatedTextInput(window, new Font(16), key, hidden);
 
 		value.bind(input.valueProperty());
 

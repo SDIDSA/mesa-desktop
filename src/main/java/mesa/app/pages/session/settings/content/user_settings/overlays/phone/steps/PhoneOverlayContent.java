@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays.phone;
+package mesa.app.pages.session.settings.content.user_settings.overlays.phone.steps;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

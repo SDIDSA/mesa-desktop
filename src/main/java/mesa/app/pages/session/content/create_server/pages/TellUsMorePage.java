@@ -32,8 +32,12 @@ public class TellUsMorePage extends MultiOverlayPage {
 		VBox.setMargin(skip, new Insets(10, 0, 2, 0));
 		
 		center.getChildren().addAll(
-				new ServerOption(owner.getWindow(), "for_me_and_friends", "friends2", "friends1").setAction(owner::next),
-				new ServerOption(owner.getWindow(), "for_club_or_community", "commb", "commf").setAction(owner::next)
+				new ServerOption(owner.getWindow(), "for_me_and_friends", "friends2", "friends1")
+				.addAction(() -> owner.put("audience", "friends"))
+				.addAction(owner::next),
+				new ServerOption(owner.getWindow(), "for_club_or_community", "commb", "commf")
+				.addAction(() -> owner.put("audience", "community"))
+				.addAction(owner::next)
 			);
 
 		center.getChildren().add(skip);

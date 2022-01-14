@@ -31,9 +31,9 @@ public interface Styleable {
 	 * @param style - the {@link Style} to be applied on this Node
 	 */
 
-	void applyStyle(ObjectProperty<Style> style);
-
 	void applyStyle(Style style);
+
+	void applyStyle(ObjectProperty<Style> style);
 
 	public static String colorToCss(Color color) {
 		return "rgb(" + (int) (color.getRed() * 255) + "," + (int) (color.getGreen() * 255) + ","

@@ -26,7 +26,10 @@ import mesa.app.pages.session.content.Content;
 import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.menu.SectionItem;
+import mesa.app.pages.session.types.server.ServerContent;
+import mesa.app.utils.Threaded;
 import mesa.data.SessionManager;
+import mesa.data.bean.Server;
 import mesa.data.bean.User;
 import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.alert.Alert;
@@ -52,6 +55,8 @@ public class SessionPage extends Page {
 	private Timeline showSettings;
 	private Timeline hideSettings;
 
+	private ServerBar servers;
+
 	private Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
 
 	public SessionPage(Window window) {
@@ -63,13 +68,15 @@ public class SessionPage extends Page {
 		registerSocket(window);
 
 		root = new HBox();
+		root.setMinHeight(0);
+		root.maxHeightProperty().bind(heightProperty());
 
 		settings = new Settings(this);
 		settings.setOpacity(0);
 		settings.getRoot().setScaleX(1.1);
 		settings.getRoot().setScaleY(1.1);
 
-		ServerBar servers = new ServerBar(this);
+		servers = new ServerBar(this);
 
 		side = new StackPane();
 		side.setMinWidth(240);
@@ -105,6 +112,24 @@ public class SessionPage extends Page {
 			getChildren().remove(settings);
 		});
 
+		try {
+			window.getServers().forEach(obj -> {
+				int serId = ((JSONObject) obj).getInt("server");
+				int order = ((JSONObject) obj).getInt("order");
+
+				Session.getServer(serId, result -> {
+					Server server = new Server(result.getJSONObject("server"), order);
+
+					ServerContent sc = new ServerContent(this, server);
+
+					Threaded.runAfter(500, () -> servers.addServer(sc));
+				});
+			});
+		}catch(Exception x) {
+			x.printStackTrace();
+		}
+		
+
 		getChildren().add(root);
 		applyStyle(window.getStyl());
 	}
@@ -116,6 +141,20 @@ public class SessionPage extends Page {
 			JSONObject obj = new JSONObject(data[0].toString());
 
 			obj.keySet().forEach(key -> Platform.runLater(() -> user.set(key, obj.get(key))));
+		});
+
+		socket.on("join_server", data -> {
+			JSONObject obj = new JSONObject(data[0].toString());
+
+			int id = obj.getInt("id");
+
+			Session.getServer(id, result -> {
+				Server server = new Server(result.getJSONObject("server"), Integer.MAX_VALUE);
+
+				ServerContent sc = new ServerContent(this, server);
+
+				Threaded.runAfter(500, () -> servers.addServer(sc));
+			});
 		});
 	}
 
@@ -175,7 +214,7 @@ public class SessionPage extends Page {
 	}
 
 	public void logout(Runnable onDone) {
-		Session.logout(user.getId(), e -> {
+		Session.logout(e -> {
 			window.getMainSocket().off("user_sync");
 			window.getMainSocket().io().off("reconnect");
 			SessionManager.clearSession();

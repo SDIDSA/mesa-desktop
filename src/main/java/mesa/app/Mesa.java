@@ -15,7 +15,7 @@ public class Mesa extends Application {
 	@Override
 	public void start(Stage dismiss) throws Exception {
 		System.setProperty("prism.lcdtext", "false");
-		Window window = new Window(this, Style.DARK, Locale.FR_FR);
+		Window window = new Window(this, Style.DARK, Locale.EN_US);
 		window.setTitle("mesa");
 		window.setOnShown(e -> window.loadPage(LoginPage.class, window::centerOnScreen));
 		window.show();

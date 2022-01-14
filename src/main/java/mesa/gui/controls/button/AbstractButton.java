@@ -38,6 +38,8 @@ public class AbstractButton extends StackPane implements Styleable {
 	private Timeline enter;
 	private Timeline exit;
 	
+	private boolean ignoreHover = false;
+	
 	private Runnable mouseAction;
 	private Runnable keyAction;
 
@@ -110,13 +112,24 @@ public class AbstractButton extends StackPane implements Styleable {
 	}
 
 	protected void onEnter(MouseEvent event) {
+		if(ignoreHover) {
+			return;
+		}
 		exit.stop();
 		enter.playFromStart();
 	}
 
 	protected void onExit(MouseEvent event) {
+		if(ignoreHover) {
+			return;
+		}
 		enter.stop();
 		exit.playFromStart();
+	}
+	
+	
+	public void setIgnoreHover(boolean ignoreHover) {
+		this.ignoreHover = ignoreHover;
 	}
 
 	public void show() {
@@ -207,6 +220,10 @@ public class AbstractButton extends StackPane implements Styleable {
 
 		exit = new Timeline(
 				new KeyFrame(Duration.seconds(.15), new KeyValue(back.fillProperty(), fill, Interpolator.EASE_BOTH)));
+	}
+	
+	public ObjectProperty<Paint> fillProperty() {
+		return back.fillProperty();
 	}
 
 	public void setStroke(Color fill) {

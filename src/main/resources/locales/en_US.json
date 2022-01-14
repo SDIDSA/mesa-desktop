@@ -184,5 +184,25 @@
 	"a_new_fem": "a new",
 	"a_new_mal": "a new",
 	
-	"get_black_to_modify_id": "Get Black Mesa to modify your tag!"
+	"get_black_to_modify_id": "Get Black Mesa to modify your tag!",
+	
+	"phone_used": "This number is already in use.",
+	
+	"create_channel": "Create Channel",
+	"create_invite": "Create Invite",
+	"edit_channel": "Edit Channel",
+	"invite_to": "Invite friends to {$0}",
+	"share_invite": "Share this link with others to grant access to this server",
+	"link_expires_in": "Your invite link expires in {$0}.",
+	"never_expire": "Set this link to never expire",
+	"link_settings": "Link Settings",
+	"copy": "Copy",
+	"copied": "Copied",
+	"enter_invite": "Enter an invite below to join an existing server",
+	"server_join": "Join Server",
+	"invite_link": "Invite link",
+	"invites_format": "Invites should look like",
+	"dont_have_invite": "Don't have an invite?",
+	"check_server_discovery": "Check out public communities in Server Discovery.",
+	"invalid_invite": "The invite is invalid or has expired."
 }

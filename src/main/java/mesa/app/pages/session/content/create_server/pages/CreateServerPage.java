@@ -50,18 +50,20 @@ public class CreateServerPage extends MultiOverlayPage {
 		temps.setTranslateX(4);
 		VBox.setMargin(temps, new Insets(8, 0, 0, 0));
 
-		center.getChildren().add(
-				new ServerOption(owner.getWindow(), "create_my_own", "kh", "ks").setAction(owner::next));
+		center.getChildren().add(new ServerOption(owner.getWindow(), "create_my_own", "kh", "ks")
+				.addAction(() -> owner.put("template", "default")).addAction(owner::next));
 
 		center.getChildren().add(temps);
 
 		center.getChildren().addAll(
-				new ServerOption(owner.getWindow(), "gaming", "gpp", "gpb").setAction(owner::next),
-				new ServerOption(owner.getWindow(), "school_club", "scp", "scb"),
-				new ServerOption(owner.getWindow(), "study_group", "bpb", "bpa"),
-				new ServerOption(owner.getWindow(), "friends", "friends2", "friends1"),
-				new ServerOption(owner.getWindow(), "artists_and_creators", "createb", "createf"),
-				new ServerOption(owner.getWindow(), "local_community", "commb", "commf"));
+				new ServerOption(owner.getWindow(), "gaming", "gpp", "gpb")
+						.addAction(() -> owner.put("template", "gaming")).addAction(owner::next),
+				new ServerOption(owner.getWindow(), "school_club", "scp", "scb").addAction(owner::next),
+				new ServerOption(owner.getWindow(), "study_group", "bpb", "bpa").addAction(owner::next),
+				new ServerOption(owner.getWindow(), "friends", "friends2", "friends1").addAction(owner::next),
+				new ServerOption(owner.getWindow(), "artists_and_creators", "createb", "createf")
+						.addAction(owner::next),
+				new ServerOption(owner.getWindow(), "local_community", "commb", "commf").addAction(owner::next));
 
 		preCenter.getChildren().addAll(center, sb);
 
@@ -76,6 +78,8 @@ public class CreateServerPage extends MultiOverlayPage {
 
 		join = new Button(owner.getWindow(), "join_server", 3.0, 408, 38);
 		join.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 13.5));
+
+		join.setAction(() -> owner.load(3));
 
 		bot.getChildren().addAll(haveInvite, join);
 

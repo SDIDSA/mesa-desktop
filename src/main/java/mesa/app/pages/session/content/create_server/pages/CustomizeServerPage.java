@@ -3,6 +3,8 @@ package mesa.app.pages.session.content.create_server.pages;
 import java.io.File;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -14,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
+import mesa.api.Session;
 import mesa.app.component.input.TextInputField;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
 import mesa.gui.controls.Font;
@@ -44,8 +47,12 @@ public class CustomizeServerPage extends MultiOverlayPage {
 	private StackPane imagePane;
 	private ImageView serverIcon;
 
+	private ObjectProperty<File> iconFile;
+
 	public CustomizeServerPage(MultiOverlay owner) {
 		super(owner, "customize_server", "server_name_icon");
+
+		iconFile = new SimpleObjectProperty<>();
 
 		VBox center = new VBox(8);
 		center.setAlignment(Pos.CENTER);
@@ -90,9 +97,14 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 		iconPane.setOnMouseClicked(e -> {
 			File file = FileUtils.selectImage(owner.getWindow());
+			if (file != null)
+				iconFile.set(file);
+		});
 
-			if (file != null) {
-				Image image = ImageProxy.load(file.getAbsolutePath(), 80, true);
+		iconFile.addListener((obs, ov, nv) -> {
+			File val = iconFile.get();
+			if (val != null) {
+				Image image = ImageProxy.load(val.getAbsolutePath(), 80, true);
 				serverIcon.setImage(image);
 				iconPane.getChildren().setAll(imagePane);
 
@@ -103,6 +115,8 @@ public class CustomizeServerPage extends MultiOverlayPage {
 				} else {
 					serverIcon.setViewport(null);
 				}
+			} else {
+				iconPane.getChildren().setAll(icon);
 			}
 		});
 
@@ -117,6 +131,19 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 		create = new Button(owner.getWindow(), "create", 3.0, 28, 38);
 		create.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
+
+		create.disableProperty().bind(field.valueProperty().isEmpty());
+		
+		create.setAction(() -> {
+			create.startLoading();
+			Session.createServer(field.getValue(), owner.getString("template"), owner.getString("audience"), iconFile.get(), result -> {
+				if(!result.has("err")) {
+					owner.hide();
+					iconFile.set(null);
+				}
+				create.stopLoading();
+			});
+		});
 
 		back.setAction(owner::back);
 

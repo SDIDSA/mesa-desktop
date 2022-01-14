@@ -2,18 +2,31 @@ package mesa.gui.controls.image;
 
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
+import javax.imageio.ImageIO;
+
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
+import mesa.gui.exception.ErrorHandler;
 import net.coobird.thumbnailator.makers.FixedSizeThumbnailMaker;
 import net.coobird.thumbnailator.resizers.DefaultResizerFactory;
 import net.coobird.thumbnailator.resizers.Resizer;
 
 public class ImageProxy {
 	private static HashMap<String, Image> cache = new HashMap<>();
-
+	static {
+		File cacheDir = new File("cache");
+		if(!cacheDir.exists() || !cacheDir.isDirectory()) {
+			cacheDir.mkdir();
+		}
+	}
+	
 	private ImageProxy() {
 		
 	}
@@ -32,7 +45,7 @@ public class ImageProxy {
 				found = new Image(ImageProxy.class.getResourceAsStream(path));
 			}
 
-			if (found.getHeight() != size) {
+			if (found.getHeight() > size || found.getWidth() > size) {
 				found = resize(found, size);
 			}
 			cache.put(size + "_" + path, found);
@@ -47,7 +60,11 @@ public class ImageProxy {
 			public void run() {
 				Image found = cache.get(size + "_" + path);
 				if(found == null) {
-					found = new Image(path);
+					found = lookInCache(path);
+					if(found == null) {
+						found = new Image(path);
+						saveInCache(path, found);
+					}
 					if (found.getHeight() != size) {
 						found = resize(found, size);
 					}
@@ -83,5 +100,31 @@ public class ImageProxy {
 				.make(o);
 
 		return SwingFXUtils.toFXImage(scaledImage, null);
+	}
+	
+	private static Image lookInCache(String path) {
+		String name = path.substring(path.lastIndexOf("/") + 1);
+		File file = new File("cache/" + name);
+		if(file.exists()) {
+			try {
+				return new Image(new FileInputStream(file));
+			} catch (FileNotFoundException e) {
+				ErrorHandler.handle(e, "load image from cache");
+				return null;
+			}
+		}else {
+			return null;
+		}
+	}
+	
+	private static void saveInCache(String path, Image image) {
+		String name = path.substring(path.lastIndexOf("/") + 1);
+		String extension = name.substring(name.lastIndexOf(".") + 1);
+		
+		try {
+			ImageIO.write(SwingFXUtils.fromFXImage(image, null), extension, new File("cache/" + name));
+		} catch (IOException e) {
+			ErrorHandler.handle(e, "save image in cache");
+		}
 	}
 }

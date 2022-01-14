@@ -86,7 +86,7 @@ public class Verify extends LoginSubPage {
 
 		setRoot(root);
 
-		logout.setAction(() -> Session.logout(user.getString("id"), e -> {
+		logout.setAction(() -> Session.logout(e -> {
 			window.getMainSocket().io().off("reconnect");
 			SessionManager.clearSession();
 			if (onLogout != null) {

@@ -10,13 +10,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.input.Clipboard;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.input.TextInput;
+import mesa.gui.controls.input.DeprecatedTextInput;
 import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.window.Window;
 
 public class ConfCode extends InputField {
 
-	private ArrayList<TextInput> inputs;
+	private ArrayList<DeprecatedTextInput> inputs;
 
 	public ConfCode(Window window, String key, int length, double width) {
 		super(window, key, width);
@@ -42,11 +42,11 @@ public class ConfCode extends InputField {
 
 		focusedProperty().addListener((obs, ov, nv) -> {
 			if (nv.booleanValue()) {
-				for (TextInput inp : inputs) {
+				for (DeprecatedTextInput inp : inputs) {
 					inp.focus();
 				}
 			} else {
-				for (TextInput inp : inputs) {
+				for (DeprecatedTextInput inp : inputs) {
 					inp.unfocus();
 				}
 			}
@@ -83,7 +83,7 @@ public class ConfCode extends InputField {
 			if (i == length / 2) {
 				addNode(new ExpandingHSpace());
 			}
-			TextInput inp = new TextInput(window, f, key);
+			DeprecatedTextInput inp = new DeprecatedTextInput(window, f, key);
 			inp.setMinSize(45, 45);
 			inp.setMaxSize(45, 45);
 			inp.align(Pos.CENTER);
@@ -97,21 +97,21 @@ public class ConfCode extends InputField {
 
 	private void onMouseEntered() {
 		if (!isFocused())
-			for (TextInput inp : inputs) {
+			for (DeprecatedTextInput inp : inputs) {
 				inp.hover();
 			}
 	}
 
 	private void onMouseExited() {
 		if (!isFocused())
-			for (TextInput inp : inputs) {
+			for (DeprecatedTextInput inp : inputs) {
 				inp.unhover();
 			}
 	}
 
 	private void append(char c) {
 		for (int i = 0; i < inputs.size(); i++) {
-			TextInput inp = inputs.get(i);
+			DeprecatedTextInput inp = inputs.get(i);
 
 			if (inp.getValue().isEmpty()) {
 				inp.setValue(Character.toString(c));
@@ -122,7 +122,7 @@ public class ConfCode extends InputField {
 
 	public void delete() {
 		for (int i = inputs.size() - 1; i >= 0; i--) {
-			TextInput inp = inputs.get(i);
+			DeprecatedTextInput inp = inputs.get(i);
 
 			if (!inp.getValue().isEmpty()) {
 				inp.clear();

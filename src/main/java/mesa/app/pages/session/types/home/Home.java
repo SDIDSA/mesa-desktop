@@ -8,7 +8,7 @@ import javafx.scene.text.Text;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.content.Content;
 import mesa.app.pages.session.content.UserBar;
-import mesa.app.pages.session.items.ColorBarItem;
+import mesa.app.pages.session.items.color.ColorBarItem;
 import mesa.app.utils.Colors;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.popup.context.ContextMenu;
