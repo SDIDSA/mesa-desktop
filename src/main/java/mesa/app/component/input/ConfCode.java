@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanExpression;
 import javafx.beans.binding.StringExpression;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -131,15 +132,6 @@ public class ConfCode extends InputField {
 		}
 	}
 
-	public void paste() {
-		Clipboard clipboard = Clipboard.getSystemClipboard();
-		if (clipboard.hasString()) {
-			setValue(clipboard.getString());
-		}
-		getParent().requestFocus();
-		requestFocus();
-	}
-
 	public ConfCode(Window window, String key, int length) {
 		this(window, key, length, 200);
 	}
@@ -156,6 +148,36 @@ public class ConfCode extends InputField {
 				append(c);
 			}
 		}
+	}
+
+	@Override
+	public void copy() {
+		//DO NOTHING
+	}
+
+	@Override
+	public void cut() {
+		//DO NOTHING
+	}
+	
+	@Override
+	public void paste() {
+		Clipboard clipboard = Clipboard.getSystemClipboard();
+		if (clipboard.hasString()) {
+			setValue(clipboard.getString());
+		}
+		getParent().requestFocus();
+		requestFocus();
+	}
+	
+	@Override
+	public boolean supportsContextMenu() {
+		return false;
+	}
+	
+	@Override
+	public BooleanProperty notSelected() {
+		return null;
 	}
 
 }

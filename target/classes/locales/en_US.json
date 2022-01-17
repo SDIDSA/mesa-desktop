@@ -196,7 +196,6 @@
 	"link_expires_in": "Your invite link expires in {$0}.",
 	"never_expire": "Set this link to never expire",
 	"link_settings": "Link Settings",
-	"copy": "Copy",
 	"copied": "Copied",
 	"enter_invite": "Enter an invite below to join an existing server",
 	"server_join": "Join Server",
@@ -204,5 +203,12 @@
 	"invites_format": "Invites should look like",
 	"dont_have_invite": "Don't have an invite?",
 	"check_server_discovery": "Check out public communities in Server Discovery.",
-	"invalid_invite": "The invite is invalid or has expired."
+	"invalid_invite": "The invite is invalid or has expired.",
+	
+	"stickers": "Stickers",
+	"spellcheck": "Spellcheck",
+	"languages": "Languages",
+	"paste": "Paste",
+	"copy": "Copy",
+	"cut": "Cut"
 }

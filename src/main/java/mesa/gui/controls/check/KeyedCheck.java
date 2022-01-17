@@ -23,9 +23,7 @@ public class KeyedCheck extends HBox {
 		check.setMouseTransparent(true);
 		label.setMouseTransparent(true);
 		
-		setOnMouseClicked(e-> {
-			checkedProperty().set(!checkedProperty().get());
-		});
+		setOnMouseClicked(e-> check.flip());
 		
 		setCursor(Cursor.HAND);
 		

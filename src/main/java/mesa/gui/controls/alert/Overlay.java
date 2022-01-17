@@ -40,12 +40,12 @@ public class Overlay extends StackPane {
 	public Overlay(Pane owner, Window window) {
 		this.owner = owner;
 		this.window = window;
-		
+
 		onShown = new ArrayList<>();
 		onShowing = new ArrayList<>();
 		onHidden = new ArrayList<>();
 		onHiding = new ArrayList<>();
-		
+
 		back = new StackPane();
 		back.setBackground(Backgrounds.make(Color.gray(0, .8)));
 
@@ -77,18 +77,18 @@ public class Overlay extends StackPane {
 			if (autoHide)
 				hide();
 		});
-		
-		content.setOnMousePressed(e-> requestFocus());
-		
-		addEventFilter(KeyEvent.KEY_RELEASED, e-> {
-			if(e.getCode().equals(KeyCode.ESCAPE) && autoHide) {
+
+		content.setOnMousePressed(e -> requestFocus());
+
+		addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+			if (e.getCode().equals(KeyCode.ESCAPE) && autoHide) {
 				hide();
 			}
 		});
 
 		getChildren().addAll(back, content);
 	}
-	
+
 	public Overlay(Page owner) {
 		this(owner, owner.getWindow());
 	}
@@ -121,7 +121,7 @@ public class Overlay extends StackPane {
 		this.content.getChildren().setAll(cont);
 	}
 
-	public void show() {		
+	public void show() {
 		hide.stop();
 		back.setOpacity(0);
 		content.setScaleX(.7);

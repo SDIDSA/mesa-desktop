@@ -1,5 +1,6 @@
 package mesa.app.component.input;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.DeprecatedTextInput;
@@ -48,6 +49,31 @@ public class TextInputField extends InputField {
 	@Override
 	public void requestFocus() {
 		input.requestFocus();
+	}
+	
+	@Override
+	public boolean supportsContextMenu() {
+		return true;
+	}
+
+	@Override
+	public void copy() {
+		input.copy();
+	}
+
+	@Override
+	public void cut() {
+		input.cut();
+	}
+
+	@Override
+	public void paste() {
+		input.paste();
+	}
+	
+	@Override
+	public BooleanProperty notSelected() {
+		return input.notSelected();
 	}
 	
 }

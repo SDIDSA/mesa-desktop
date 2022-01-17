@@ -1,9 +1,9 @@
 package mesa.gui.controls.check;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderWidths;
@@ -18,41 +18,82 @@ import mesa.gui.window.Window;
 
 public class Check extends StackPane implements Styleable {
 	private BooleanProperty checked;
+	private BooleanProperty inverted;
+	
+	private Pane tick;
 
 	public Check(Window window, double size) {
 		setMinSize(size, size);
 		setMaxSize(size, size);
 
+		inverted = new SimpleBooleanProperty(false);
 		checked = new SimpleBooleanProperty(false);
 
-		Pane check = new Pane();
-		check.setMinSize(size / 3.5, size / 1.5);
-		check.setMaxSize(size / 3.5, size / 1.5);
-		check.setBorder(Borders.make(Color.WHITE, new BorderWidths(0, 2, 2, 0)));
-		check.setTranslateY(-size / 12);
-		check.setRotate(45);
-		check.setMouseTransparent(true);
+		tick = new Pane();
+		tick.setMinSize(size / 3.5, size / 1.5);
+		tick.setMaxSize(size / 3.5, size / 1.5);
+		tick.setTranslateY(-size / 15);
+		tick.setRotate(45);
+		tick.setMouseTransparent(true);
 
-		getChildren().add(check);
+		getChildren().add(tick);
 
-		check.visibleProperty().bind(checked);
+		tick.visibleProperty().bind(checked);
 
 		setCursor(Cursor.HAND);
-		setOnMouseClicked(e -> {
-			checked.set(!checked.get());
-		});
+		setOnMouseClicked(e -> flip());
 
 		applyStyle(window.getStyl());
 	}
-
-	@Override
-	public void applyStyle(Style style) {
-		borderProperty().bind(Bindings.when(checked).then(Borders.make(style.getAccent(), 2.0, 2.0))
-				.otherwise(Borders.make(style.getChannelsDefault(), 2.0, 2.0)));
-		backgroundProperty().bind(
-				Bindings.when(checked).then(Backgrounds.make(style.getAccent(), 2.0)).otherwise(Background.EMPTY));
+	
+	public void flip() {
+		checked.set(!checked.get());
 	}
 
+	private ChangeListener<Boolean> listener;
+	@Override
+	public void applyStyle(Style style) {
+		Runnable restyle = () -> {
+			boolean checkedVal = this.checked.get();
+			boolean invertedVal = this.inverted.get();
+
+			if (checkedVal) {
+				if (invertedVal) {
+					setBorder(Borders.make(Color.WHITE, 2.0, 2.0));
+					setBackground(Backgrounds.make(Color.WHITE, 2.0));
+					tick.setBorder(Borders.make(style.getAccent(), new BorderWidths(0, 2, 2, 0)));
+				} else {
+					setBorder(Borders.make(style.getAccent(), 2.0, 2.0));
+					setBackground(Backgrounds.make(style.getAccent(), 2.0));
+					tick.setBorder(Borders.make(Color.WHITE, new BorderWidths(0, 2, 2, 0)));
+				}
+			} else {
+				setBackground(Background.EMPTY);
+				if (invertedVal) {
+					setBorder(Borders.make(Color.WHITE, 2.0, 2.0));
+				} else {
+					setBorder(Borders.make(style.getChannelsDefault(), 2.0, 2.0));
+				}
+			}
+		};
+
+		restyle.run();
+		
+		if(listener != null) {
+			checked.removeListener(listener);
+			inverted.removeListener(listener);
+		}
+		
+		listener = (obs, ov, nv)-> restyle.run();
+		
+		checked.addListener(listener);
+		inverted.addListener(listener);
+	}
+	
+	public BooleanProperty invertedProperty() {
+		return inverted;
+	}
+	
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);
@@ -60,5 +101,9 @@ public class Check extends StackPane implements Styleable {
 
 	public BooleanProperty checkedProperty() {
 		return checked;
+	}
+	
+	public void setChecked(boolean checked) {
+		this.checked.set(checked);
 	}
 }

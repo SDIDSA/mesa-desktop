@@ -3,10 +3,12 @@ package mesa.gui.controls.input.combo;
 import java.util.ArrayList;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
@@ -179,6 +181,36 @@ public class ComboInput extends DeprecatedInput implements Localized {
 	@Override
 	public void clear() {
 		setValue("");
+	}
+
+	@Override
+	public boolean supportsContextMenu() {
+		return false;
+	}
+
+	@Override
+	public Node contextMenuNode() {
+		return null;
+	}
+	
+	@Override
+	public void copy() {
+		//DO NOTHING
+	}
+	
+	@Override
+	public void cut() {
+		//DO NOTHING
+	}
+	
+	@Override
+	public void paste() {
+		//DO NOTHING
+	}
+	
+	@Override
+	public BooleanProperty notSelected() {
+		return null;
 	}
 
 	@Override

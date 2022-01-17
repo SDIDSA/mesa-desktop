@@ -2,6 +2,7 @@ package mesa.app.pages.session.content.create_server.pages;
 
 import java.util.ArrayList;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -74,7 +75,7 @@ public class ExploreJoin extends HBox implements Styleable {
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 8.0));
+		backgroundProperty().bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getBackgroundModifierHover(), 8.0)).otherwise(Backgrounds.make(style.getBackgroundSecondary(), 8.0)));
 
 		NodeUtils.focusBorder(this, style.getTextLink(), Color.TRANSPARENT, 8.0);
 

@@ -1,8 +1,10 @@
 package mesa.gui.controls.input;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.css.Styleable;
+import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import mesa.gui.controls.Font;
@@ -39,4 +41,16 @@ public abstract class Input extends StackPane implements Styleable {
 	public abstract void setBorder(Color border, Color hover, Color foc);
 	
 	public abstract void applyStyle(Style style);
+	
+	public abstract boolean supportsContextMenu();
+	
+	public abstract Node contextMenuNode();
+	
+	public abstract void copy();
+	
+	public abstract void cut();
+	
+	public abstract void paste();
+	
+	public abstract BooleanProperty notSelected();
 }

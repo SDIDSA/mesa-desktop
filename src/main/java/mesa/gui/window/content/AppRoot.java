@@ -2,6 +2,7 @@ package mesa.gui.window.content;
 
 import java.awt.Dimension;
 
+import javafx.scene.Node;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -33,7 +34,20 @@ public class AppRoot extends BorderPane {
 		DropShadow ds = new DropShadow(15, Color.gray(0, .25));
 		setEffect(ds);
 
-		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> requestFocus());
+		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+			boolean cancel = false;
+			Node p = (Node) e.getTarget();
+			while(p != null) {
+				if(p.isFocusTraversable()) {
+					cancel = true;
+					break;
+				}
+				p = p.getParent();
+			}
+			if(!cancel) {
+				requestFocus();
+			}
+		});
 
 		setBorderFill(Colors.DEFAULT_WINDOW_BORDER, 1);
 		setFill(window.getStyl().get().getBackgroundTertiary());
@@ -57,9 +71,9 @@ public class AppRoot extends BorderPane {
 
 		bar = new AppBar(window, helper);
 		setTop(bar);
-		
+
 		Alert credits = new Credits(parent, window);
-		
+
 		bar.setOnInfo(credits::show);
 	}
 
@@ -74,6 +88,7 @@ public class AppRoot extends BorderPane {
 	}
 
 	private Page old = null;
+
 	public void setContent(Page page) {
 		if (old != null) {
 			old.destroy();
@@ -81,7 +96,7 @@ public class AppRoot extends BorderPane {
 
 		page.setup();
 		setCenter(page);
-		
+
 		old = page;
 	}
 
