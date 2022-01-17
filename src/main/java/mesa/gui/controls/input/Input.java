@@ -6,17 +6,22 @@ import javafx.beans.property.StringProperty;
 import javafx.css.Styleable;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import mesa.gui.controls.Font;
-import mesa.gui.style.Style;
+import mesa.gui.controls.input.styles.InputStyle;
 
 public abstract class Input extends StackPane implements Styleable {
 	protected StringProperty value;
+	
+	protected InputStyle inputStyle;
 	
 	protected Input(String key) {
 		getStyleClass().addAll("input", key);
 		
 		value = new SimpleStringProperty("");
+	}
+	
+	public InputStyle getInputStyle() {
+		return inputStyle;
 	}
 	
 	public String getValue() {
@@ -26,9 +31,10 @@ public abstract class Input extends StackPane implements Styleable {
 	public StringProperty valueProperty() {
 		return value;
 	}
-
+	
+	public abstract boolean isFocus();
+	
 	public abstract void setFont(Font font);
-
 
 	public abstract void setValue(String value);
 
@@ -37,10 +43,6 @@ public abstract class Input extends StackPane implements Styleable {
 	 * implementation of this method depends on the input type
 	 */
 	public abstract void clear();
-
-	public abstract void setBorder(Color border, Color hover, Color foc);
-	
-	public abstract void applyStyle(Style style);
 	
 	public abstract boolean supportsContextMenu();
 	

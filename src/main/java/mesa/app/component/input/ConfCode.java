@@ -44,11 +44,11 @@ public class ConfCode extends InputField {
 		focusedProperty().addListener((obs, ov, nv) -> {
 			if (nv.booleanValue()) {
 				for (DeprecatedTextInput inp : inputs) {
-					inp.focus();
+					inp.getInputStyle().focus();
 				}
 			} else {
 				for (DeprecatedTextInput inp : inputs) {
-					inp.unfocus();
+					inp.getInputStyle().unfocus();
 				}
 			}
 		});
@@ -99,14 +99,14 @@ public class ConfCode extends InputField {
 	private void onMouseEntered() {
 		if (!isFocused())
 			for (DeprecatedTextInput inp : inputs) {
-				inp.hover();
+				inp.getInputStyle().hover();
 			}
 	}
 
 	private void onMouseExited() {
 		if (!isFocused())
 			for (DeprecatedTextInput inp : inputs) {
-				inp.unhover();
+				inp.getInputStyle().unhover();
 			}
 	}
 

@@ -1,4 +1,4 @@
-package mesa.gui.controls.input;
+package mesa.gui.controls.input.styles;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -8,13 +8,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
-import mesa.gui.factory.Backgrounds;
-import mesa.gui.factory.Borders;
+import mesa.gui.controls.input.Input;
 import mesa.gui.style.Style;
-import mesa.gui.style.Styleable;
 
-public abstract class DeprecatedInput extends Input implements Styleable {
-
+public class DeprecatedInputStyle extends InputStyle {
 	private ObjectProperty<Color> borderProperty;
 
 	private Timeline focus;
@@ -22,17 +19,15 @@ public abstract class DeprecatedInput extends Input implements Styleable {
 	private Timeline enter;
 	private Timeline exit;
 
-	protected DeprecatedInput(String key) {
-		super(key);
+	public DeprecatedInputStyle(Input input) {
+		super(input);
 
 		borderProperty = new SimpleObjectProperty<>();
 
 		borderProperty.addListener((obs, ov, nv) -> applyBorder(nv));
 
-		setMinHeight(40);
-
-		hoverProperty().addListener((obs, ov, nv) -> {
-			if (!isFocus()) {
+		input.hoverProperty().addListener((obs, ov, nv) -> {
+			if (!input.isFocus()) {
 				if (nv.booleanValue()) {
 					hover();
 				} else {
@@ -42,7 +37,8 @@ public abstract class DeprecatedInput extends Input implements Styleable {
 		});
 	}
 
-	protected void focus(boolean focus) {
+	@Override
+	public void focus(boolean focus) {
 		if (focus) {
 			focus();
 		} else {
@@ -50,30 +46,31 @@ public abstract class DeprecatedInput extends Input implements Styleable {
 		}
 	}
 
+	@Override
 	public void hover() {
 		exit.stop();
 		enter.playFromStart();
 	}
 
+	@Override
 	public void unhover() {
 		enter.stop();
 		exit.playFromStart();
 	}
 
+	@Override
 	public void focus() {
 		unfocus.stop();
 		this.focus.playFromStart();
 	}
 
+	@Override
 	public void unfocus() {
 		this.focus.stop();
 		unfocus.playFromStart();
 	}
 
-	private void setBack(Color fill) {
-		applyBack(fill);
-	}
-
+	@Override
 	public void setBorder(Color border, Color hover, Color foc) {
 		if (enter != null) {
 			enter.stop();
@@ -82,7 +79,11 @@ public abstract class DeprecatedInput extends Input implements Styleable {
 			unfocus.stop();
 		}
 
-		borderProperty.set(border);
+		if (input.isFocus()) {
+			borderProperty.set(foc);
+		} else {
+			borderProperty.set(border);
+		}
 
 		focus = new Timeline(
 				new KeyFrame(Duration.seconds(.2), new KeyValue(borderProperty, foc, Interpolator.EASE_BOTH)));
@@ -95,19 +96,10 @@ public abstract class DeprecatedInput extends Input implements Styleable {
 				new KeyFrame(Duration.seconds(.2), new KeyValue(borderProperty, border, Interpolator.EASE_BOTH)));
 	}
 
-	private void applyBack(Color fill) {
-		setBackground(Backgrounds.make(fill, 3.0));
-	}
-
-	private void applyBorder(Color border) {
-		setBorder(Borders.make(border, 3.0));
-	}
-	
-	protected abstract boolean isFocus();
-
 	@Override
 	public void applyStyle(Style style) {
-		setBack(style.getDeprecatedTextInputBg());
+		applyBack(style.getDeprecatedTextInputBg());
 		setBorder(style.getDeprecatedTextInputBorder(), style.getDeprecatedTextInputBorderHover(), style.getTextLink());
 	}
+
 }

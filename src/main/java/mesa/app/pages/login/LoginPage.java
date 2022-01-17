@@ -38,125 +38,131 @@ public class LoginPage extends Page {
 	private Login login;
 
 	public LoginPage(Window window) {
+
 		super(window, new Dimension(970, 530));
+		try {
 
-		Register register = new Register(window);
-		login = new Login(window);
-		Verify verify = new Verify(window);
+			Register register = new Register(window);
+			login = new Login(window);
+			Verify verify = new Verify(window);
 
-		subs.add(register);
-		subs.add(login);
-		subs.add(verify);
+			subs.add(register);
+			subs.add(login);
+			subs.add(verify);
 
-		prepare(register);
-		prepare(verify);
+			prepare(register);
+			prepare(verify);
 
-		Timeline showRegister = fromTo(login, register);
-		showRegister.setOnFinished(e -> {
-			login.postTransition();
-			register.postTransition();
-			getChildren().remove(login);
-		});
+			Timeline showRegister = fromTo(login, register);
+			showRegister.setOnFinished(e -> {
+				login.postTransition();
+				register.postTransition();
+				getChildren().remove(login);
+			});
 
-		Timeline hideRegister = fromTo(register, login);
-		hideRegister.setOnFinished(e -> {
-			login.postTransition();
-			register.postTransition();
-			getChildren().remove(register);
-		});
+			Timeline hideRegister = fromTo(register, login);
+			hideRegister.setOnFinished(e -> {
+				login.postTransition();
+				register.postTransition();
+				getChildren().remove(register);
+			});
 
-		Timeline showVerify = fromTo(login, verify);
-		showVerify.setOnFinished(e -> {
-			login.postTransition();
-			verify.postTransition();
-			getChildren().remove(login);
-		});
+			Timeline showVerify = fromTo(login, verify);
+			showVerify.setOnFinished(e -> {
+				login.postTransition();
+				verify.postTransition();
+				getChildren().remove(login);
+			});
 
-		Timeline hideVerify = fromTo(verify, login);
-		hideVerify.setOnFinished(e -> {
-			login.postTransition();
-			verify.postTransition();
-			getChildren().remove(verify);
-		});
+			Timeline hideVerify = fromTo(verify, login);
+			hideVerify.setOnFinished(e -> {
+				login.postTransition();
+				verify.postTransition();
+				getChildren().remove(verify);
+			});
 
-		login.setOnRegister(() -> {
-			register.preTransition();
-			login.preTransition();
+			login.setOnRegister(() -> {
+				register.preTransition();
+				login.preTransition();
 
-			getChildren().add(register);
-			register.setMouseTransparent(false);
-			login.setMouseTransparent(true);
-			showVerify.stop();
-			hideVerify.stop();
-			hideRegister.stop();
-			showRegister.playFromStart();
-		});
+				getChildren().add(register);
+				register.setMouseTransparent(false);
+				login.setMouseTransparent(true);
+				showVerify.stop();
+				hideVerify.stop();
+				hideRegister.stop();
+				showRegister.playFromStart();
+			});
 
-		register.setOnLogin(data -> {
-			register.preTransition();
-			login.preTransition();
-			getChildren().add(login);
-			login.setMouseTransparent(false);
-			register.setMouseTransparent(true);
-			showVerify.stop();
-			hideVerify.stop();
-			showRegister.stop();
-			hideRegister.playFromStart();
+			register.setOnLogin(data -> {
+				register.preTransition();
+				login.preTransition();
+				getChildren().add(login);
+				login.setMouseTransparent(false);
+				register.setMouseTransparent(true);
+				showVerify.stop();
+				hideVerify.stop();
+				showRegister.stop();
+				hideRegister.playFromStart();
 
-			if (data != null) {
-				login.loadData(data);
-			}
-		});
-
-		login.setOnVerify(user -> {
-			verify.preTransition();
-			login.preTransition();
-
-			getChildren().add(verify);
-			verify.setMouseTransparent(false);
-			register.setMouseTransparent(true);
-			hideVerify.stop();
-			showRegister.stop();
-			hideRegister.stop();
-			showVerify.playFromStart();
-
-			verify.loadData(user);
-		});
-
-		verify.setOnLogout(() -> {
-			verify.preTransition();
-			login.preTransition();
-			getChildren().add(login);
-			login.setMouseTransparent(false);
-			verify.setMouseTransparent(true);
-			showVerify.stop();
-			showRegister.stop();
-			hideRegister.stop();
-			hideVerify.playFromStart();
-		});
-
-		BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> {
-			Session.getServers(servers -> {
-				JSONArray servarr = servers.getJSONArray("servers");
-				window.putServers(servarr);
-				window.putData("user", user);
-				if (hide != null) {
-					hide.setOnFinished(e -> window.loadPage(SessionPage.class));
-					hide.playFromStart();
-				} else {
-					window.loadPage(SessionPage.class);
+				if (data != null) {
+					login.loadData(data);
 				}
 			});
-			
-		};
 
-		login.setOnSuccess(user -> onSuccess.accept(user, hide(login)));
-		verify.setOnSuccess(user -> onSuccess.accept(user, hide(verify)));
+			login.setOnVerify(user -> {
+				verify.preTransition();
+				login.preTransition();
 
-		getChildren().addAll(login);
-		prepare(login);
+				getChildren().add(verify);
+				verify.setMouseTransparent(false);
+				register.setMouseTransparent(true);
+				hideVerify.stop();
+				showRegister.stop();
+				hideRegister.stop();
+				showVerify.playFromStart();
 
-		applyStyle(window.getStyl());
+				verify.loadData(user);
+			});
+
+			verify.setOnLogout(() -> {
+				verify.preTransition();
+				login.preTransition();
+				getChildren().add(login);
+				login.setMouseTransparent(false);
+				verify.setMouseTransparent(true);
+				showVerify.stop();
+				showRegister.stop();
+				hideRegister.stop();
+				hideVerify.playFromStart();
+			});
+
+			BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> {
+				Session.getServers(servers -> {
+					JSONArray servarr = servers.getJSONArray("servers");
+					window.putServers(servarr);
+					window.putData("user", user);
+					if (hide != null) {
+						hide.setOnFinished(e -> window.loadPage(SessionPage.class));
+						hide.playFromStart();
+					} else {
+						window.loadPage(SessionPage.class);
+					}
+				});
+
+			};
+
+			login.setOnSuccess(user -> onSuccess.accept(user, hide(login)));
+			verify.setOnSuccess(user -> onSuccess.accept(user, hide(verify)));
+
+			getChildren().addAll(login);
+			prepare(login);
+
+			applyStyle(window.getStyl());
+
+		} catch (Exception x) {
+			x.printStackTrace();
+		}
 	}
 
 	private void prepare(Node node) {

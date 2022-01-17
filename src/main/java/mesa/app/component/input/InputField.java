@@ -147,7 +147,7 @@ public abstract class InputField extends VBox implements Styleable {
 		}
 		err.setKey(error);
 
-		forEach(in -> in.setBorder(Colors.Error, Colors.Error, Colors.Error));
+		forEach(in -> in.getInputStyle().setBorder(Colors.Error, Colors.Error, Colors.Error));
 	}
 
 	public void setError(String string) {
@@ -159,7 +159,7 @@ public abstract class InputField extends VBox implements Styleable {
 		err.setKey(null);
 		applyStyle(window.getStyl());
 
-		forEach(in -> in.applyStyle(window.getStyl().get()));
+		forEach(in -> in.getInputStyle().applyStyle(window.getStyl().get()));
 	}
 
 	protected void addInput(Input in) {

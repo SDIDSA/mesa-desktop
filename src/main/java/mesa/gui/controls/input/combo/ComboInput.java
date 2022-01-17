@@ -12,7 +12,8 @@ import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.input.DeprecatedInput;
+import mesa.gui.controls.input.Input;
+import mesa.gui.controls.input.styles.DeprecatedInputStyle;
 import mesa.gui.controls.shape.Triangle;
 import mesa.gui.locale.Locale;
 import mesa.gui.locale.Localized;
@@ -20,7 +21,7 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class ComboInput extends DeprecatedInput implements Localized {
+public class ComboInput extends Input implements Styleable, Localized {
 	private String key;
 
 	private Text prompt;
@@ -40,6 +41,8 @@ public class ComboInput extends DeprecatedInput implements Localized {
 		super(key);
 
 		this.key = key;
+		
+		inputStyle = new DeprecatedInputStyle(this);
 
 		setFocusTraversable(true);
 		setAlignment(Pos.CENTER_LEFT);
@@ -72,7 +75,7 @@ public class ComboInput extends DeprecatedInput implements Localized {
 		});
 
 		focusedProperty().addListener((obs, ov, nv) -> {
-			focus(nv);
+			inputStyle.focus(nv);
 			if (!nv.booleanValue()) {
 				popup.hide();
 			}
@@ -153,7 +156,7 @@ public class ComboInput extends DeprecatedInput implements Localized {
 	}
 
 	@Override
-	protected boolean isFocus() {
+	public boolean isFocus() {
 		return isFocused();
 	}
 
@@ -215,7 +218,7 @@ public class ComboInput extends DeprecatedInput implements Localized {
 
 	@Override
 	public void applyStyle(Style style) {
-		super.applyStyle(style);
+		inputStyle.applyStyle(style);
 		popup.applyStyle(style);
 
 		base.setFill(style.getTextNormal());
