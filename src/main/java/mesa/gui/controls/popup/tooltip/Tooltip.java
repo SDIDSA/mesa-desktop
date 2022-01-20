@@ -32,6 +32,7 @@ import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.popup.Direction;
 import mesa.gui.controls.shape.Triangle;
 import mesa.gui.factory.Backgrounds;
+import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -111,10 +112,11 @@ public class Tooltip extends StackPane implements Styleable {
 
 		content.getChildren().add(text);
 
-		content.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> {
-			return text.getBoundsInLocal().getWidth() + content.getPadding().getLeft() + content.getPadding().getRight();
-		}, text.boundsInLocalProperty()));
-		
+		content.maxWidthProperty()
+				.bind(Bindings.createDoubleBinding(() -> text.getBoundsInLocal().getWidth()
+						+ content.getPadding().getLeft() + content.getPadding().getRight(),
+						text.boundsInLocalProperty()));
+
 		if (direction.isArrowFirst()) {
 			root.getChildren().addAll(arr, content);
 		} else {
@@ -138,7 +140,9 @@ public class Tooltip extends StackPane implements Styleable {
 		setMinSize(0, 0);
 
 		maxHeightProperty().bind(root.heightProperty());
+		minHeightProperty().bind(root.heightProperty());
 		maxWidthProperty().bind(root.widthProperty());
+		minWidthProperty().bind(root.widthProperty());
 
 		if (direction == RIGHT) {
 			((HBox) root).setAlignment(Pos.CENTER_LEFT);
@@ -154,6 +158,15 @@ public class Tooltip extends StackPane implements Styleable {
 		}
 
 		getChildren().add(root);
+
+		root.widthProperty().addListener((obs, ov, nv) -> {
+			if (node != null) {
+				position(node);
+			}
+		});
+
+		setBorder(Borders.make(Color.BLACK));
+		root.setBorder(Borders.make(Color.RED));
 
 		applyStyle(window.getStyl());
 	}
@@ -174,7 +187,10 @@ public class Tooltip extends StackPane implements Styleable {
 		text.setText(txt);
 	}
 
+	private Node node;
+
 	private void position(Node node) {
+		this.node = node;
 		double[] pos = direction.calcPos(this, node, offset);
 
 		scale.setPivotX(getWidth() * direction.pivotX());
@@ -327,6 +343,10 @@ public class Tooltip extends StackPane implements Styleable {
 
 	public Window getOwner() {
 		return owner;
+	}
+
+	public double width() {
+		return root.getWidth();
 	}
 
 	@Override

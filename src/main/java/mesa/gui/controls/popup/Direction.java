@@ -43,11 +43,11 @@ public enum Direction {
 		
 		switch(this) {
 		case DOWN:
-			res[0] = screenBounds.getCenterX() - (tooltip.getWidth() / 2);
+			res[0] = screenBounds.getCenterX() - (tooltip.width() / 2);
 			res[1] = screenBounds.getMaxY() + offset;
 			break;
 		case LEFT:
-			res[0] = screenBounds.getMinX() - tooltip.getWidth() - offset;
+			res[0] = screenBounds.getMinX() - tooltip.width() - offset;
 			res[1] = screenBounds.getCenterY() - (tooltip.getHeight() / 2);
 			break;
 		case RIGHT:
@@ -55,7 +55,7 @@ public enum Direction {
 			res[1] = screenBounds.getCenterY() - (tooltip.getHeight() / 2);
 			break;
 		case UP:
-			res[0] = screenBounds.getCenterX() - (tooltip.getWidth() / 2);
+			res[0] = screenBounds.getCenterX() - (tooltip.width() / 2);
 			res[1] = screenBounds.getMinY() - tooltip.getHeight() - offset;
 			break;		
 		}
