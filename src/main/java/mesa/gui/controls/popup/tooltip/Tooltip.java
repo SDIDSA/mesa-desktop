@@ -32,7 +32,6 @@ import mesa.gui.controls.SplineInterpolator;
 import mesa.gui.controls.popup.Direction;
 import mesa.gui.controls.shape.Triangle;
 import mesa.gui.factory.Backgrounds;
-import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -164,9 +163,6 @@ public class Tooltip extends StackPane implements Styleable {
 				position(node);
 			}
 		});
-
-		setBorder(Borders.make(Color.BLACK));
-		root.setBorder(Borders.make(Color.RED));
 
 		applyStyle(window.getStyl());
 	}
