@@ -77,7 +77,8 @@ public class ContextMenu extends PopupControl implements Styleable {
 			}
 		});
 
-		getScene().setOnKeyReleased(this::handleKey);
+		getScene().setOnKeyPressed(this::handlePress);
+		getScene().setOnKeyReleased(this::handleRelease);
 
 		setOnHiding(e -> {
 			if (selected != null) {
@@ -88,21 +89,12 @@ public class ContextMenu extends PopupControl implements Styleable {
 
 		applyStyle(window.getStyl());
 	}
-	
-	private void handleKey(KeyEvent e) {
-		if(checkForAccelerator(e)) {
+
+	private void handleRelease(KeyEvent e) {
+		if (checkForAccelerator(e)) {
 			return;
 		}
-
 		switch (e.getCode()) {
-		case UP: {
-			up();
-		}
-			break;
-		case DOWN: {
-			down();
-		}
-			break;
 		case ENTER, SPACE: {
 			if (selected != null) {
 				selected.fire();
@@ -115,10 +107,25 @@ public class ContextMenu extends PopupControl implements Styleable {
 		default:
 			break;
 		}
-
 		e.consume();
 	}
-	
+
+	private void handlePress(KeyEvent e) {
+		switch (e.getCode()) {
+		case UP: {
+			up();
+		}
+			break;
+		case DOWN: {
+			down();
+		}
+			break;
+		default:
+			break;
+		}
+		e.consume();
+	}
+
 	private boolean checkForAccelerator(KeyEvent e) {
 		for (MenuItem item : items) {
 			KeyCombination accelerator = item.getAccelerator();
@@ -127,26 +134,24 @@ public class ContextMenu extends PopupControl implements Styleable {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	private void up() {
 		MenuItem nextItem = selected;
 
-		int i = (nextItem == null ? items.size() - 1
-				: (items.indexOf(nextItem) - 1 + items.size()) % items.size());
+		int i = (nextItem == null ? items.size() - 1 : (items.indexOf(nextItem) - 1 + items.size()) % items.size());
 		nextItem = items.get(i);
 
 		while (nextItem == null || nextItem.isDisabled()) {
-			i = (nextItem == null ? items.size() - 1
-					: (items.indexOf(nextItem) - 1 + items.size()) % items.size());
+			i = (nextItem == null ? items.size() - 1 : (items.indexOf(nextItem) - 1 + items.size()) % items.size());
 			nextItem = items.get(i);
 		}
 
 		select(nextItem);
 	}
-	
+
 	public void down() {
 		MenuItem nextItem = selected;
 

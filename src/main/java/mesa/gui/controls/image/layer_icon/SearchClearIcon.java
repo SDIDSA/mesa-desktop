@@ -4,6 +4,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Cursor;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -49,6 +50,10 @@ public class SearchClearIcon extends StackPane {
 	
 	public void setOnClear(Runnable onClear) {
 		clear.setAction(onClear);
+	}
+	
+	public ReadOnlyBooleanProperty focusProperty() {
+		return clear.focusedProperty();
 	}
 	
 	private Timeline animate(ColorIcon hide, ColorIcon show, int by) {

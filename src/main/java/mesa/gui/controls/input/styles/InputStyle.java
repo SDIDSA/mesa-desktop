@@ -8,10 +8,20 @@ import mesa.gui.style.Style;
 
 public abstract class InputStyle {
 	protected Input input;
+
+	protected boolean ignoreHover = false;
+	protected boolean ignoreFocus = false;
 	
 	protected InputStyle(Input input) {
 		this.input = input;
-		input.setMinHeight(40);
+	}
+	
+	public void setIgnoreFocus(boolean ignoreFocus) {
+		this.ignoreFocus = ignoreFocus;
+	}
+	
+	public void setIgnoreHover(boolean ignoreHover) {
+		this.ignoreHover = ignoreHover;
 	}
 
 	protected void applyBack(Color fill) {

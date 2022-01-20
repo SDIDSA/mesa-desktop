@@ -289,24 +289,35 @@ public class Tooltip extends StackPane implements Styleable {
 	static class Installation {
 		EventHandler<MouseEvent> onEnter;
 		EventHandler<MouseEvent> onExit;
+		ChangeListener<Boolean> onFocusChange;
+		
 		Node node;
 
 		public Installation(Node node, Tooltip tip) {
 			this.node = node;
 			this.onEnter = e -> tip.showPop(node);
 			this.onExit = e -> tip.fadeOut();
+			onFocusChange = (obs, ov, nv) -> {
+				if(nv.booleanValue()) {
+					tip.showPop(node);
+				}else {
+					tip.fadeOut();
+				}
+			};
 		}
 
 		public void install() {
 			node.addEventFilter(MouseEvent.MOUSE_ENTERED, onEnter);
 			node.addEventFilter(MouseEvent.MOUSE_EXITED, onExit);
 			node.addEventFilter(MouseEvent.MOUSE_CLICKED, onExit);
+			node.focusedProperty().addListener(onFocusChange);
 		}
 
 		public void uninstall() {
 			node.removeEventFilter(MouseEvent.MOUSE_ENTERED, onEnter);
 			node.removeEventFilter(MouseEvent.MOUSE_EXITED, onExit);
 			node.removeEventFilter(MouseEvent.MOUSE_CLICKED, onExit);
+			node.focusedProperty().removeListener(onFocusChange);
 		}
 	}
 

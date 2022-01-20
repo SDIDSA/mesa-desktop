@@ -49,7 +49,7 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 		phoneUse.addLabel("one_account", new Font(15, FontWeight.BOLD));
 		phoneUse.addLabel("phone_use_post", new Font(15));
 
-		invalid = new MultiText(owner.getWindow(), "phone_invalid", new Font(15));
+		invalid = new MultiText(owner.getWindow(), "", new Font(15));
 		invalid.center();
 		invalid.setFill(Colors.Error);
 		VBox.setMargin(invalid, new Insets(0, 0, 20, 0));
@@ -101,9 +101,11 @@ public class EnterPhone extends PhoneOverlayContent implements Styleable {
 						input.stopLoading();
 					});
 				} else {
+					invalid.setKey("phone_invalid");
 					invalid(onInvalid);
 				}
 			} catch (Exception e) {
+				invalid.setKey("phone_invalid");
 				invalid(onInvalid);
 			}
 		});

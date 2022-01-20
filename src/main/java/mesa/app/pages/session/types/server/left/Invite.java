@@ -12,7 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.api.Session;
 import mesa.app.pages.session.SessionPage;
-import mesa.app.utils.Threaded;
 import mesa.data.bean.Server;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.alert.Overlay;
@@ -44,7 +43,7 @@ public class Invite extends Overlay implements Styleable {
 	private KeyedCheck check;
 
 	private ActionIcon linkSettings;
-	
+
 	private boolean inited = false;
 
 	protected Invite(SessionPage session, Server server, double width) {
@@ -108,13 +107,13 @@ public class Invite extends Overlay implements Styleable {
 
 	@Override
 	public void show() {
-		if(!inited) {
+		if (!inited) {
 			input.startLoading();
-			
-			Threaded.runAfter(500, ()-> {
-				Session.generateInvite(server.getId(), result -> input.stopLoading(result.getString("invite_id")));
-			});
-			
+
+			Session.generateInvite(server.getId(), result -> 
+				input.stopLoading(result.getString("invite_id"))
+			);
+
 			inited = true;
 		}
 		super.show();
@@ -135,6 +134,8 @@ public class Invite extends Overlay implements Styleable {
 		check.setTextFill(style.getHeaderSecondary());
 
 		linkSettings.setFill(style.getHeaderSecondary());
+		
+		linkSettings.applyStyle(style);
 	}
 
 	@Override

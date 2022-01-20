@@ -27,7 +27,7 @@ public class DeprecatedInputStyle extends InputStyle {
 		borderProperty.addListener((obs, ov, nv) -> applyBorder(nv));
 
 		input.hoverProperty().addListener((obs, ov, nv) -> {
-			if (!input.isFocus()) {
+			if (!input.isFocus() || ignoreFocus) {
 				if (nv.booleanValue()) {
 					hover();
 				} else {
@@ -39,6 +39,9 @@ public class DeprecatedInputStyle extends InputStyle {
 
 	@Override
 	public void focus(boolean focus) {
+		if(ignoreFocus) {
+			return;
+		}
 		if (focus) {
 			focus();
 		} else {
@@ -48,24 +51,36 @@ public class DeprecatedInputStyle extends InputStyle {
 
 	@Override
 	public void hover() {
+		if(ignoreHover) {
+			return;
+		}
 		exit.stop();
 		enter.playFromStart();
 	}
 
 	@Override
 	public void unhover() {
+		if(ignoreHover) {
+			return;
+		}
 		enter.stop();
 		exit.playFromStart();
 	}
 
 	@Override
 	public void focus() {
+		if(ignoreFocus) {
+			return;
+		}
 		unfocus.stop();
 		this.focus.playFromStart();
 	}
 
 	@Override
 	public void unfocus() {
+		if(ignoreFocus) {
+			return;
+		}
 		this.focus.stop();
 		unfocus.playFromStart();
 	}

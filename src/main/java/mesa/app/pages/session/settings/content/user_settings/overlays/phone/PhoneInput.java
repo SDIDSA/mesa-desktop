@@ -6,15 +6,9 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -24,15 +18,12 @@ import mesa.gui.controls.Font;
 import mesa.gui.controls.button.AbstractButton;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
-import mesa.gui.factory.Backgrounds;
-import mesa.gui.factory.Borders;
+import mesa.gui.controls.input.DeprecatedTextInput;
 import mesa.gui.style.Style;
-import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class PhoneInput extends HBox implements Styleable {
+public class PhoneInput extends DeprecatedTextInput {
 	private AbstractButton country;
-	private TextField field;
 	private Button send;
 
 	private ColorIcon showPop;
@@ -51,16 +42,12 @@ public class PhoneInput extends HBox implements Styleable {
 	private Timeline onHidden;
 
 	public PhoneInput(Window window) {
-		setAlignment(Pos.CENTER);
+		super(window, new Font(16), "phone_number");
+		setPadding(new Insets(2, 6, 3, 6));
 		
-		field = new TextField();
-		field.setBackground(Background.EMPTY);
-		field.setBorder(Border.EMPTY);
-		field.setPadding(new Insets(12));
-		field.setFont(new Font(16).getFont());
-		field.textProperty().addListener(c -> onChange());
-
-		setHgrow(field, Priority.ALWAYS);
+		ignoreFocus(true);
+		
+		valueProperty().addListener(c -> onChange());
 
 		send = new Button(window, "phone_send", 3.0, 16, 32);
 		send.setFont(new Font(13, FontWeight.BOLD));
@@ -101,9 +88,10 @@ public class PhoneInput extends HBox implements Styleable {
 			countries.showPop(this);
 		});
 
-		getChildren().addAll(country, field, send);
+		addPreField(country);
+		addPostField(send);
 
-		applyStyle(window.getStyl());
+		applyStyle(window.getStyl().get());
 	}
 
 	private void onChange() {
@@ -137,7 +125,7 @@ public class PhoneInput extends HBox implements Styleable {
 			selectedCode.setText(code.getCode());
 			countries.hide();
 			onChange();
-			field.requestFocus();
+			requestFocus();
 		});
 	}
 
@@ -149,8 +137,9 @@ public class PhoneInput extends HBox implements Styleable {
 		countries = null;
 	}
 
-	private String getValue() {
-		return selectedCode.getText() + field.getText();
+	@Override
+	public String getValue() {
+		return selectedCode.getText() + super.getValue();
 	}
 
 	public void setAction(Consumer<String> action) {
@@ -165,32 +154,27 @@ public class PhoneInput extends HBox implements Styleable {
 		send.stopLoading();
 	}
 
+	@Override
 	public void clear() {
-		field.clear();
+		super.clear();
 		selectedCode.setText("");
 		selectedCountry = null;
 	}
 
 	@Override
 	public void applyStyle(Style style) {
-		setBackground(Backgrounds.make(style.getBackgroundSecondary(), 5.0));
-		setBorder(Borders.make(style.getDeprecatedTextInputBorder(), 5.0));
+		super.applyStyle(style);
+		if(country == null) {
+			return;
+		}
 
 		country.setFill(style.getSecondaryButtonBack());
 		selectedCode.setFill(Color.WHITE);
 		showPop.setFill(Color.WHITE);
 
-		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getTextNormal())
-				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
-
 		send.setTextFill(Color.WHITE);
 		send.setFill(style.getAccent());
 		setEffect(new DropShadow(8, Color.gray(0, .2)));
-	}
-
-	@Override
-	public void applyStyle(ObjectProperty<Style> style) {
-		Styleable.bindStyle(this, style);
 	}
 
 }

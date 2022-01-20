@@ -13,7 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import mesa.api.Auth;
 import mesa.app.component.Form;
-import mesa.app.component.input.TextInputField;
+import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.data.SessionManager;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
@@ -56,9 +56,9 @@ public class Login extends LoginSubPage {
 		etsya.setOpacity(.7);
 		VBox.setMargin(etsya, new Insets(0, 0, 20, 0));
 
-		TextInputField email = new TextInputField(window, "email_phone", 414);
+		DeprecatedTextInputField email = new DeprecatedTextInputField(window, "email_phone", 414);
 		VBox.setMargin(email, new Insets(0, 0, 20, 0));
-		TextInputField password = new TextInputField(window, "password", 414, true);
+		DeprecatedTextInputField password = new DeprecatedTextInputField(window, "password", 414, true);
 		VBox.setMargin(password, new Insets(0, 0, 4, 0));
 
 		KeyedLink recover = new KeyedLink(window, "recover", new Font(14));

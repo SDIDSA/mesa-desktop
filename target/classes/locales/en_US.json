@@ -210,5 +210,13 @@
 	"languages": "Languages",
 	"paste": "Paste",
 	"copy": "Copy",
-	"cut": "Cut"
+	"cut": "Cut",
+	"search": "Search",
+	"help": "Help",
+	"inbox": "Inbox",
+	"hide_members": "Hide Member List",
+	"show_members": "Show Member List",
+	"pinned_messages": "Pinned messages",
+	"notification_settings": "Notification settings",
+	"threads": "Threads"
 }

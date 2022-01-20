@@ -3,7 +3,6 @@ package mesa.app.component.input;
 import java.util.List;
 import java.util.function.Consumer;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -23,9 +21,6 @@ import mesa.gui.controls.Font;
 import mesa.gui.controls.input.Input;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.keyed.Label;
-import mesa.gui.controls.popup.context.ContextMenu;
-import mesa.gui.controls.popup.context.items.CheckMenuItem;
-import mesa.gui.controls.popup.context.items.KeyedMenuItem;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
@@ -42,11 +37,6 @@ public abstract class InputField extends VBox implements Styleable {
 	private Text t;
 
 	protected StringProperty value;
-
-	private ContextMenu menu;
-	private KeyedMenuItem copy;
-	private KeyedMenuItem cut;
-	private KeyedMenuItem paste;
 
 	protected InputField(Window window, String key, double width) {
 		super(8);
@@ -76,45 +66,6 @@ public abstract class InputField extends VBox implements Styleable {
 		setMaxWidth(width);
 
 		input = new HBox(15);
-
-		if (supportsContextMenu()) {
-			menu = new ContextMenu(window);
-			
-			CheckMenuItem stickers = new CheckMenuItem(menu, "stickers", null);
-			stickers.setChecked(true);
-			CheckMenuItem spellCheck = new CheckMenuItem(menu, "spellcheck", null);
-			spellCheck.setChecked(true);
-			KeyedMenuItem languages = new KeyedMenuItem(menu, "languages", null);
-			
-			copy = new KeyedMenuItem(menu, "copy", null);
-			copy.setAccelerator("ctrl+c");
-			copy.setAction(this::copy);
-
-			cut = new KeyedMenuItem(menu, "cut", null);
-			cut.setAccelerator("ctrl+x");
-			cut.setAction(this::cut);
-
-			paste = new KeyedMenuItem(menu, "paste", null);
-			paste.setAccelerator("ctrl+v");
-			paste.setAction(this::paste);
-
-			menu.addMenuItem(stickers);
-			menu.separate();
-			menu.addMenuItem(spellCheck);
-			menu.addMenuItem(languages);
-			menu.separate();
-			menu.addMenuItem(copy);
-			menu.addMenuItem(cut);
-			menu.addMenuItem(paste);
-		
-			spellCheck.checkedProperty().addListener((obs, ov, nv)-> {
-				if(nv.booleanValue()) {
-					menu.enable(languages);
-				}else {
-					menu.disable(languages);
-				}
-			});
-		}
 
 		getChildren().addAll(labs, input);
 	}
@@ -164,27 +115,6 @@ public abstract class InputField extends VBox implements Styleable {
 
 	protected void addInput(Input in) {
 		HBox.setHgrow(in, Priority.ALWAYS);
-
-		if (supportsContextMenu() && in.supportsContextMenu()) {
-			Consumer<Boolean> checkSelection = nv -> {
-				if(nv.booleanValue()) {
-					menu.disable(cut);
-					menu.disable(copy);
-				}else {
-					menu.enable(copy);
-					menu.enable(cut);
-				}
-			};
-			
-			notSelected().addListener((obs, ov, nv)-> checkSelection.accept(nv));
-			
-			checkSelection.accept(notSelected().getValue());
-			
-			in.contextMenuNode().setOnContextMenuRequested(e -> menu.showPop(in, e));
-
-			in.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> menu.hide());
-		}
-
 		input.getChildren().add(in);
 	}
 
@@ -227,16 +157,6 @@ public abstract class InputField extends VBox implements Styleable {
 	}
 
 	public abstract void setValue(String string);
-
-	public abstract boolean supportsContextMenu();
-
-	public abstract void copy();
-
-	public abstract void cut();
-
-	public abstract void paste();
-
-	public abstract BooleanProperty notSelected();
 
 	/**
 	 * Remove the error (if exists) from this field and clear the values of all

@@ -7,7 +7,7 @@ import mesa.gui.window.Window;
 public class DeprecatedTextInput extends TextInput {
 
 	public DeprecatedTextInput(Window window, Font font, String key, boolean hidden) {
-		super(font, key, hidden);
+		super(window, font, key, hidden);
 
 		inputStyle = new DeprecatedInputStyle(this);
 

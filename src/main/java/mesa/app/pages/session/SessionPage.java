@@ -56,6 +56,8 @@ public class SessionPage extends Page {
 	private Timeline hideSettings;
 
 	private ServerBar servers;
+	
+	private Content loaded;
 
 	private Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
 
@@ -211,6 +213,12 @@ public class SessionPage extends Page {
 	public void load(Content content) {
 		side.getChildren().setAll(content.getSide());
 		main.getChildren().setAll(content.getMain());
+		
+		loaded = content;
+	}
+	
+	public Content getLoaded() {
+		return loaded;
 	}
 
 	public void logout(Runnable onDone) {

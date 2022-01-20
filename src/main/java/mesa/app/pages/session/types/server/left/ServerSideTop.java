@@ -30,7 +30,8 @@ public class ServerSideTop extends StackPane implements Styleable {
 	private ColorIcon expand;
 	private Text name;
 	
-	private FillTransition hover, unhover;
+	private FillTransition hover;
+	private FillTransition unhover;
 
 	public ServerSideTop(SessionPage session, Server server) {
 		setMinHeight(48);

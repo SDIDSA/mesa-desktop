@@ -32,6 +32,7 @@ import mesa.app.utils.Threaded;
 import mesa.data.bean.CountryCode;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.SplineInterpolator;
+import mesa.gui.controls.input.Search;
 import mesa.gui.controls.scroll.ScrollBar;
 import mesa.gui.controls.space.Separator;
 import mesa.gui.factory.Backgrounds;
@@ -45,7 +46,7 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 	protected Window owner;
 	private VBox root;
 
-	private CountrySearch search;
+	private Search search;
 	
 	private Separator separator;
 	private ScrollBar scrollBar;
@@ -69,7 +70,7 @@ public class CountryCodePopup extends PopupControl implements Styleable {
 		
 		root.setOnMouseClicked(e-> root.requestFocus());
 
-		search = new CountrySearch();
+		search = new Search(owner, "search_country");
 
 		separator = new Separator(Orientation.HORIZONTAL);
 		VBox.setMargin(separator, new Insets(8, 0, 8, 0));

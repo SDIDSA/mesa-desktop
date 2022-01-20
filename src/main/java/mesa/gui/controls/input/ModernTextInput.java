@@ -7,7 +7,7 @@ import mesa.gui.window.Window;
 public class ModernTextInput extends TextInput {
 
 	public ModernTextInput(Window window, Font font, String key, boolean hidden) {
-		super(font, key, hidden);
+		super(window, font, key, hidden);
 
 		inputStyle = new ModernInputStyle(this);
 

@@ -1,8 +1,6 @@
 package mesa.app.component.input;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
-import javafx.scene.input.Clipboard;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.combo.ComboInput;
 import mesa.gui.controls.input.combo.item.MonthItem;
@@ -51,31 +49,6 @@ public class DateInputField extends InputField {
 		day.setValue(parts[0]);
 		month.setValue(parts[1]);
 		year.setValue(parts[2]);
-	}
-
-	@Override
-	public void copy() {
-		//DO NOTHING
-	}
-
-	@Override
-	public void cut() {
-		//DO NOTHING
-	}
-
-	@Override
-	public void paste() {
-		setValue(Clipboard.getSystemClipboard().getString());
-	}
-	
-	@Override
-	public boolean supportsContextMenu() {
-		return false;
-	}
-	
-	@Override
-	public BooleanProperty notSelected() {
-		return null;
 	}
 
 }

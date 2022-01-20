@@ -1,22 +1,14 @@
 package mesa.app.component.input;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.scene.Node;
-import mesa.gui.controls.Font;
-import mesa.gui.controls.input.ModernTextInput;
+import mesa.gui.controls.input.styles.ModernInputStyle;
 import mesa.gui.window.Window;
 
-public class ModernTextInputField extends InputField {
-	private ModernTextInput input;
+public class ModernTextInputField extends TextInputField {
 
 	public ModernTextInputField(Window window, String key, double width, boolean hidden) {
 		super(window, key, width);
-
-		input = new ModernTextInput(window, new Font(16), key, hidden);
-
-		value.bind(input.valueProperty());
-
-		addInput(input);
+		
+		input.setInputStyle(new ModernInputStyle(input));
 
 		applyStyle(window.getStyl());
 	}
@@ -31,53 +23,6 @@ public class ModernTextInputField extends InputField {
 
 	public ModernTextInputField(Window window, String key) {
 		this(window, key, 200, false);
-	}
-	
-	public void setPrompt(String prompt) {
-		input.setPrompt(prompt);
-	}
-	
-	public void addPostField(Node...nodes) {
-		input.addPostField(nodes);
-	}
-	
-	public void positionCaret(int pos) {
-		input.positionCaret(pos);
-	}
-
-	@Override
-	public void setValue(String value) {
-		input.setValue(value);
-	}
-
-	@Override
-	public void requestFocus() {
-		input.requestFocus();
-	}
-	
-	@Override
-	public boolean supportsContextMenu() {
-		return true;
-	}
-
-	@Override
-	public void copy() {
-		input.copy();
-	}
-
-	@Override
-	public void cut() {
-		input.cut();
-	}
-
-	@Override
-	public void paste() {
-		input.paste();
-	}
-	
-	@Override
-	public BooleanProperty notSelected() {
-		return input.notSelected();
 	}
 	
 }

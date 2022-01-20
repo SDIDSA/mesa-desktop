@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
 import mesa.api.Session;
-import mesa.app.component.input.TextInputField;
+import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.app.pages.session.content.create_server.MultiOverlay;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -37,7 +37,7 @@ public class CustomizeServerPage extends MultiOverlayPage {
 	private CircledAdd addIcon;
 	private Text upload;
 
-	private TextInputField field;
+	private DeprecatedTextInputField field;
 
 	private MultiText guidelines;
 
@@ -72,7 +72,7 @@ public class CustomizeServerPage extends MultiOverlayPage {
 
 		icon.getChildren().addAll(upload, addIcon);
 
-		field = new TextInputField(owner.getWindow(), "server_name", 408);
+		field = new DeprecatedTextInputField(owner.getWindow(), "server_name", 408);
 		VBox.setMargin(field, new Insets(22, 0, 8, 0));
 
 		guidelines = new MultiText(owner.getWindow());

@@ -4,7 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import mesa.app.component.input.TextInputField;
+import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.MultiText;
@@ -14,7 +14,7 @@ import mesa.gui.style.Styleable;
 public class PasswordOverlay extends AbstractOverlay {
 
 	private MultiText head;
-	private TextInputField password;
+	private DeprecatedTextInputField password;
 
 	public PasswordOverlay(SessionPage session, String headKey, String actionKey, double width) {
 		super(session, width);
@@ -27,7 +27,7 @@ public class PasswordOverlay extends AbstractOverlay {
 		head.setMouseTransparent(true);
 		VBox.setMargin(head, new Insets(0, 0, 16, 0));
 
-		password = new TextInputField(session.getWindow(), "password", width - 32, true);
+		password = new DeprecatedTextInputField(session.getWindow(), "password", width - 32, true);
 
 		form.addAll(password);
 
