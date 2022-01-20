@@ -44,6 +44,8 @@ public class Tooltip extends StackPane implements Styleable {
 
 	private static final double SCALED = .7;
 
+	private Node node;
+
 	protected Window owner;
 	private Pane root;
 	private Text text;
@@ -158,11 +160,15 @@ public class Tooltip extends StackPane implements Styleable {
 
 		getChildren().add(root);
 
-		root.widthProperty().addListener((obs, ov, nv) -> {
+		ChangeListener<Number> onResize = (obs, ov, nv) -> {
 			if (node != null) {
+				getTransforms().clear();
 				position(node);
+				getTransforms().add(scale);
 			}
-		});
+		};
+		root.widthProperty().addListener(onResize);
+		root.heightProperty().addListener(onResize);
 
 		applyStyle(window.getStyl());
 	}
@@ -183,25 +189,21 @@ public class Tooltip extends StackPane implements Styleable {
 		text.setText(txt);
 	}
 
-	private Node node;
-
 	private void position(Node node) {
-		this.node = node;
 		double[] pos = direction.calcPos(this, node, offset);
 
-		scale.setPivotX(getWidth() * direction.pivotX());
-		scale.setPivotY(getHeight() * direction.pivotY());
+		scale.setPivotX(width() * direction.pivotX());
+		scale.setPivotY(height() * direction.pivotY());
 
 		setTranslateX(pos[0]);
 		setTranslateY(pos[1]);
 	}
 
 	protected void showPop(Node node) {
+		this.node = node;
+		
 		fadeOut.stop();
 		Runnable adjust = () -> {
-			getTransforms().clear();
-			position(node);
-			getTransforms().add(scale);
 			setCache(true);
 			fadeIn.playFromStart();
 		};
@@ -343,6 +345,10 @@ public class Tooltip extends StackPane implements Styleable {
 
 	public double width() {
 		return root.getWidth();
+	}
+
+	public double height() {
+		return root.getHeight();
 	}
 
 	@Override
