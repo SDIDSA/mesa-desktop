@@ -6,7 +6,7 @@ import mesa.gui.window.Window;
 public class DeprecatedTextInputField extends TextInputField {
 
 	public DeprecatedTextInputField(Window window, String key, double width, boolean hidden) {
-		super(window, key, width);
+		super(window, key, width, hidden);
 		
 		input.setInputStyle(new DeprecatedInputStyle(input));
 

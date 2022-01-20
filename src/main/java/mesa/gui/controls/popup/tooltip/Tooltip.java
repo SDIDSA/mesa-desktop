@@ -7,6 +7,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -110,6 +111,10 @@ public class Tooltip extends StackPane implements Styleable {
 
 		content.getChildren().add(text);
 
+		content.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> {
+			return text.getBoundsInLocal().getWidth() + content.getPadding().getLeft() + content.getPadding().getRight();
+		}, text.boundsInLocalProperty()));
+		
 		if (direction.isArrowFirst()) {
 			root.getChildren().addAll(arr, content);
 		} else {
@@ -216,8 +221,7 @@ public class Tooltip extends StackPane implements Styleable {
 			if (root.isNeedsLayout()) {
 				root.needsLayoutProperty().addListener(new ChangeListener<Boolean>() {
 					@Override
-					public void changed(ObservableValue<? extends Boolean> obs, Boolean ov,
-							Boolean nv) {
+					public void changed(ObservableValue<? extends Boolean> obs, Boolean ov, Boolean nv) {
 						if (getWidth() != 0) {
 							onShown.run();
 							root.needsLayoutProperty().removeListener(this);
@@ -290,7 +294,7 @@ public class Tooltip extends StackPane implements Styleable {
 		EventHandler<MouseEvent> onEnter;
 		EventHandler<MouseEvent> onExit;
 		ChangeListener<Boolean> onFocusChange;
-		
+
 		Node node;
 
 		public Installation(Node node, Tooltip tip) {
@@ -298,9 +302,9 @@ public class Tooltip extends StackPane implements Styleable {
 			this.onEnter = e -> tip.showPop(node);
 			this.onExit = e -> tip.fadeOut();
 			onFocusChange = (obs, ov, nv) -> {
-				if(nv.booleanValue()) {
+				if (nv.booleanValue()) {
 					tip.showPop(node);
-				}else {
+				} else {
 					tip.fadeOut();
 				}
 			};
