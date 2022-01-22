@@ -200,14 +200,12 @@ public class Tooltip extends StackPane implements Styleable {
 	}
 
 	protected void showPop(Node node) {
-		if(this.node == null) {
-			node.localToSceneTransformProperty().addListener((obs, ov, nv) -> {
-				position(node);
-			});
+		if (this.node == null) {
+			node.localToSceneTransformProperty().addListener((obs, ov, nv) -> position(node));
 		}
-		
+
 		this.node = node;
-		
+
 		fadeOut.stop();
 		Runnable adjust = () -> {
 			setCache(true);

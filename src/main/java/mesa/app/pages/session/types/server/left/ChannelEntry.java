@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -17,6 +18,7 @@ import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.types.server.center.ChannelDisplay;
 import mesa.data.bean.Channel;
 import mesa.data.bean.ChannelGroup;
+import mesa.data.bean.Server;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
@@ -27,7 +29,7 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class ChannelEntry extends HBox implements Styleable {
-	private static HashMap<Channel, ChannelDisplay> displayCache = new HashMap<>();
+	private static HashMap<Server, ChannelDisplay> displayCache = new HashMap<>();
 	private static HashMap<Integer, ChannelEntry> selectedChannels = new HashMap<>();
 
 	private BooleanProperty selected;
@@ -45,6 +47,11 @@ public class ChannelEntry extends HBox implements Styleable {
 		setAlignment(Pos.CENTER);
 		setCursor(Cursor.HAND);
 		setOnMouseClicked(e -> select(session, channel));
+		setOnKeyPressed(e-> {
+			if(e.getCode().equals(KeyCode.SPACE)) {
+				select(session, channel);
+			}
+		});
 
 		setFocusTraversable(true);
 
@@ -101,16 +108,19 @@ public class ChannelEntry extends HBox implements Styleable {
 	}
 
 	public void loadChannel(SessionPage session, Channel channel) {
-		ChannelDisplay display = displayCache.get(channel);
+		Server server = channel.getGroup().getServer();
+		ChannelDisplay display = displayCache.get(server);
 
 		if (display == null) {
-			display = new ChannelDisplay(session, channel);
+			display = new ChannelDisplay(session);
 
-			displayCache.put(channel, display);
+			displayCache.put(server, display);
 		}
 
+		display.loadChannel(channel);
+		
 		session.getLoaded().getMain().setTop(display.getTop());
-
+		session.getLoaded().getMain().setCenter(display.getCenter());
 	}
 
 	public void unselect() {

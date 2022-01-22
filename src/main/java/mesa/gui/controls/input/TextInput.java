@@ -82,6 +82,10 @@ public class TextInput extends Input implements Styleable {
 
 		setFont(font);
 	}
+	
+	public void setRadius(double radius) {
+		inputStyle.setRadius(radius);
+	}
 
 	public void setFieldPadding(Insets insets) {
 		field.setPadding(insets);

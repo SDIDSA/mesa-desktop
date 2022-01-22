@@ -21,7 +21,7 @@ public class ChannelTopIcon extends ColorIcon {
 	private boolean ignoreStyle = false;
 
 	public ChannelTopIcon(String icon, String hint, double size) {
-		super(icon, size, true);
+		super(icon, size, hint != null);
 
 		if (hint == null) {
 			setIgnoreStyle(true);
@@ -45,6 +45,14 @@ public class ChannelTopIcon extends ColorIcon {
 		active = new SimpleBooleanProperty(false);
 	}
 
+	public BooleanProperty activeProperty() {
+		return active;
+	}
+	
+	public void toggleActive() {
+		active.set(!active.get());
+	}
+	
 	public ChannelTopIcon(String icon, double size) {
 		this(icon, null, size);
 	}

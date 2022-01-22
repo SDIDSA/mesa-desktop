@@ -3,6 +3,7 @@ package mesa.gui.window.content;
 import java.awt.Dimension;
 
 import javafx.scene.Node;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -38,7 +39,7 @@ public class AppRoot extends BorderPane {
 			boolean cancel = false;
 			Node p = (Node) e.getTarget();
 			while(p != null) {
-				if(p.isFocusTraversable()) {
+				if(p.isFocusTraversable() && p.isFocused() && p instanceof TextInputControl) {
 					cancel = true;
 					break;
 				}

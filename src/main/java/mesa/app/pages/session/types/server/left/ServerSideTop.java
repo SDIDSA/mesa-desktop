@@ -37,7 +37,8 @@ public class ServerSideTop extends StackPane implements Styleable {
 		setMinHeight(48);
 		setMaxHeight(48);
 
-		name = new Text(server.getName(), new Font(15, FontWeight.BOLD));
+		name = new Text("", new Font(15, FontWeight.BOLD));
+		name.textProperty().bind(server.nameProperty());
 
 		expand = new ColorIcon("expand", 10, true);
 		expand.setPadding(4);

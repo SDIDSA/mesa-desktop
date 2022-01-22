@@ -7,6 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,9 +37,11 @@ public class ChannelDisplayTop extends HBox implements Styleable {
 
 	private Search search;
 
+	private ChannelTopIcon people;
+	
 	private ArrayList<ChannelTopIcon> icons;
 
-	public ChannelDisplayTop(SessionPage session, Channel channel) {
+	public ChannelDisplayTop(SessionPage session) {
 		setMinHeight(48);
 		setMaxHeight(48);
 		setPadding(new Insets(0, 8, 0, 8));
@@ -47,7 +50,6 @@ public class ChannelDisplayTop extends HBox implements Styleable {
 		hashTag = new ChannelTopIcon("channel_type_text", 18);
 
 		name = new Text("", new Font(16, FontWeight.BOLD));
-		name.textProperty().bind(channel.nameProperty());
 
 		StackPane namePane = new StackPane(name);
 		namePane.setAlignment(Pos.CENTER_LEFT);
@@ -74,7 +76,8 @@ public class ChannelDisplayTop extends HBox implements Styleable {
 		ChannelTopIcon threads = new ChannelTopIcon("thread", "threads", 20);
 		ChannelTopIcon notification = new ChannelTopIcon("notification", "notification_settings", 18);
 		ChannelTopIcon pinned = new ChannelTopIcon("pin", "pinned_messages", 19);
-		ChannelTopIcon people = new ChannelTopIcon("people", "show_members", 24);
+		people = new ChannelTopIcon("people", "show_members", 24);
+		people.setAction(people::toggleActive);
 
 		search = new Search(session.getWindow(), "search");
 		search.setMaxHeight(24);
@@ -117,6 +120,15 @@ public class ChannelDisplayTop extends HBox implements Styleable {
 		search.applyLocale(session.getWindow().getLocale());
 		search.applyStyle(session.getWindow().getStyl());
 		applyStyle(session.getWindow().getStyl());
+	}
+	
+	public void loadChannel(Channel channel) {
+		name.textProperty().unbind();
+		name.textProperty().bind(channel.nameProperty());
+	}
+	
+	public BooleanProperty membersShown() {
+		return people.activeProperty();
 	}
 
 	private void initMargin(Node node) {

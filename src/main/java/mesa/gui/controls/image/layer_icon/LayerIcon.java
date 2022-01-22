@@ -7,7 +7,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import mesa.gui.controls.image.ColorIcon;
 
@@ -42,7 +41,7 @@ public class LayerIcon extends StackPane {
 		setAlignment(layers.get(layer), alignment);
 	}
 	
-	public void setFill(int layer, Color fill) {
+	public void setFill(int layer, Paint fill) {
 		if(layers.size() <= layer) {
 			return;
 		}

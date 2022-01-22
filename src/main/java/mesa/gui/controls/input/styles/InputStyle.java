@@ -9,6 +9,8 @@ import mesa.gui.style.Style;
 public abstract class InputStyle {
 	protected Input input;
 
+	private double radius = 3;
+	
 	protected boolean ignoreHover = false;
 	protected boolean ignoreFocus = false;
 	
@@ -25,11 +27,15 @@ public abstract class InputStyle {
 	}
 
 	protected void applyBack(Color fill) {
-		input.setBackground(Backgrounds.make(fill, 3.0));
+		input.setBackground(Backgrounds.make(fill, radius));
 	}
 
 	protected void applyBorder(Color border) {
-		input.setBorder(Borders.make(border, 3.0));
+		input.setBorder(Borders.make(border, radius));
+	}
+	
+	public void setRadius(double radius) {
+		this.radius = radius;
 	}
 	
 	public abstract void focus(boolean focus);

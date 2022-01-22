@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import mesa.api.API;
 import mesa.app.pages.login.LoginPage;
+import mesa.emojis.Emojis;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -19,6 +20,8 @@ public class Mesa extends Application {
 		window.setTitle("mesa");
 		window.setOnShown(e -> window.loadPage(LoginPage.class, window::centerOnScreen));
 		window.show();
+		
+		Emojis.init();
 		
 		Socket socket = IO.socket(API.BASE);
 		socket.connect();
