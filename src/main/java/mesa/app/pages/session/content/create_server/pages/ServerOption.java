@@ -1,5 +1,7 @@
 package mesa.app.pages.session.content.create_server.pages;
 
+import java.util.ArrayList;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
@@ -26,7 +28,7 @@ public class ServerOption extends HBox implements Styleable {
 	private Label lab;
 	private ColorIcon arrow;
 
-	private Runnable action;
+	private ArrayList<Runnable> actions;
 
 	public ServerOption(Window owner, String text, String... iconLayers) {
 		super(12);
@@ -34,20 +36,19 @@ public class ServerOption extends HBox implements Styleable {
 		setPadding(new Insets(10, 20, 12, 16));
 		setCursor(Cursor.HAND);
 
-		setOnMouseClicked(e -> {
-			if (action != null) {
-				action.run();
+		actions = new ArrayList<>();
+
+		setOnMouseClicked(e -> actions.forEach(Runnable::run));
+		setOnKeyPressed(e -> {
+			if (e.getCode().equals(KeyCode.SPACE)) {
+				actions.forEach(Runnable::run);
 			}
 		});
-		setOnKeyPressed(e-> {
-			if(e.getCode().equals(KeyCode.SPACE) && action != null) {
-				action.run();
-			}
-		});
-		
+
 		setFocusTraversable(true);
-		
+
 		icon = new LayerIcon(42, iconLayers);
+		icon.setOpacity(.7);
 
 		lab = new Label(owner, text);
 		lab.setFont(new Font(16, FontWeight.BOLD));
@@ -61,8 +62,8 @@ public class ServerOption extends HBox implements Styleable {
 		applyStyle(owner.getStyl());
 	}
 
-	public ServerOption setAction(Runnable action) {
-		this.action = action;
+	public ServerOption addAction(Runnable action) {
+		actions.add(action);
 		return this;
 	}
 
@@ -71,7 +72,7 @@ public class ServerOption extends HBox implements Styleable {
 		backgroundProperty()
 				.bind(Bindings.when(hoverProperty()).then(Backgrounds.make(style.getBackgroundModifierHover(), 8.0))
 						.otherwise(Backgrounds.make(style.getBackgroundPrimary(), 8.0)));
-		
+
 		NodeUtils.focusBorder(this, style.getTextLink(), style.getBackgroundModifierAccent(), 8.0);
 
 		lab.setFill(style.getTextNormal());

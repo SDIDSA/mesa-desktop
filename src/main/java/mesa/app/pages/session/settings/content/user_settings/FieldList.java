@@ -77,7 +77,7 @@ public class FieldList extends VBox implements Styleable {
 
 		helpEditTag.setFocusTraversable(true);
 
-		Tooltip tip = new KeyedTooltip(settings.getWindow(), "get_black_to_modify_id", Direction.LEFT);
+		Tooltip tip = new KeyedTooltip(settings.getWindow(), "get_black_to_modify_id", Direction.LEFT, 6);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 		Tooltip.install(helpEditTag, tip);
 

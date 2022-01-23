@@ -152,5 +152,7 @@
 	"a_new_mal": "un nouveau",
 	"a_new_fem": "une nouvelle",
 	
-	"get_black_to_modify_id": "Obtenez Black Mesa pour modifier ton tag !"
+	"get_black_to_modify_id": "Obtenez Black Mesa pour modifier ton tag !",
+	
+	"phone_used": "Ce numéro est déjà utilisé."
 }

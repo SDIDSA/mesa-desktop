@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import mesa.api.API;
 import mesa.app.pages.login.LoginPage;
+import mesa.emojis.Emojis;
 import mesa.gui.locale.Locale;
 import mesa.gui.style.Style;
 import mesa.gui.window.Window;
@@ -15,10 +16,12 @@ public class Mesa extends Application {
 	@Override
 	public void start(Stage dismiss) throws Exception {
 		System.setProperty("prism.lcdtext", "false");
-		Window window = new Window(this, Style.DARK, Locale.FR_FR);
+		Window window = new Window(this, Style.DARK, Locale.EN_US);
 		window.setTitle("mesa");
 		window.setOnShown(e -> window.loadPage(LoginPage.class, window::centerOnScreen));
 		window.show();
+		
+		Emojis.init();
 		
 		Socket socket = IO.socket(API.BASE);
 		socket.connect();

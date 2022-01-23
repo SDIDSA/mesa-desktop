@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.apache.commons.text.CaseUtils;
 
+import javafx.scene.effect.BlurType;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import mesa.gui.file.FileUtils;
 
@@ -13,9 +15,11 @@ public class Style {
 
 	private Color accent;
 	private HashMap<String, Color> colors;
+	private HashMap<String, DropShadow> dropShadows;
 
 	private Style(String theme) {
 		colors = new HashMap<>();
+		dropShadows = new HashMap<>();
 
 		String content = FileUtils.readFile("/themes/" + theme + ".txt");
 
@@ -29,18 +33,55 @@ public class Style {
 					.replaceAll("\\bcalc\\(\\b([0-9]+\\.?[0-9]+%)\\)", "$1");
 
 			key = CaseUtils.toCamelCase(key, false, '_');
-
+			
 			try {
 				Color c = value.startsWith("hsl") ? parseHSL(value) : Color.web(value);
 				colors.put(key, c);
 			} catch (Exception x) {
-				// IGNORE
+				if(key.contains("elevation") && !key.contains("Stroke")) {
+					String[] shadows = value.replace("),", ");").split(";");
+					
+					DropShadow input = null;
+					for(String shadow : shadows) {
+						DropShadow dps = parseShadow(shadow);
+						if(input != null) {
+							dps.setInput(input);
+						}
+						input = dps;
+					}
+					dropShadows.put(key, input);
+				}
 			}
 		}
 
 		accent = Color.web("#5865f2");
 	}
 
+	private DropShadow parseShadow(String shadowString) {
+		String[] parts = shadowString.split(" ");
+		
+		double shiftX = parseVal(parts[0]);
+		double shiftY = parseVal(parts[1]);
+		double blur = parseVal(parts[2]);
+		double spread = (shiftY - blur)/shiftY;
+		
+		Color c = Color.web(parts[3]);
+		
+		DropShadow res = new DropShadow();
+		res.setBlurType(BlurType.THREE_PASS_BOX);
+		res.setRadius(1);
+		res.setSpread(spread);
+		res.setOffsetX(shiftX);
+		res.setOffsetY(shiftY);
+		res.setColor(c);
+		
+		return res;
+	}
+	
+	private double parseVal(String val) {
+		return Double.parseDouble(val.replace("px", ""));
+	}
+	
 	private static Color parseHSL(String hslString) {
 		double[] vals = new double[4];
 
@@ -100,6 +141,12 @@ public class Style {
 		this.accent = accent;
 	}
 
+	/* ********************************** */
+	
+	public DropShadow getElevationLow() {
+		return dropShadows.get("elevationLow");
+	}
+	
 	/* ********************************** */
 
 	public Color getHeaderPrimary() {

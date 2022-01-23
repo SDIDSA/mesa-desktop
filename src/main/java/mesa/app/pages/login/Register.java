@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import mesa.api.Auth;
 import mesa.app.component.Form;
 import mesa.app.component.input.DateInputField;
-import mesa.app.component.input.TextInputField;
+import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.button.Button;
@@ -55,9 +55,9 @@ public class Register extends LoginSubPage {
 
 		bottom.getChildren().addAll(haveAcc, login);
 
-		TextInputField email = new TextInputField(window, "email", width);
-		TextInputField username = new TextInputField(window, "username", width);
-		TextInputField password = new TextInputField(window, "password", width, true);
+		DeprecatedTextInputField email = new DeprecatedTextInputField(window, "email", width);
+		DeprecatedTextInputField username = new DeprecatedTextInputField(window, "username", width);
+		DeprecatedTextInputField password = new DeprecatedTextInputField(window, "password", width, true);
 		DateInputField birth = new DateInputField(window, "birth_date", width);
 		fields.add(email, 0, 0);
 		fields.add(username, 1, 0);

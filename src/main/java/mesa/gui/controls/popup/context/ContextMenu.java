@@ -1,6 +1,7 @@
 package mesa.gui.controls.popup.context;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Bounds;
@@ -8,6 +9,9 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.PopupControl;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -16,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import mesa.gui.controls.popup.Direction;
+import mesa.gui.controls.popup.context.items.MenuItem;
 import mesa.gui.factory.Backgrounds;
 import mesa.gui.factory.Borders;
 import mesa.gui.style.Style;
@@ -25,15 +30,18 @@ import mesa.gui.window.Window;
 public class ContextMenu extends PopupControl implements Styleable {
 	protected Window owner;
 	protected VBox root;
-	protected ArrayList<ContextMenuItem> items;
+	protected ArrayList<MenuItem> items;
+	protected HashMap<MenuItem, Node> after;
 
 	private ArrayList<StackPane> separators;
 
-	protected ContextMenuItem selected;
+	protected MenuItem selected;
 
 	public ContextMenu(Window window) {
 		this.owner = window;
+
 		items = new ArrayList<>();
+		after = new HashMap<>();
 		separators = new ArrayList<>();
 
 		root = new VBox(3);
@@ -69,33 +77,93 @@ public class ContextMenu extends PopupControl implements Styleable {
 			}
 		});
 
-		getScene().setOnKeyPressed(e -> {
-			switch (e.getCode()) {
-			case UP: {
-				int i = (selected == null ? items.size() - 1
-						: (items.indexOf(selected) - 1 + items.size()) % items.size());
-				select(items.get(i));
-			}
-				break;
-			case DOWN: {
-				int i = (selected == null ? 0 : (items.indexOf(selected) + 1) % items.size());
-				select(items.get(i));
-			}
-				break;
-			case SPACE: {
-				if (selected != null) {
-					selected.fire();
-				}
-			}
-				break;
-			default:
-				break;
-			}
+		getScene().setOnKeyPressed(this::handlePress);
+		getScene().setOnKeyReleased(this::handleRelease);
 
-			e.consume();
+		setOnHiding(e -> {
+			if (selected != null) {
+				selected.setActive(false);
+				selected = null;
+			}
 		});
 
 		applyStyle(window.getStyl());
+	}
+
+	private void handleRelease(KeyEvent e) {
+		if (checkForAccelerator(e)) {
+			return;
+		}
+		switch (e.getCode()) {
+		case ENTER, SPACE: {
+			if (selected != null) {
+				selected.fire();
+			}
+		}
+			break;
+		case ESCAPE:
+			this.hide();
+			break;
+		default:
+			break;
+		}
+		e.consume();
+	}
+
+	private void handlePress(KeyEvent e) {
+		switch (e.getCode()) {
+		case UP: {
+			up();
+		}
+			break;
+		case DOWN: {
+			down();
+		}
+			break;
+		default:
+			break;
+		}
+		e.consume();
+	}
+
+	private boolean checkForAccelerator(KeyEvent e) {
+		for (MenuItem item : items) {
+			KeyCombination accelerator = item.getAccelerator();
+			if (accelerator != null && accelerator.match(e) && !item.isDisabled()) {
+				item.fire();
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private void up() {
+		MenuItem nextItem = selected;
+
+		int i = (nextItem == null ? items.size() - 1 : (items.indexOf(nextItem) - 1 + items.size()) % items.size());
+		nextItem = items.get(i);
+
+		while (nextItem == null || nextItem.isDisabled()) {
+			i = (nextItem == null ? items.size() - 1 : (items.indexOf(nextItem) - 1 + items.size()) % items.size());
+			nextItem = items.get(i);
+		}
+
+		select(nextItem);
+	}
+
+	public void down() {
+		MenuItem nextItem = selected;
+
+		int i = (nextItem == null ? 0 : (items.indexOf(nextItem) + 1) % items.size());
+		nextItem = items.get(i);
+
+		while (nextItem == null || nextItem.isDisabled()) {
+			i = (nextItem == null ? 0 : (items.indexOf(nextItem) + 1) % items.size());
+			nextItem = items.get(i);
+		}
+
+		select(nextItem);
 	}
 
 	public void install(Node node) {
@@ -109,14 +177,9 @@ public class ContextMenu extends PopupControl implements Styleable {
 	}
 
 	public void addMenuItem(String item, Runnable onAction, Color fill, boolean keyed) {
-		ContextMenuItem i = new ContextMenuItem(this, item, fill, keyed);
+		MenuItem i = new MenuItem(this, item, fill, keyed);
 		i.setAction(onAction);
-
-		i.setOnMouseClicked(e -> i.fire());
-
-		i.setOnMouseEntered(e -> select(i));
-		root.getChildren().add(i);
-		items.add(i);
+		addMenuItem(i);
 	}
 
 	public void addMenuItem(String item, Runnable onAction, Color fill) {
@@ -135,6 +198,24 @@ public class ContextMenu extends PopupControl implements Styleable {
 		addMenuItem(item, null, null);
 	}
 
+	public void addMenuItem(MenuItem i) {
+		i.setOnMouseClicked(e -> i.fire());
+		i.setOnMouseEntered(e -> select(i));
+		root.getChildren().add(i);
+		items.add(i);
+	}
+
+	public void disable(MenuItem item) {
+		item.setDisable(true);
+		after.put(item, root.getChildren().get(root.getChildren().indexOf(item) - 1));
+		root.getChildren().remove(item);
+	}
+
+	public void enable(MenuItem item) {
+		item.setDisable(false);
+		root.getChildren().add(root.getChildren().indexOf(after.get(item)) + 1, item);
+	}
+
 	public void separate() {
 		StackPane sep = new StackPane();
 		sep.setMinHeight(1);
@@ -149,7 +230,7 @@ public class ContextMenu extends PopupControl implements Styleable {
 		applyStyle(owner.getStyl().get());
 	}
 
-	private void select(ContextMenuItem item) {
+	private void select(MenuItem item) {
 		boolean select = selected != item;
 		boolean deselect = select && selected != null;
 
@@ -196,6 +277,24 @@ public class ContextMenu extends PopupControl implements Styleable {
 
 	public void showPop(Node node) {
 		showPop(node, null, 0);
+	}
+
+	public void showPop(Node node, ContextMenuEvent event) {
+		setOnShown(e -> node.getScene().getRoot().requestFocus());
+
+		setOnHidden(e -> node.requestFocus());
+
+		if (event.isKeyboardTrigger()) {
+			Bounds bounds = node.getBoundsInLocal();
+			Bounds screenBounds = node.localToScreen(bounds);
+			double px = screenBounds.getMinX();
+			double py = screenBounds.getMaxY() + 5;
+
+			this.show(node, px, py);
+		} else {
+			this.show(node, event.getScreenX(), event.getScreenY());
+		}
+
 	}
 
 	public Window getOwner() {

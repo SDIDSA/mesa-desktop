@@ -33,7 +33,7 @@ public class UserBarIcon extends StackPane implements Styleable {
 		
 		setFocusTraversable(true);
 
-		KeyedTooltip tip = new KeyedTooltip(session.getWindow(), tooltip, Tooltip.UP, -10);
+		KeyedTooltip tip = new KeyedTooltip(session.getWindow(), tooltip, Tooltip.UP);
 		tip.setFont(new Font(Font.DEFAULT_FAMILY_MEDIUM, 14));
 
 		Tooltip.install(this, tip);

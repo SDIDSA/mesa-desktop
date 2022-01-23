@@ -3,10 +3,12 @@ package mesa.app.component.input;
 import javafx.scene.Node;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.input.TextInput;
+import mesa.gui.controls.input.styles.InputStyle;
+import mesa.gui.style.Style;
 import mesa.gui.window.Window;
 
 public class TextInputField extends InputField {
-	private TextInput input;
+	protected TextInput input;
 
 	public TextInputField(Window window, String key, double width, boolean hidden) {
 		super(window, key, width);
@@ -16,8 +18,14 @@ public class TextInputField extends InputField {
 		value.bind(input.valueProperty());
 
 		addInput(input);
+	}
 
-		applyStyle(window.getStyl());
+	public void setPrompt(String prompt) {
+		input.setPrompt(prompt);
+	}
+
+	public void setInputStyle(InputStyle style) {
+		input.setInputStyle(style);
 	}
 
 	public TextInputField(Window window, String key, boolean hidden) {
@@ -31,11 +39,11 @@ public class TextInputField extends InputField {
 	public TextInputField(Window window, String key) {
 		this(window, key, 200, false);
 	}
-	
-	public void addPostField(Node...nodes) {
+
+	public void addPostField(Node... nodes) {
 		input.addPostField(nodes);
 	}
-	
+
 	public void positionCaret(int pos) {
 		input.positionCaret(pos);
 	}
@@ -49,5 +57,11 @@ public class TextInputField extends InputField {
 	public void requestFocus() {
 		input.requestFocus();
 	}
-	
+
+	@Override
+	public void applyStyle(Style style) {
+		input.applyStyle(style);
+		super.applyStyle(style);
+	}
+
 }

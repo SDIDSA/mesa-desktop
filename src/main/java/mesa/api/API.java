@@ -5,6 +5,10 @@ import java.util.function.Consumer;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import mesa.api.json.JsonApiCall;
+import mesa.api.json.Param;
+import mesa.api.multipart.MultiPartApiCall;
+import mesa.api.multipart.Part;
 import mesa.gui.exception.ErrorHandler;
 import mesa.gui.exception.LogHandler;
 
@@ -12,6 +16,10 @@ public class API {
 	public static final JSONObject netErr = new JSONObject("{\"err\":[{\"key\":\"global\",\"value\":\"net_err\"}]}");
 
 	public static final String BASE = "http://localhost:4000/";
+	
+	public static final String INVITE_BASE = "https://mesa-invite.tk/";
+	
+	public static final String INVITE_CODE = "hTKzmak";
 
 	public static class Auth {
 		private static final String PREFIX = BASE + "auth/";
@@ -50,17 +58,35 @@ public class API {
 		
 		public static final String GET_USER = PREFIX + "getUser";
 		
+		public static final String CREATE_SERVER = PREFIX + "createServer";
+
+		public static final String GET_SERVERS = PREFIX + "getServers";
+		
+		public static final String GET_SERVER = PREFIX + "getServer";
+		
+		public static final String CREATE_INVITE = PREFIX + "createInvite";
+		
+		public static final String JOIN_WITH_INVITE = PREFIX + "joinWithInvite";
+		
 		private Session() {
 			
 		}
 	}
 
-	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, String session, Param... params) {
+	public static void asyncJsonPost(String path, String action, Consumer<JSONObject> onResult, String session, Param... params) {
+		asyncPost(new JsonApiCall(path, params), action, onResult, session);
+	}
+
+	public static void asyncMultiPost(String path, String action, Consumer<JSONObject> onResult, String session, Part...parts) {
+		asyncPost(new MultiPartApiCall(path, parts), action, onResult, session);
+	}
+
+	private static void asyncPost(ApiCall call, String action, Consumer<JSONObject> onResult, String session) {
 		new Thread() {
 			@Override
 			public void run() {
 				try {
-					new ApiCall(path, params).execute(result -> {
+					call.execute(result -> {
 						LogHandler.log(result.toString(4));
 						onResult.accept(result);
 					}, session);
@@ -71,8 +97,10 @@ public class API {
 			}
 		}.start();
 	}
-	public static void asyncPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
-		asyncPost(path, action, onResult, null, params);
+	
+	
+	public static void asyncJsonPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
+		asyncJsonPost(path, action, onResult, null, params);
 	}
 
 	private API() {

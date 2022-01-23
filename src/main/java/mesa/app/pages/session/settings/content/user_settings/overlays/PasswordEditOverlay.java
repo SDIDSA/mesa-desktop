@@ -1,19 +1,19 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays;
 
-import mesa.app.component.input.TextInputField;
+import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.app.pages.session.SessionPage;
 
 public class PasswordEditOverlay extends EditOverlay {
 
-	private TextInputField currPass;
-	private TextInputField newPass;
-	private TextInputField confNewPass;
+	private DeprecatedTextInputField currPass;
+	private DeprecatedTextInputField newPass;
+	private DeprecatedTextInputField confNewPass;
 
 	public PasswordEditOverlay(SessionPage session) {
 		super(session, "password");
-		currPass = new TextInputField(session.getWindow(), "current_password", 408, true);
-		newPass = new TextInputField(session.getWindow(), "new_password", 408, true);
-		confNewPass = new TextInputField(session.getWindow(), "confirm_new_password", 408, true);
+		currPass = new DeprecatedTextInputField(session.getWindow(), "current_password", 408, true);
+		newPass = new DeprecatedTextInputField(session.getWindow(), "new_password", 408, true);
+		confNewPass = new DeprecatedTextInputField(session.getWindow(), "confirm_new_password", 408, true);
 		center.getChildren().addAll(currPass, newPass, confNewPass);
 		
 		addOnShown(currPass::requestFocus);

@@ -1,5 +1,6 @@
 package mesa.app.pages.session.content;
 
+import javafx.scene.layout.BorderPane;
 import mesa.app.pages.session.SessionPage;
 import mesa.app.pages.session.items.BarItem;
 
@@ -7,14 +8,14 @@ public abstract class Content {
 	private SessionPage session;
 	
 	private BarItem item;
-	private ContentSide side;
-	private ContentMain main;
+	private BorderPane side;
+	private BorderPane main;
 	
 	protected Content(SessionPage session) {
 		this.session = session;
 		
-		side = new ContentSide();
-		main = new ContentMain();
+		side = new BorderPane();
+		main = new BorderPane();
 	}
 	
 	public void setItem(BarItem item) {
@@ -27,11 +28,11 @@ public abstract class Content {
 		return item;
 	}
 	
-	public ContentSide getSide() {
+	public BorderPane getSide() {
 		return side;
 	}
 	
-	public ContentMain getMain() {
+	public BorderPane getMain() {
 		return main;
 	}
 }

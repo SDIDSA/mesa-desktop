@@ -1,6 +1,7 @@
 package mesa.app.pages.session.content.create_server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,6 +22,8 @@ import mesa.gui.style.Styleable;
 public class MultiOverlay extends Overlay implements Styleable {
 	private StackPane root;
 
+	private HashMap<String, Object> shared;
+
 	private ArrayList<MultiOverlayPage> pages;
 	private int selected;
 
@@ -29,6 +32,8 @@ public class MultiOverlay extends Overlay implements Styleable {
 	public MultiOverlay(Page owner, double width) {
 		super(owner);
 		selected = 0;
+
+		shared = new HashMap<>();
 
 		clip = new Rectangle(width, 1000);
 		clip.setArcHeight(10);
@@ -50,10 +55,10 @@ public class MultiOverlay extends Overlay implements Styleable {
 				page.setTranslateX(width * (i > selected ? 1 : -1));
 				page.setDisable(true);
 			}
-			
+
 			slide(selected);
 		});
-		
+
 		addOnHiding(() -> {
 			clip.yProperty().unbind();
 			clip.heightProperty().unbind();
@@ -81,7 +86,7 @@ public class MultiOverlay extends Overlay implements Styleable {
 		load(selected - 1);
 	}
 
-	private void load(int page) {
+	public void load(int page) {
 		int direction = page > selected ? 1 : -1;
 
 		MultiOverlayPage toHide = pages.get(selected);
@@ -114,8 +119,6 @@ public class MultiOverlay extends Overlay implements Styleable {
 		slide.playFromStart();
 		selected = page;
 	}
-	
-
 
 	private void slide(int page) {
 		MultiOverlayPage toLoad = pages.get(page);
@@ -128,7 +131,25 @@ public class MultiOverlay extends Overlay implements Styleable {
 		clip.heightProperty().unbind();
 		clip.yProperty().bind(root.heightProperty().subtract(toLoad.heightProp()).divide(2));
 		clip.heightProperty().bind(toLoad.heightProp());
-		
+	}
+	
+	@Override
+	public void hide() {
+		selected = 0;
+		super.hide();
+	}
+
+	public void put(String key, Object value) {
+		shared.put(key, value);
+	}
+	
+	public String getString(String key) {
+		return get(key);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> T get(String key) {
+		return (T) shared.get(key);
 	}
 
 	@Override

@@ -85,6 +85,7 @@ public class SectionItem extends StackPane implements Styleable {
 					} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 							| InvocationTargetException | NoSuchMethodException | SecurityException x) {
 						ErrorHandler.handle(x, "create settings content for " + key);
+//						x.printStackTrace();
 					}
 				}
 

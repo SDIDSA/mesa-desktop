@@ -1,24 +1,46 @@
 package mesa.gui.controls.input;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.popup.context.ContextMenu;
+import mesa.gui.controls.popup.context.items.CheckMenuItem;
+import mesa.gui.controls.popup.context.items.KeyedMenuItem;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
 
-public class TextInput extends Input {
+public class TextInput extends Input implements Styleable {
 	private TextInputControl field;
 	private HBox preField;
+
+	private AtomicInteger caretPos;
+
+	private BooleanProperty notSelected;
+	private ObjectProperty<IndexRange> selection;
+	
+	private ContextMenu menu;
 
 	public TextInput(Window window, Font font, String key, boolean hidden) {
 		super(key);
@@ -28,7 +50,23 @@ public class TextInput extends Input {
 		field.setBorder(Border.EMPTY);
 		field.setPadding(new Insets(10));
 
-		field.focusedProperty().addListener((obs, ov, nv) -> focus(nv));
+		field.focusedProperty().addListener((obs, ov, nv) -> inputStyle.focus(nv));
+
+		caretPos = new AtomicInteger();
+		field.caretPositionProperty().addListener((obs, ov, nv) -> {
+			if (field.isFocused()) {
+				caretPos.set(nv.intValue());
+			}
+		});
+
+		notSelected = new SimpleBooleanProperty(true);
+		selection = new SimpleObjectProperty<>(field.getSelection());
+		field.selectionProperty().addListener((obs, ov, nv) -> {
+			if (field.isFocused() && !hidden) {
+				selection.set(nv);
+				notSelected.set(nv.getLength() == 0);
+			}
+		});
 
 		value.bind(field.textProperty());
 
@@ -40,13 +78,82 @@ public class TextInput extends Input {
 
 		getChildren().add(preField);
 
-		setFont(font);
+		prepareMenu(window);
 
-		applyStyle(window.getStyl());
+		setFont(font);
+	}
+	
+	public void setRadius(double radius) {
+		inputStyle.setRadius(radius);
 	}
 
-	public void addPostField(Node... nodes) {
-		preField.getChildren().addAll(nodes);
+	public void setFieldPadding(Insets insets) {
+		field.setPadding(insets);
+	}
+	
+	public boolean isMenuShowing() {
+		return menu.isShowing();
+	}
+	
+	public ReadOnlyBooleanProperty menuShowingProperty() {
+		return menu.showingProperty();
+	}
+	
+	private void prepareMenu(Window window) {
+		menu = new ContextMenu(window);
+
+		CheckMenuItem stickers = new CheckMenuItem(menu, "stickers", null);
+		stickers.setChecked(true);
+		CheckMenuItem spellCheck = new CheckMenuItem(menu, "spellcheck", null);
+		spellCheck.setChecked(true);
+		KeyedMenuItem languages = new KeyedMenuItem(menu, "languages", null);
+
+		KeyedMenuItem copy = new KeyedMenuItem(menu, "copy", null);
+		copy.setAccelerator("ctrl+c");
+		copy.setAction(this::copy);
+
+		KeyedMenuItem cut = new KeyedMenuItem(menu, "cut", null);
+		cut.setAccelerator("ctrl+x");
+		cut.setAction(this::cut);
+
+		KeyedMenuItem paste = new KeyedMenuItem(menu, "paste", null);
+		paste.setAccelerator("ctrl+v");
+		paste.setAction(this::paste);
+
+		menu.addMenuItem(stickers);
+		menu.separate();
+		menu.addMenuItem(spellCheck);
+		menu.addMenuItem(languages);
+		menu.separate();
+		menu.addMenuItem(copy);
+		menu.addMenuItem(cut);
+		menu.addMenuItem(paste);
+
+		spellCheck.checkedProperty().addListener((obs, ov, nv) -> {
+			if (nv.booleanValue()) {
+				menu.enable(languages);
+			} else {
+				menu.disable(languages);
+			}
+		});
+
+		Consumer<Boolean> checkSelection = nv -> {
+			if (nv.booleanValue()) {
+				menu.disable(cut);
+				menu.disable(copy);
+			} else {
+				menu.enable(copy);
+				menu.enable(cut);
+			}
+		};
+
+		notSelected().addListener((obs, ov, nv) -> checkSelection.accept(nv));
+
+		checkSelection.accept(notSelected().getValue());
+
+		field.setOnContextMenuRequested(e -> menu.showPop(this, e));
+
+		addEventFilter(MouseEvent.MOUSE_PRESSED, e -> menu.hide());
 	}
 
 	public void align(Pos pos) {
@@ -64,10 +171,28 @@ public class TextInput extends Input {
 		}
 	}
 
+	public void setPrompt(String promt) {
+		field.setPromptText(promt);
+	}
+
+	public void addPostField(Node... nodes) {
+		preField.getChildren().addAll(nodes);
+	}
+
+	public void addPreField(Node node) {
+		preField.getChildren().add(0, node);
+	}
+
+	public void addPreField(Node... nodes) {
+		for (Node node : nodes) {
+			addPreField(node);
+		}
+	}
+
 	public TextInput(Window window, Font font, String key) {
 		this(window, font, key, false);
 	}
-	
+
 	public void positionCaret(int pos) {
 		field.positionCaret(pos);
 	}
@@ -78,8 +203,13 @@ public class TextInput extends Input {
 	}
 
 	@Override
-	protected boolean isFocus() {
+	public boolean isFocus() {
 		return field.isFocused();
+	}
+	
+
+	public ReadOnlyBooleanProperty focusProperty() {
+		return field.focusedProperty();
 	}
 
 	@Override
@@ -99,15 +229,52 @@ public class TextInput extends Input {
 
 	@Override
 	public void requestFocus() {
+		int pos = caretPos.get();
 		field.requestFocus();
 		field.deselect();
-		field.positionCaret(getValue().length());
+		field.positionCaret(pos);
+	}
+
+	public void copy() {
+		String selected = field.getText().substring(selection.get().getStart(), selection.get().getEnd());
+		ClipboardContent cpc = new ClipboardContent();
+		cpc.putString(selected);
+		Clipboard.getSystemClipboard().setContent(cpc);
+		caretPos.set(selection.get().getEnd());
+	}
+
+	public void cut() {
+		copy();
+		field.replaceText(selection.get(), "");
+		caretPos.set(selection.get().getStart());
+
+		selection.set(field.getSelection());
+		notSelected.set(true);
+	}
+
+	public void paste() {
+		if (notSelected.get()) {
+			field.positionCaret(caretPos.getAndAdd(Clipboard.getSystemClipboard().getString().length()));
+			field.paste();
+		} else {
+			field.replaceText(selection.get(), Clipboard.getSystemClipboard().getString());
+		}
+
+		selection.set(field.getSelection());
+		notSelected.set(true);
+	}
+
+	public BooleanProperty notSelected() {
+		return notSelected;
 	}
 
 	@Override
 	public void applyStyle(Style style) {
-		super.applyStyle(style);
-		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(style.getTextNormal())
+		inputStyle.applyStyle(style);
+
+		Color tx = style.getTextNormal();
+		field.setStyle("-fx-text-fill: " + Styleable.colorToCss(tx) + ";-fx-prompt-text-fill: "
+				+ Styleable.colorToCss(tx.deriveColor(0, 1, 1, .3))
 				+ ";-fx-background-color:transparent;-fx-text-box-border: transparent;");
 	}
 

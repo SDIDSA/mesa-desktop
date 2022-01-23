@@ -1,7 +1,7 @@
 package mesa.app.pages.session.content;
 
 import mesa.app.pages.session.items.BarItem;
-import mesa.app.pages.session.items.ColorBarItem;
+import mesa.app.pages.session.items.color.ColorBarItem;
 import mesa.gui.controls.alert.Overlay;
 
 public class OverlayItem {
