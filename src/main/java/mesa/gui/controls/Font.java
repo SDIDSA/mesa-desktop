@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.URLDecoder;
 import java.util.HashMap;
+import java.util.Objects;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -83,16 +84,23 @@ public class Font {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (obj instanceof Font otherFont) {
-			return family.equals(otherFont.family) 	&&
-					size == otherFont.size			&&
-					weight.equals(otherFont.weight)	&&
-					posture.equals(otherFont.posture);
-		} else {
-			return false;
-		}
+	public int hashCode() {
+		return Objects.hash(family, posture, size, weight);
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Font other = (Font) obj;
+		return Objects.equals(family, other.family) && posture == other.posture
+				&& Double.doubleToLongBits(size) == Double.doubleToLongBits(other.size) && weight == other.weight;
+	}
+	
 
 	private static HashMap<Font, javafx.scene.text.Font> cache = new HashMap<>();
 
@@ -105,6 +113,19 @@ public class Font {
 		}
 
 		return found;
+	}
+	
+	public Font copy() {
+		return new Font(family, size, weight, posture);
+	}
+
+	public double getSize() {
+		return size;
+	}
+
+	@Override
+	public String toString() {
+		return "Font [family=" + family + ", size=" + size + ", weight=" + weight + ", posture=" + posture + "]";
 	}
 
 	static {

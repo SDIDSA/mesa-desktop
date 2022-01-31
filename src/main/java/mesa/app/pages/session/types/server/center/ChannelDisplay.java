@@ -2,6 +2,7 @@ package mesa.app.pages.session.types.server.center;
 
 import mesa.app.pages.session.SessionPage;
 import mesa.data.bean.Channel;
+import mesa.data.bean.Message;
 
 public class ChannelDisplay {
 	
@@ -28,5 +29,9 @@ public class ChannelDisplay {
 	
 	public ChannelDisplayCenter getCenter() {
 		return center;
+	}
+
+	public boolean handleMessage(Message msg) {
+		return center.handleMessage(msg);
 	}
 }

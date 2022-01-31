@@ -27,8 +27,11 @@ import mesa.app.pages.session.items.BarItem;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.menu.SectionItem;
 import mesa.app.pages.session.types.server.ServerContent;
+import mesa.app.pages.session.types.server.center.ChannelDisplayMain;
+import mesa.app.pages.session.types.server.left.ChannelEntry;
 import mesa.app.utils.Threaded;
 import mesa.data.SessionManager;
+import mesa.data.bean.Message;
 import mesa.data.bean.Server;
 import mesa.data.bean.User;
 import mesa.gui.controls.SplineInterpolator;
@@ -71,7 +74,7 @@ public class SessionPage extends Page {
 
 		root = new HBox();
 		root.setMinHeight(0);
-		root.maxHeightProperty().bind(heightProperty());
+		root.setMaxHeight(-1);
 
 		settings = new Settings(this);
 		settings.setOpacity(0);
@@ -155,8 +158,14 @@ public class SessionPage extends Page {
 
 				ServerContent sc = new ServerContent(this, server);
 
-				Threaded.runAfter(500, () -> servers.addServer(sc));
+				servers.addServer(sc);
 			});
+		});
+		
+		socket.on("message", data -> {
+			JSONObject obj = new JSONObject(data[0].toString());
+			
+			Platform.runLater(()-> servers.handleMessage(Message.get(obj)));
 		});
 	}
 
@@ -217,6 +226,10 @@ public class SessionPage extends Page {
 		loaded = content;
 	}
 	
+	public boolean isLoaded(Content content) {
+		return loaded == content;
+	}
+	
 	public Content getLoaded() {
 		return loaded;
 	}
@@ -227,6 +240,8 @@ public class SessionPage extends Page {
 			window.getMainSocket().io().off("reconnect");
 			SessionManager.clearSession();
 			SectionItem.clearCache();
+			ChannelDisplayMain.clearCache();
+			ChannelEntry.clearCache();
 			BarItem.clear();
 			Tooltip.clear();
 			window.clearLoggedUser();

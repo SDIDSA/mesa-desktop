@@ -1,13 +1,39 @@
 package mesa.data.bean;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.Consumer;
+
 import org.json.JSONObject;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import mesa.api.Session;
 
 public class User extends Bean {
+	private static HashMap<String, User> cache = new HashMap<>();
+	private static HashMap<String, ArrayList<Consumer<User>>> waiting = new HashMap<>();
+
+	public static synchronized void getForId(String id, Consumer<User> onUser) {
+		User res = cache.get(id);
+		if (res == null) {
+			ArrayList<Consumer<User>> pending = waiting.get(id);
+			if (pending == null) {
+				pending = new ArrayList<>();
+				waiting.put(id, pending);
+				Session.getUserForId(id, result -> {
+					User u = new User(result.getJSONObject("user"), id);
+					waiting.get(id).forEach(consumer -> consumer.accept(u));
+				});
+			}
+			pending.add(onUser);
+		} else {
+			onUser.accept(res);
+		}
+	}
+
 	private StringProperty id;
 	private StringProperty email;
 	private StringProperty username;
@@ -27,6 +53,16 @@ public class User extends Bean {
 		birthDate = new SimpleStringProperty();
 		emailConfirmed = new SimpleBooleanProperty();
 		init(obj);
+
+		if(id.get() != null && !id.get().isEmpty()) {
+			cache.put(id.get(), this);
+		}
+	}
+	
+	public User(JSONObject obj, String id) {
+		this(obj);
+		setId(id);
+		cache.put(id, this);
 	}
 
 	public StringProperty idProperty() {
@@ -112,7 +148,7 @@ public class User extends Bean {
 	public void setBirthDate(String val) {
 		birthDate.set(val);
 	}
-	
+
 	public BooleanProperty emailConfirmedProperty() {
 		return emailConfirmed;
 	}
@@ -127,15 +163,9 @@ public class User extends Bean {
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " {"
-			+ "\tid : " + id.get()
-			+ "\temail : " + email.get()
-			+ "\tusername : " + username.get()
-			+ "\tpassword : " + password.get()
-			+ "\tphone : " + phone.get()
-			+ "\tavatar : " + avatar.get()
-			+ "\tbirthDate : " + birthDate.get()
-			+ "\temailConfirmed : " + emailConfirmed.get()
-		+ "}";
+		return getClass().getSimpleName() + " {" + "\tid : " + id.get() + "\temail : " + email.get() + "\tusername : "
+				+ username.get() + "\tpassword : " + password.get() + "\tphone : " + phone.get() + "\tavatar : "
+				+ avatar.get() + "\tbirthDate : " + birthDate.get() + "\temailConfirmed : " + emailConfirmed.get()
+				+ "}";
 	}
 }

@@ -2,7 +2,9 @@ package mesa.data.bean;
 
 import org.json.JSONObject;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -10,6 +12,7 @@ public class Channel extends Bean {
 	private IntegerProperty id;
 	private StringProperty name;
 	private StringProperty type;
+	private BooleanProperty unread;
 	
 	private ChannelGroup group;
 
@@ -17,6 +20,7 @@ public class Channel extends Bean {
 		id = new SimpleIntegerProperty();
 		name = new SimpleStringProperty();
 		type = new SimpleStringProperty();
+		unread = new SimpleBooleanProperty();
 		init(obj);
 	}
 	
@@ -62,6 +66,18 @@ public class Channel extends Bean {
 
 	public void setType(String val) {
 		type.set(val);
+	}
+	
+	public BooleanProperty unreadProperty() {
+		return unread;
+	}
+	
+	public boolean isUnread() {
+		return unread.get();
+	}
+	
+	public void setUnread(Boolean val) {
+		unread.set(val);
 	}
 
 	@Override

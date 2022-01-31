@@ -18,6 +18,13 @@
 			<version>18-ea+7</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.fxmisc.richtext</groupId>
+			<artifactId>richtextfx</artifactId>
+			<version>0.10.7</version>
+		</dependency>
+
+
 		<!-- Connectivity -->
 		<dependency>
 			<groupId>io.socket</groupId>
@@ -63,6 +70,11 @@
 			<groupId>com.googlecode.libphonenumber</groupId>
 			<artifactId>libphonenumber</artifactId>
 			<version>8.12.38</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ocpsoft.prettytime</groupId>
+			<artifactId>prettytime</artifactId>
+			<version>5.0.2.Final</version>
 		</dependency>
 
 		<!-- TEST -->

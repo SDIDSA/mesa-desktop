@@ -16,6 +16,9 @@ public abstract class Content {
 		
 		side = new BorderPane();
 		main = new BorderPane();
+
+		main.setMinHeight(0);
+		main.setMaxHeight(-1);
 	}
 	
 	public void setItem(BarItem item) {
