@@ -58,6 +58,8 @@ public class API {
 		
 		public static final String GET_USER = PREFIX + "getUser";
 		
+		public static final String GET_USER_FOR_ID = PREFIX + "getUserForId";
+		
 		public static final String CREATE_SERVER = PREFIX + "createServer";
 
 		public static final String GET_SERVERS = PREFIX + "getServers";
@@ -67,6 +69,12 @@ public class API {
 		public static final String CREATE_INVITE = PREFIX + "createInvite";
 		
 		public static final String JOIN_WITH_INVITE = PREFIX + "joinWithInvite";
+		
+		public static final String SEND_MESSAGE = PREFIX + "sendMessage";
+		
+		public static final String GET_MESSAGES = PREFIX + "getMessages";
+		
+		public static final String SEEN = PREFIX + "seen";
 		
 		private Session() {
 			

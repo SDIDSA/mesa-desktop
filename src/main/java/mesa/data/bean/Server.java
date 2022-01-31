@@ -3,7 +3,11 @@ package mesa.data.bean;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
@@ -14,6 +18,9 @@ public class Server extends Bean {
 	private StringProperty owner;
 	private StringProperty name;
 	private StringProperty icon;
+
+	private BooleanBinding unreadBinding;
+	private BooleanProperty unread;
 	
 	private ObservableList<ChannelGroup> groups;
 	private ObservableList<String> members;
@@ -25,6 +32,8 @@ public class Server extends Bean {
 		owner = new SimpleStringProperty();
 		name = new SimpleStringProperty();
 		icon = new SimpleStringProperty();
+
+		unread = new SimpleBooleanProperty();
 		
 		groups = FXCollections.observableArrayList();
 		members = FXCollections.observableArrayList();
@@ -45,6 +54,23 @@ public class Server extends Bean {
 	public void addGroup(ChannelGroup group) {
 		group.setServer(this);
 		groups.add(group);
+		
+		if(unreadBinding == null) {
+			unreadBinding = Bindings.when(group.unreadProperty()).then(true).otherwise(false);
+		}else {
+			unreadBinding = unreadBinding.or(group.unreadProperty());
+		}
+		
+		unread.unbind();
+		unread.bind(unreadBinding);
+	}
+
+	public boolean isUnread() {
+		return unread.get();
+	}
+	
+	public BooleanProperty unreadProperty() {
+		return unread;
 	}
 	
 	public void addMember(String member) {
@@ -105,6 +131,17 @@ public class Server extends Bean {
 
 	public void setIcon(String val) {
 		icon.set(val);
+	}
+
+	public Channel hasChannel(Integer channel) {
+		for(ChannelGroup group : groups) {
+			Channel ch = group.hasChannel(channel);
+			if(ch != null) {
+				return ch;
+			}
+		}
+		
+		return null;
 	}
 
 	@Override

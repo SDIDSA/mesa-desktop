@@ -1,6 +1,15 @@
 package mesa.gui.controls.label;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import java.util.function.UnaryOperator;
+
+import org.ocpsoft.prettytime.PrettyTime;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.StringProperty;
 
 public abstract class TextTransform implements UnaryOperator<String> {
 
@@ -95,4 +104,27 @@ public abstract class TextTransform implements UnaryOperator<String> {
 			return sb.toString();
 		}
 	};
+
+	private static final PrettyTime prettyTime = new PrettyTime();
+	private static final long TZ_OFFSET = TimeZone.getDefault().getRawOffset() /1000;
+	private static final DateTimeFormatter parser = DateTimeFormatter.ofPattern("ddMMyyHHmmss");
+	public static final TextTransform FORMAT_TIME = new TextTransform() {
+		@Override
+		public String apply(String t) {
+			try {
+				LocalDateTime dt = LocalDateTime.parse(t, parser).plusSeconds(TZ_OFFSET);
+				return prettyTime.format(dt);
+			} catch (Exception x) {
+				return t;
+			}
+		}
+	};
+
+	public static StringBinding transformBinding(StringBinding binding, TextTransform transform) {
+		return Bindings.createStringBinding(() -> transform.apply(binding.get()), binding);
+	}
+
+	public static StringBinding transformBinding(StringProperty binding, TextTransform transform) {
+		return Bindings.createStringBinding(() -> transform.apply(binding.get()), binding);
+	}
 }

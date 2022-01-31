@@ -169,6 +169,7 @@ public class ComboInput extends Input implements Styleable, Localized {
 			selected = null;
 			base.textProperty().unbind();
 			base.setText(value);
+			this.value.unbind();
 			this.value.set(value);
 		} else
 			for (ComboMenuItem item : items) {

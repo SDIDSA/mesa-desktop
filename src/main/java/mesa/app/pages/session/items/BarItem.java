@@ -8,13 +8,15 @@ import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.popup.tooltip.Tooltip;
 
 public abstract class BarItem extends HBox {
+	private boolean unread = false;
+
 	private ItemPill pill;
 	private ItemIcon icon;
-	
+
 	private Runnable action;
-	
+
 	private Tooltip tip;
-	
+
 	private boolean selectable = true;
 
 	protected BarItem(SessionPage session) {
@@ -23,52 +25,69 @@ public abstract class BarItem extends HBox {
 		setAlignment(Pos.CENTER_LEFT);
 
 		setFocusTraversable(true);
-		
+
 		focusedProperty().addListener((obs, ov, nv) -> {
-			if(nv.booleanValue()) {
+			if (nv.booleanValue()) {
 				icon.focus();
-			}else {
+			} else {
 				icon.unfocus();
 			}
 		});
-		
-		setOnKeyPressed(e-> {
-			if(e.getCode().equals(KeyCode.SPACE)) {
+
+		setOnKeyPressed(e -> {
+			if (e.getCode().equals(KeyCode.SPACE)) {
 				fire();
 			}
 		});
-		
+
 		pill = new ItemPill(session);
 
 		getChildren().addAll(pill);
 	}
 
+	public void setUnread(boolean unread) {
+		this.unread = unread;
+
+		if (!icon.isSelected() && !icon.isHover()) {
+			pill.unread();
+		}
+	}
+
 	public void setSelectable(boolean selectable) {
 		this.selectable = selectable;
 	}
-	
+
 	public void setTooltip(Tooltip tip) {
 		this.tip = tip;
 		tip.setOffset(15);
 		Tooltip.install(icon, tip);
 	}
-	
+
 	public Tooltip getTooltip() {
 		return tip;
 	}
-	
+
 	private static BarItem selected;
+
 	protected void setIcon(ItemIcon icon) {
 		this.icon = icon;
 		icon.addEventFilter(MouseEvent.MOUSE_ENTERED, e -> {
 			if (!icon.isSelected() && selectable) {
-				pill.enter();
+				if (unread) {
+					pill.enterFromUnread();
+				} else {
+					pill.enter();
+				}
 			}
 		});
 
 		icon.addEventFilter(MouseEvent.MOUSE_EXITED, e -> {
 			if (!icon.isSelected() && selectable) {
-				pill.exit();
+				if(unread) {
+					pill.exitToUnread();
+				}else {
+					pill.exit();
+				}
 			}
 		});
 
@@ -76,30 +95,35 @@ public abstract class BarItem extends HBox {
 
 		getChildren().add(icon);
 	}
-	
+
 	private void fire() {
-		if(action != null)  {
+		if (action != null) {
 			action.run();
 		}
-		
+
 		icon.hover();
-		
-		if(selectable) {
-			if(selected != null && selected != this) {
+
+		if (selectable) {
+			if (selected != null && selected != this) {
 				selected.icon.unselect();
-				selected.pill.exit();
+				
+				if(selected.unread) {
+					selected.pill.exitToUnread();
+				}else {
+					selected.pill.exit();
+				}
 			}
-			
+
 			icon.select();
 			pill.select();
 			selected = this;
 		}
 	}
-	
+
 	public void setAction(Runnable action) {
 		this.action = action;
 	}
-	
+
 	public static void clear() {
 		selected = null;
 	}
