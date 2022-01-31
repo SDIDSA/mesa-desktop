@@ -21,7 +21,10 @@ import mesa.app.pages.session.items.color.ColorBarItem;
 import mesa.app.pages.session.items.image.ServerBarItem;
 import mesa.app.pages.session.types.home.Home;
 import mesa.app.pages.session.types.server.ServerContent;
+import mesa.app.pages.session.types.server.left.ChannelEntry;
 import mesa.app.utils.Colors;
+import mesa.data.bean.Channel;
+import mesa.data.bean.Message;
 import mesa.data.bean.Server;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Animator;
@@ -29,10 +32,16 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class ServerBar extends VBox implements Styleable {
+	private SessionPage session;
+
 	private ArrayList<Rectangle> seps;
+
+	private ArrayList<ServerContent> servers;
 
 	public ServerBar(SessionPage session) {
 		super(8);
+		this.session = session;
+
 		setAlignment(Pos.TOP_CENTER);
 		setPadding(new Insets(8, 0, 0, 0));
 		setMinWidth(72);
@@ -49,12 +58,13 @@ public class ServerBar extends VBox implements Styleable {
 
 		addItem(new ColorBarItem(session, Colors.GREEN, "discover", "compass", 20));
 
+		servers = new ArrayList<>();
 		applyStyle(session.getWindow().getStyl());
 	}
 
 	public void addServer(ServerContent content) {
 		Server thisServer = ((ServerBarItem) content.getItem()).getServer();
-
+		servers.add(content);
 		for (int i = 2; i < getChildren().size(); i++) {
 			Node nodeAt = getChildren().get(i);
 
@@ -110,6 +120,20 @@ public class ServerBar extends VBox implements Styleable {
 		seps.add(sep);
 
 		getChildren().add(sep);
+	}
+
+	public void handleMessage(Message msg) {
+		for (ServerContent serverContent : servers) {
+			Server server = serverContent.getServer();
+			Channel ch = server.hasChannel(msg.getChannel());
+			if (ch != null) {
+				boolean handled = ChannelEntry.handleMessage(msg, server) && session.isLoaded(serverContent);
+				if (!handled) {
+					ch.setUnread(true);
+				}
+				break;
+			}
+		}
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class Settings extends StackPane implements Styleable {
 	public Settings(SessionPage session) {
 		this.session = session;
 		setMinHeight(0);
-		maxHeightProperty().bind(session.heightProperty());
+		setMaxHeight(-1);
 		
 		HBox back = new HBox();
 		leftBack = new ExpandingHSpace();
@@ -51,7 +51,7 @@ public class Settings extends StackPane implements Styleable {
 		getChildren().add(back);
 		root = new HBox();
 		root.setMinHeight(0);
-		root.maxHeightProperty().bind(heightProperty());
+		root.setMaxHeight(-1);
 		root.setAlignment(Pos.TOP_CENTER);
 		root.setPadding(new Insets(0, 8, 0, 0));
 

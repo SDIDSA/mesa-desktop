@@ -42,7 +42,9 @@ public class JsonApiCall extends ApiCall {
 
 		JSONObject res = new JSONObject(EntityUtils.toString(response.getEntity()));
 
-		Platform.runLater(() -> onResult.accept(res));
+		if(onResult != null) {
+			Platform.runLater(() -> onResult.accept(res));
+		}
 	}
 
 	public Param[] getParams() {

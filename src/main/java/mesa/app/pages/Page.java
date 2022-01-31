@@ -59,13 +59,8 @@ public abstract class Page extends StackPane implements Styleable {
 			setClip(Shape.union(clipBottom, clipTop));
 		};
 
-		DoubleExpression height = window.heightProperty()
-				.subtract(Bindings.when(window.getRoot().paddedProperty()).then(AppPreRoot.DEFAULT_PADDING * 2).otherwise(0))
-				.subtract(window.getAppBar().heightProperty()).subtract(window.getBorderWidth().multiply(2));
-
 		setMinHeight(0);
-		
-		maxHeightProperty().bind(height);
+		setMaxHeight(-1);
 	}
 
 	protected Page(Window window) {

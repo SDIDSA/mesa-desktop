@@ -1,6 +1,5 @@
 package mesa.gui.controls.input.styles;
 
-import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import mesa.gui.controls.input.Input;
 import mesa.gui.style.Style;

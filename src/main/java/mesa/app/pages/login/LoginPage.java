@@ -137,20 +137,17 @@ public class LoginPage extends Page {
 				hideVerify.playFromStart();
 			});
 
-			BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> {
-				Session.getServers(servers -> {
-					JSONArray servarr = servers.getJSONArray("servers");
-					window.putServers(servarr);
-					window.putData("user", user);
-					if (hide != null) {
-						hide.setOnFinished(e -> window.loadPage(SessionPage.class));
-						hide.playFromStart();
-					} else {
-						window.loadPage(SessionPage.class);
-					}
-				});
-
-			};
+			BiConsumer<JSONObject, Timeline> onSuccess = (user, hide) -> Session.getServers(servers -> {
+				JSONArray servarr = servers.getJSONArray("servers");
+				window.putServers(servarr);
+				window.putData("user", user);
+				if (hide != null) {
+					hide.setOnFinished(e -> window.loadPage(SessionPage.class));
+					hide.playFromStart();
+				} else {
+					window.loadPage(SessionPage.class);
+				}
+			});
 
 			login.setOnSuccess(user -> onSuccess.accept(user, hide(login)));
 			verify.setOnSuccess(user -> onSuccess.accept(user, hide(verify)));
@@ -209,6 +206,19 @@ public class LoginPage extends Page {
 
 		login.setMouseTransparent(true);
 
+		Runnable fail = ()-> {
+			Timeline showLogin = show(login);
+			showLogin.setDelay(Duration.seconds(1));
+			login.preTransition();
+			showLogin.playFromStart();
+			showLogin.setOnFinished(e -> {
+				login.setMouseTransparent(false);
+				login.postTransition();
+				loading.stop();
+				getChildren().remove(loading);
+			});
+		};
+		
 		String token = SessionManager.getSession();
 		if (token != null) {
 			Session.getUser(result -> {
@@ -221,19 +231,13 @@ public class LoginPage extends Page {
 						SessionManager.registerSocket(window.getMainSocket(), token);
 						loading.stop();
 					});
+				}else {
+					SessionManager.clearSession();
+					fail.run();
 				}
 			});
 		} else {
-			Timeline showLogin = show(login);
-			showLogin.setDelay(Duration.seconds(1));
-			login.preTransition();
-			showLogin.playFromStart();
-			showLogin.setOnFinished(e -> {
-				login.setMouseTransparent(false);
-				login.postTransition();
-				loading.stop();
-				getChildren().remove(loading);
-			});
+			fail.run();
 		}
 	}
 

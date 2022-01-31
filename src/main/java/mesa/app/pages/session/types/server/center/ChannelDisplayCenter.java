@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import mesa.app.pages.session.SessionPage;
 import mesa.data.bean.Channel;
+import mesa.data.bean.Message;
 
 public class ChannelDisplayCenter extends HBox {
 	private BooleanProperty membersShown;
@@ -33,5 +34,9 @@ public class ChannelDisplayCenter extends HBox {
 	
 	public BooleanProperty membersShown() {
 		return membersShown;
+	}
+
+	public boolean handleMessage(Message msg) {
+		return main.handleMessage(msg);
 	}
 }

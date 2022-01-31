@@ -12,6 +12,10 @@ public class Param {
 		this.value = value;
 	}
 
+	public Param(String key, int value) {
+		this(key, Integer.toString(value));
+	}
+
 	public String getKey() {
 		return key;
 	}

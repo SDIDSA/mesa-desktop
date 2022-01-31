@@ -1,6 +1,8 @@
 package mesa.api;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.function.Consumer;
 
 import org.json.JSONObject;
@@ -43,18 +45,42 @@ public class Session {
 	}
 	
 	public static void getServer(int id, Consumer<JSONObject> onResult) {
-		call(API.Session.GET_SERVER, "get server data", onResult, new Param(SERVER_ID, Integer.toString(id)));
+		call(API.Session.GET_SERVER, "get server data", onResult, new Param(SERVER_ID, id));
 	}
 	
 	public static void generateInvite(int server, Consumer<JSONObject> onResult) {
-		call(API.Session.CREATE_INVITE, "create invite", onResult, new Param(SERVER_ID, Integer.toString(server)));
+		call(API.Session.CREATE_INVITE, "create invite", onResult, new Param(SERVER_ID, server));
 	}
 	
 	public static void joinWithInvite(String inviteCode, Consumer<JSONObject> onResult) {
 		call(API.Session.JOIN_WITH_INVITE, "join server with invite", onResult, new Param("invite_code", inviteCode));
 	}
 	
+	public static void sendMessage(String content, int channel, int server, Consumer<JSONObject> onResult) {
+		try {
+			String val = URLEncoder.encode(content, "utf-8");
+			call(API.Session.SEND_MESSAGE, "send message", onResult ,
+					new Param("content", val),
+					new Param("channel", channel),
+					new Param("server", server));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void seen(int channel, Consumer<JSONObject> onResult) {
+		call(API.Session.SEEN, "mark a channel as seen", onResult, new Param("channel", channel));
+	}
+	
 	public static void getUser(Consumer<JSONObject> onResult) {
 		call(API.Session.GET_USER, "get user data", onResult);
+	}
+	
+	public static void getUserForId(String id, Consumer<JSONObject> onResult) {
+		call(API.Session.GET_USER_FOR_ID, "get user data for id : " + id, onResult, new Param("user_id", id));
+	}
+	
+	public static void getMessages(int channel, Consumer<JSONObject> onResult) {
+		call(API.Session.GET_MESSAGES, "get messasges for channel " + channel, onResult, new Param("channel", channel));
 	}
 }

@@ -144,6 +144,14 @@ public class ScrollBar extends StackPane {
 	private void setPos(double val) {
 		position.set(Math.max(0, Math.min(1, val)));
 	}
+	
+	public void scrollToTop() {
+		setPos(0);
+	}
+	
+	public void scrollToBottom() {
+		setPos(1);
+	}
 
 	public DoubleProperty positionProperty() {
 		return position;

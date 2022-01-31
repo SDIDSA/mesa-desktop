@@ -5,7 +5,7 @@ import java.io.File;
 import javafx.scene.image.Image;
 import mesa.gui.controls.image.ImageProxy;
 
-public class Emoji {
+public class Emoji implements Comparable<Emoji>{
 	private String value;
 	private String name;
 	private File file;
@@ -31,11 +31,6 @@ public class Emoji {
 		return ImageProxy.load(file.getAbsolutePath(), size, true);
 	}
 
-	@Override
-	public String toString() {
-		return "Emoji [value=" + value + ", name=" + name + ", file=" + file + "]";
-	}
-
 	public static String prepareValue(String name, String delimiter) {
 		String[] parts = name.split(delimiter);
 
@@ -54,6 +49,16 @@ public class Emoji {
 		sb.appendCodePoint(Integer.parseInt("FE0F", 16));
 
 		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		return "Emoji [value=" + value + ", name=" + name + ", file=" + file + "]";
+	}
+
+	@Override
+	public int compareTo(Emoji o) {
+		return Integer.compare(o.value.length(), value.length());
 	}
 
 }
