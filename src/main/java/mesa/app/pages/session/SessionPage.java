@@ -1,6 +1,7 @@
 package mesa.app.pages.session;
 
 import java.awt.Dimension;
+import java.util.HashMap;
 
 import org.json.JSONObject;
 
@@ -24,6 +25,7 @@ import mesa.app.pages.Page;
 import mesa.app.pages.login.LoginPage;
 import mesa.app.pages.session.content.Content;
 import mesa.app.pages.session.items.BarItem;
+import mesa.app.pages.session.settings.GlobalSettings;
 import mesa.app.pages.session.settings.Settings;
 import mesa.app.pages.session.settings.menu.SectionItem;
 import mesa.app.pages.session.types.server.ServerContent;
@@ -47,7 +49,8 @@ import mesa.gui.window.Window;
 public class SessionPage extends Page {
 	private User user;
 
-	private double duration = .4;
+	private static double duration = .4;
+	private static Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
 
 	private StackPane side;
 	private StackPane main;
@@ -55,14 +58,9 @@ public class SessionPage extends Page {
 	private HBox root;
 	private Settings settings;
 
-	private Timeline showSettings;
-	private Timeline hideSettings;
-
 	private ServerBar servers;
-	
-	private Content loaded;
 
-	private Interpolator inter = SplineInterpolator.ANTICIPATEOVERSHOOT;
+	private Content loaded;
 
 	public SessionPage(Window window) {
 		super(window, new Dimension(970, 530));
@@ -76,10 +74,7 @@ public class SessionPage extends Page {
 		root.setMinHeight(0);
 		root.setMaxHeight(-1);
 
-		settings = new Settings(this);
-		settings.setOpacity(0);
-		settings.getRoot().setScaleX(1.1);
-		settings.getRoot().setScaleY(1.1);
+		settings = new GlobalSettings(this);
 
 		servers = new ServerBar(this);
 
@@ -92,30 +87,6 @@ public class SessionPage extends Page {
 		HBox.setHgrow(main, Priority.ALWAYS);
 
 		root.getChildren().addAll(servers, side, main);
-
-		showSettings = new Timeline(new KeyFrame(Duration.seconds(duration),
-				new KeyValue(root.opacityProperty(), 0, inter), new KeyValue(root.scaleXProperty(), 0.93, inter),
-				new KeyValue(root.scaleYProperty(), 0.93, inter),
-
-				new KeyValue(settings.opacityProperty(), 1, inter),
-				new KeyValue(settings.getRoot().scaleXProperty(), 1, inter),
-				new KeyValue(settings.getRoot().scaleYProperty(), 1, inter)));
-		showSettings.setOnFinished(e -> {
-			afterTransition();
-			getChildren().remove(root);
-		});
-		hideSettings = new Timeline(
-				new KeyFrame(Duration.seconds(duration), new KeyValue(root.opacityProperty(), 1, inter),
-						new KeyValue(root.scaleXProperty(), 1, inter), new KeyValue(root.scaleYProperty(), 1, inter),
-
-						new KeyValue(settings.opacityProperty(), 0, inter),
-						new KeyValue(settings.getRoot().scaleXProperty(), 1.1, inter),
-						new KeyValue(settings.getRoot().scaleYProperty(), 1.1, inter)));
-
-		hideSettings.setOnFinished(e -> {
-			afterTransition();
-			getChildren().remove(settings);
-		});
 
 		try {
 			window.getServers().forEach(obj -> {
@@ -130,10 +101,9 @@ public class SessionPage extends Page {
 					Threaded.runAfter(500, () -> servers.addServer(sc));
 				});
 			});
-		}catch(Exception x) {
+		} catch (Exception x) {
 			x.printStackTrace();
 		}
-		
 
 		getChildren().add(root);
 		applyStyle(window.getStyl());
@@ -152,67 +122,72 @@ public class SessionPage extends Page {
 			JSONObject obj = new JSONObject(data[0].toString());
 
 			int id = obj.getInt("id");
+			int order = obj.getInt("order");
 
 			Session.getServer(id, result -> {
-				Server server = new Server(result.getJSONObject("server"), Integer.MAX_VALUE);
+				Server server = new Server(result.getJSONObject("server"), order);
 
 				ServerContent sc = new ServerContent(this, server);
 
 				servers.addServer(sc);
 			});
 		});
-		
+
 		socket.on("message", data -> {
 			JSONObject obj = new JSONObject(data[0].toString());
-			
-			Platform.runLater(()-> servers.handleMessage(Message.get(obj)));
+
+			Platform.runLater(() -> servers.handleMessage(Message.get(obj)));
+		});
+
+		socket.on("delete_channel", data -> {
+			JSONObject obj = new JSONObject(data[0].toString());
+
+			int server = obj.getInt("server");
+			int channel = obj.getInt("channel");
+
+			Platform.runLater(() -> servers.removeChannel(server, channel));
 		});
 	}
 
-	private void prepareNode(Node node) {
-		node.setCache(true);
-		node.setCacheHint(CacheHint.SPEED);
-	}
-
-	private void clearNode(Node node) {
-		node.setCache(false);
-		node.setCacheHint(CacheHint.DEFAULT);
-	}
-
-	private void beforeTransition() {
-		prepareNode(root);
-		prepareNode(settings);
-		prepareNode(settings.getRoot());
-	}
-
-	private void afterTransition() {
-		clearNode(root);
-		clearNode(settings);
-		clearNode(settings.getRoot());
-	}
-
 	public void showSettings() {
-		beforeTransition();
-		if (!getChildren().contains(settings)) {
-			getChildren().add(settings);
+		showSettings(settings);
+	}
+
+	private static HashMap<Settings, SettingsTransition> transitionCache = new HashMap<>();
+
+	public void showSettings(Settings other) {
+		SettingsTransition transition = transitionCache.get(other);
+		if (transition == null) {
+			transition = new SettingsTransition(other, this);
+			transitionCache.put(other, transition);
+		}
+
+		if (!getChildren().contains(other)) {
+			getChildren().add(other);
 		}
 		root.setMouseTransparent(true);
-		settings.setMouseTransparent(false);
-		hideSettings.stop();
-		showSettings.playFromStart();
+		other.setMouseTransparent(false);
 
-		settings.requestFocus();
+		transition.show();
+
+		other.requestFocus();
 	}
 
-	public void hideSettings() {
-		beforeTransition();
+	@Override
+	public void requestFocus() {
+		getChildren().get(0).requestFocus();
+	}
+
+	public void hideSettings(Settings other) {
+		SettingsTransition transition = transitionCache.get(other);
+
 		if (!getChildren().contains(root)) {
 			getChildren().add(root);
 		}
-		settings.setMouseTransparent(true);
 		root.setMouseTransparent(false);
-		showSettings.stop();
-		hideSettings.playFromStart();
+		other.setMouseTransparent(true);
+
+		transition.hide();
 	}
 
 	public User getUser() {
@@ -222,14 +197,15 @@ public class SessionPage extends Page {
 	public void load(Content content) {
 		side.getChildren().setAll(content.getSide());
 		main.getChildren().setAll(content.getMain());
-		
+
+		content.onLoad();
 		loaded = content;
 	}
-	
+
 	public boolean isLoaded(Content content) {
 		return loaded == content;
 	}
-	
+
 	public Content getLoaded() {
 		return loaded;
 	}
@@ -242,6 +218,7 @@ public class SessionPage extends Page {
 			SectionItem.clearCache();
 			ChannelDisplayMain.clearCache();
 			ChannelEntry.clearCache();
+			transitionCache.clear();
 			BarItem.clear();
 			Tooltip.clear();
 			window.clearLoggedUser();
@@ -279,6 +256,81 @@ public class SessionPage extends Page {
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);
+	}
+
+	private static class SettingsTransition {
+		private Timeline show;
+		private Timeline hide;
+
+		private Runnable before;
+
+		public SettingsTransition(Settings settings, SessionPage page) {
+			show = new Timeline(
+					new KeyFrame(Duration.seconds(duration), new KeyValue(page.root.opacityProperty(), 0, inter),
+							new KeyValue(page.root.scaleXProperty(), 0.93, inter),
+							new KeyValue(page.root.scaleYProperty(), 0.93, inter),
+
+							new KeyValue(settings.opacityProperty(), 1, inter),
+							new KeyValue(settings.getRoot().scaleXProperty(), 1, inter),
+							new KeyValue(settings.getRoot().scaleYProperty(), 1, inter)));
+			show.setOnFinished(e -> {
+				afterTransition(settings, settings.getRoot(), page.root);
+				page.getChildren().remove(page.root);
+			});
+
+			hide = new Timeline(
+					new KeyFrame(Duration.seconds(duration), new KeyValue(page.root.opacityProperty(), 1, inter),
+							new KeyValue(page.root.scaleXProperty(), 1, inter),
+							new KeyValue(page.root.scaleYProperty(), 1, inter),
+
+							new KeyValue(settings.opacityProperty(), 0, inter),
+							new KeyValue(settings.getRoot().scaleXProperty(), 1.1, inter),
+							new KeyValue(settings.getRoot().scaleYProperty(), 1.1, inter)));
+
+			hide.setOnFinished(e -> {
+				afterTransition(settings, settings.getRoot(), page.root);
+				page.getChildren().remove(settings);
+				page.requestFocus();
+			});
+
+			before = () -> beforeTransition(settings, settings.getRoot(), page.root);
+		}
+
+		public void show() {
+			before.run();
+
+			hide.stop();
+			show.playFromStart();
+		}
+
+		public void hide() {
+			before.run();
+
+			show.stop();
+			hide.playFromStart();
+		}
+
+		private static void prepareNode(Node... nodes) {
+			for (Node node : nodes) {
+				node.setCache(true);
+				node.setCacheHint(CacheHint.SPEED);
+			}
+		}
+
+		private static void clearNode(Node... nodes) {
+			for (Node node : nodes) {
+				node.setCache(false);
+				node.setCacheHint(CacheHint.DEFAULT);
+			}
+		}
+
+		private static void beforeTransition(Node... nodes) {
+			prepareNode(nodes);
+		}
+
+		private static void afterTransition(Node... nodes) {
+			clearNode(nodes);
+		}
 	}
 
 }

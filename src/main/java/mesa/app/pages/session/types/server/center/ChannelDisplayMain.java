@@ -205,6 +205,9 @@ public class ChannelDisplayMain extends BorderPane implements Styleable {
 
 			if (msg.getType().equals("text") && !list.getChildren().contains(disp)) {
 				list.getChildren().add(disp);
+				if(!msg.getSender().equals(session.getUser().getId())) {
+					Session.seen(msg.getChannel(), null);
+				}
 			}
 		}
 

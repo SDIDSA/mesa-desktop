@@ -5,6 +5,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -19,8 +20,7 @@ import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class ChannelGroupEntry extends VBox implements Styleable {
-
+public class ChannelGroupEntry extends VBox implements Styleable {	
 	private HBox header;
 
 	private ColorIcon expand;
@@ -29,6 +29,8 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 	private ActionIcon addChannel;
 
 	public ChannelGroupEntry(SessionPage session, ChannelGroup group) {
+		group.setChannelGroupEntry(this);
+		
 		setPadding(new Insets(16, 0, 0, 0));
 
 		header = new HBox();
@@ -85,6 +87,22 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);
+	}
+
+	public boolean removeChannel(int channelId) {
+		for(Node n : getChildren()) {
+			if(n instanceof ChannelEntry channelEntry && channelEntry.getChannel().getId().intValue() == channelId) {
+				if(channelEntry.isSelected()) {
+					channelEntry.getChannel().getServerContent().removeSelectedChannel();
+				}
+				
+				getChildren().remove(channelEntry);
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

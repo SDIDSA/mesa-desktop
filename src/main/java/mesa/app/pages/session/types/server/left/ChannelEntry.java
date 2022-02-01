@@ -18,11 +18,10 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
-import mesa.app.pages.session.types.server.center.ChannelDisplay;
+import mesa.app.pages.session.settings.ChannelSettings;
+import mesa.app.pages.session.types.server.ServerContent;
 import mesa.data.bean.Channel;
 import mesa.data.bean.ChannelGroup;
-import mesa.data.bean.Message;
-import mesa.data.bean.Server;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
@@ -33,11 +32,9 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class ChannelEntry extends HBox implements Styleable {
-	private static HashMap<Server, ChannelDisplay> displayCache = new HashMap<>();
 	private static HashMap<Integer, ChannelEntry> selectedChannels = new HashMap<>();
 	
 	public static void clearCache() {
-		displayCache.clear();
 		selectedChannels.clear();
 	}
 
@@ -55,7 +52,12 @@ public class ChannelEntry extends HBox implements Styleable {
 	private BooleanProperty unread;
 	private Circle unreadMark;
 
+	private ChannelSettings settings;
+	
+	private Channel channel;
 	public ChannelEntry(SessionPage session, Channel channel) {
+		channel.setChannelEntry(this);
+		this.channel = channel;
 		unread = channel.unreadProperty();
 		
 		setAlignment(Pos.CENTER);
@@ -65,10 +67,10 @@ public class ChannelEntry extends HBox implements Styleable {
 		content.setMaxHeight(34);
 		content.setAlignment(Pos.CENTER);
 		content.setCursor(Cursor.HAND);
-		content.setOnMouseClicked(e -> select(session, channel));
+		content.setOnMouseClicked(e -> select());
 		content.setOnKeyPressed(e-> {
 			if(e.getCode().equals(KeyCode.SPACE)) {
-				select(session, channel);
+				select();
 			}
 		});
 		content.setPadding(new Insets(0, 8, 0, 8));
@@ -99,6 +101,13 @@ public class ChannelEntry extends HBox implements Styleable {
 		invite.setAction(inviteOverlay::show);
 
 		edit = new ActionIcon(session.getWindow(), "settings", 12, 20, "edit_channel");
+		
+		edit.setAction(()-> {
+			if(settings == null) {
+				settings = new ChannelSettings(session, channel);
+			}
+			session.showSettings(settings);
+		});
 
 		content.getChildren().addAll(type, name, new ExpandingHSpace(), invite);
 		
@@ -123,6 +132,10 @@ public class ChannelEntry extends HBox implements Styleable {
 		
 		applyStyle(session.getWindow().getStyl());
 	}
+	
+	public Channel getChannel() {
+		return channel;
+	}
 
 	private void adminCheck(SessionPage session, ChannelGroup group) {
 		if (group.getServer().getOwner().equals(session.getUser().getId())) {
@@ -133,7 +146,7 @@ public class ChannelEntry extends HBox implements Styleable {
 		}
 	}
 
-	public void select(SessionPage session, Channel channel) {
+	public void select() {
 		if (channel.getType().equals("text")) {
 			int serverId = channel.getGroup().getServer().getId();
 			ChannelEntry old = selectedChannels.get(serverId);
@@ -142,38 +155,29 @@ public class ChannelEntry extends HBox implements Styleable {
 			}
 
 			selected.set(true);
-			loadChannel(session, channel);
+			loadChannel();
 			selectedChannels.put(serverId, this);
 		}
 	}
+	
+	public static ChannelEntry getSelected(int server) {
+		return selectedChannels.get(server);
+	}
 
-	public void loadChannel(SessionPage session, Channel channel) {
-		Server server = channel.getGroup().getServer();
-		ChannelDisplay display = displayCache.get(server);
-
-		if (display == null) {
-			display = new ChannelDisplay(session);
-
-			displayCache.put(server, display);
-		}
-
-		display.loadChannel(channel);
-		
-		session.getLoaded().getMain().setTop(display.getTop());
-		session.getLoaded().getMain().setCenter(display.getCenter());
+	public ServerContent getServerContent() {
+		return channel.getServerContent();
+	}
+	
+	public void loadChannel() {
+		getServerContent().loadChannel(channel);
 	}
 
 	public void unselect() {
 		selected.set(false);
 	}
 	
-	public static boolean handleMessage(Message msg, Server server) {
-		ChannelDisplay display = displayCache.get(server);
-		if(display != null) {
-			return display.handleMessage(msg);
-		}else {
-			return false;
-		}
+	public boolean isSelected() {
+		return selected.get();
 	}
 
 	@Override
@@ -200,7 +204,7 @@ public class ChannelEntry extends HBox implements Styleable {
 		styleIcon.accept(invite);
 		styleIcon.accept(edit);
 
-		NodeUtils.focusBorder(this, style.getTextLink());
+		NodeUtils.focusBorder(content, style.getTextLink());
 		
 		unreadMark.setFill(style.getInteractiveActive());
 	}

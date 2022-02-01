@@ -12,6 +12,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import mesa.app.pages.session.types.server.ServerContent;
 
 public class Server extends Bean {
 	private IntegerProperty id;
@@ -26,6 +27,8 @@ public class Server extends Bean {
 	private ObservableList<String> members;
 	
 	private int order;
+	
+	private ServerContent serverContent;
 
 	public Server(JSONObject obj, int order) {
 		id = new SimpleIntegerProperty();
@@ -41,6 +44,14 @@ public class Server extends Bean {
 		init(obj);
 		
 		this.order = order;
+	}
+	
+	public void setServerContent(ServerContent serverContent) {
+		this.serverContent = serverContent;
+	}
+	
+	public ServerContent getServerContent() {
+		return serverContent;
 	}
 	
 	public int getOrder() {
@@ -63,6 +74,14 @@ public class Server extends Bean {
 		
 		unread.unbind();
 		unread.bind(unreadBinding);
+	}
+	
+	public void removeChannel(int channel) {
+		for(ChannelGroup group : groups) {
+			if(group.removeChannel(channel)) {
+				break;
+			}
+		}
 	}
 
 	public boolean isUnread() {

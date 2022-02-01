@@ -25,7 +25,6 @@ public class EmojiInputIcon extends StackPane {
 	private Timeline hover;
 	private Timeline unhover;
 
-//	private double scale = 1.454545454545455;
 	private double scale = 0;
 
 	public EmojiInputIcon(double size) {

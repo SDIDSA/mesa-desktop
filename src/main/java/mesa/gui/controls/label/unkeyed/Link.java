@@ -8,8 +8,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
@@ -85,6 +87,11 @@ public class Link extends StackPane implements Styleable, TextNode {
 	}
 
 	@Override
+	public void setTransform(TextTransform transform) {
+		label.setTransform(transform);
+	}
+
+	@Override
 	public Node getNode() {
 		return this;
 	}
@@ -99,5 +106,10 @@ public class Link extends StackPane implements Styleable, TextNode {
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);
+	}
+
+	@Override
+	public void setFill(Paint fill) {
+		//IGNORE
 	}
 }

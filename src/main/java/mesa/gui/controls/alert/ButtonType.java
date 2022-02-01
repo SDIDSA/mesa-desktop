@@ -7,7 +7,8 @@ public enum ButtonType {
 	CLOSE("close"),
 	DONE("done"),
 	CANCEL("cancel", false),
-	LOGOUT("log_out", Colors.Error);
+	LOGOUT("log_out", Colors.Error),
+	DELETE_CHANNEL("Delete Channel", Colors.Error);
 	
 	private String key;
 	private boolean filled;

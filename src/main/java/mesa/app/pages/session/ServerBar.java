@@ -21,7 +21,6 @@ import mesa.app.pages.session.items.color.ColorBarItem;
 import mesa.app.pages.session.items.image.ServerBarItem;
 import mesa.app.pages.session.types.home.Home;
 import mesa.app.pages.session.types.server.ServerContent;
-import mesa.app.pages.session.types.server.left.ChannelEntry;
 import mesa.app.utils.Colors;
 import mesa.data.bean.Channel;
 import mesa.data.bean.Message;
@@ -127,10 +126,23 @@ public class ServerBar extends VBox implements Styleable {
 			Server server = serverContent.getServer();
 			Channel ch = server.hasChannel(msg.getChannel());
 			if (ch != null) {
-				boolean handled = ChannelEntry.handleMessage(msg, server) && session.isLoaded(serverContent);
+				boolean handled = serverContent.handleMessage(msg) && session.isLoaded(serverContent);
 				if (!handled) {
 					ch.setUnread(true);
 				}
+				break;
+			}
+		}
+	}
+
+	public void removeChannel(int serverId, int channelId) {
+		
+		for (ServerContent serverContent : servers) {
+			Server server = serverContent.getServer();
+			if(server.getId().intValue() == serverId) {
+				server.removeChannel(channelId);
+				serverContent.removeChannel(channelId);
+				
 				break;
 			}
 		}
