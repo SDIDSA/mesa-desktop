@@ -44,6 +44,10 @@ public class TextInputField extends InputField {
 		input.addPostField(nodes);
 	}
 
+	public void addPreField(Node... nodes) {
+		input.addPreField(nodes);
+	}
+
 	public void positionCaret(int pos) {
 		input.positionCaret(pos);
 	}

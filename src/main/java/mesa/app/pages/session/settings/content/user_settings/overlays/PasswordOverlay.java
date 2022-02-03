@@ -7,6 +7,7 @@ import javafx.scene.layout.VBox;
 import mesa.app.component.input.DeprecatedTextInputField;
 import mesa.app.pages.session.SessionPage;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.alert.AbstractOverlay;
 import mesa.gui.controls.label.MultiText;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;

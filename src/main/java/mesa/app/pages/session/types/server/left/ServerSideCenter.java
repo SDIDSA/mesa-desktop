@@ -1,6 +1,7 @@
 package mesa.app.pages.session.types.server.left;
 
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.layout.VBox;
 import mesa.app.pages.session.SessionPage;
 import mesa.data.bean.ChannelGroup;
@@ -16,5 +17,13 @@ public class ServerSideCenter extends VBox {
 
 	public void addGroup(SessionPage session, ChannelGroup group) {
 		getChildren().add(new ChannelGroupEntry(session, group));
+	}
+
+	public void removeChannel(int channelId) {
+		for (Node n : getChildren()) {
+			if (n instanceof ChannelGroupEntry groupEntry && groupEntry.removeChannel(channelId)) {
+				break;
+			}
+		}
 	}
 }

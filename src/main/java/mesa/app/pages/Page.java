@@ -4,8 +4,6 @@ import java.awt.Dimension;
 
 import org.json.JSONObject;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.DoubleExpression;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -13,7 +11,6 @@ import javafx.scene.shape.Shape;
 import mesa.app.utils.Dimensions;
 import mesa.gui.style.Styleable;
 import mesa.gui.window.Window;
-import mesa.gui.window.content.AppPreRoot;
 
 public abstract class Page extends StackPane implements Styleable {
 	protected Window window;

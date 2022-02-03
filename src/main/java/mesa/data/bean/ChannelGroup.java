@@ -12,6 +12,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import mesa.app.pages.session.types.server.ServerContent;
+import mesa.app.pages.session.types.server.left.ChannelGroupEntry;
 
 public class ChannelGroup extends Bean {
 	private IntegerProperty id;
@@ -24,6 +26,8 @@ public class ChannelGroup extends Bean {
 
 	private ObservableList<Channel> channels;
 
+	private ChannelGroupEntry channelGroupEntry;
+	
 	public ChannelGroup(JSONObject obj) {
 		id = new SimpleIntegerProperty();
 		name = new SimpleStringProperty();
@@ -33,6 +37,18 @@ public class ChannelGroup extends Bean {
 		channels = FXCollections.observableArrayList();
 
 		init(obj);
+	}
+	
+	public void setChannelGroupEntry(ChannelGroupEntry channelGroupEntry) {
+		this.channelGroupEntry = channelGroupEntry;
+	}
+	
+	public ChannelGroupEntry getChannelGroupEntry() {
+		return channelGroupEntry;
+	}
+	
+	public ServerContent getServerContent() {
+		return server.getServerContent();
 	}
 	
 	public void setServer(Server server) {
@@ -127,5 +143,9 @@ public class ChannelGroup extends Bean {
 		}
 		
 		return sb.toString();
+	}
+
+	public boolean removeChannel(int channel) {
+		return channels.removeIf(ch -> ch.getId().intValue() == channel);
 	}
 }

@@ -63,7 +63,7 @@ public class MultiOverlayPage extends VBox implements Styleable {
 
 		subHead = new MultiText(owner.getWindow(), subHeadKey, new Font(15));
 		subHead.center();
-		subHead.setLineSpacing(4);
+		subHead.setLineSpacing(6);
 
 		top.getChildren().addAll(head, subHead);
 

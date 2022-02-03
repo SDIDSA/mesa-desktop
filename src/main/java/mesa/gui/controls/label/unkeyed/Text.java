@@ -4,7 +4,7 @@ import javafx.scene.Node;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.TextTransform;
 
-public class Text extends javafx.scene.text.Text implements TextNode{
+public class Text extends javafx.scene.text.Text implements TextNode {
 
 	private TextTransform transform = TextTransform.NONE;
 	
@@ -25,7 +25,7 @@ public class Text extends javafx.scene.text.Text implements TextNode{
 
 	public void setTransform(TextTransform transform) {
 		this.transform = transform;
-		setText(transform.apply(getText()));
+		set(getText());
 	}
 	
 	@Override

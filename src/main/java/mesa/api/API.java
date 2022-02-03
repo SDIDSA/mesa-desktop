@@ -16,9 +16,9 @@ public class API {
 	public static final JSONObject netErr = new JSONObject("{\"err\":[{\"key\":\"global\",\"value\":\"net_err\"}]}");
 
 	public static final String BASE = "http://localhost:4000/";
-	
+
 	public static final String INVITE_BASE = "https://mesa-invite.tk/";
-	
+
 	public static final String INVITE_CODE = "hTKzmak";
 
 	public static class Auth {
@@ -43,49 +43,55 @@ public class API {
 		public static final String REMOVE_PHONE = PREFIX + "removePhone";
 
 		public static final String CHANGE_PASSWORD = PREFIX + "changePassword";
-		
+
 		public static final String DELETE_ACCOUNT = PREFIX + "deleteAccount";
-		
+
 		private Auth() {
-			
+
 		}
 	}
-	
+
 	public static class Session {
 		private static final String PREFIX = BASE + "session/";
 
 		public static final String LOGOUT = PREFIX + "logout";
-		
+
 		public static final String GET_USER = PREFIX + "getUser";
-		
+
 		public static final String GET_USER_FOR_ID = PREFIX + "getUserForId";
-		
+
 		public static final String CREATE_SERVER = PREFIX + "createServer";
 
 		public static final String GET_SERVERS = PREFIX + "getServers";
-		
+
 		public static final String GET_SERVER = PREFIX + "getServer";
-		
+
 		public static final String CREATE_INVITE = PREFIX + "createInvite";
-		
+
 		public static final String JOIN_WITH_INVITE = PREFIX + "joinWithInvite";
-		
+
 		public static final String SEND_MESSAGE = PREFIX + "sendMessage";
-		
+
 		public static final String GET_MESSAGES = PREFIX + "getMessages";
-		
+
 		public static final String SEEN = PREFIX + "seen";
-		
+
+		public static final String DELETE_CHANNEL = PREFIX + "deleteChannel";
+
+		public static final String CREATE_CHANNEL = PREFIX + "createChannel";
+
 		private Session() {
-			
+
 		}
 	}
 
-	public static void asyncJsonPost(String path, String action, Consumer<JSONObject> onResult, String session, Param... params) {
+	public static void asyncJsonPost(String path, String action, Consumer<JSONObject> onResult, String session,
+			Param... params) {
 		asyncPost(new JsonApiCall(path, params), action, onResult, session);
 	}
 
-	public static void asyncMultiPost(String path, String action, Consumer<JSONObject> onResult, String session, Part...parts) {
+	public static void asyncMultiPost(String path, String action, Consumer<JSONObject> onResult, String session,
+			Part... parts) {
 		asyncPost(new MultiPartApiCall(path, parts), action, onResult, session);
 	}
 
@@ -96,7 +102,8 @@ public class API {
 				try {
 					call.execute(result -> {
 						LogHandler.log(result.toString(4));
-						onResult.accept(result);
+						if (onResult != null)
+							onResult.accept(result);
 					}, session);
 				} catch (Exception x) {
 					ErrorHandler.handle(x, action);
@@ -105,8 +112,7 @@ public class API {
 			}
 		}.start();
 	}
-	
-	
+
 	public static void asyncJsonPost(String path, String action, Consumer<JSONObject> onResult, Param... params) {
 		asyncJsonPost(path, action, onResult, null, params);
 	}

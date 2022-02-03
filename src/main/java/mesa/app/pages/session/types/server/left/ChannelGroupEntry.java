@@ -5,10 +5,12 @@ import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.types.server.add_channel.AddChannel;
 import mesa.data.bean.Channel;
 import mesa.data.bean.ChannelGroup;
 import mesa.gui.controls.Font;
@@ -19,16 +21,19 @@ import mesa.gui.controls.space.ExpandingHSpace;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class ChannelGroupEntry extends VBox implements Styleable {
-
+public class ChannelGroupEntry extends VBox implements Styleable {	
 	private HBox header;
 
 	private ColorIcon expand;
 	private Text nameDisp;
 
 	private ActionIcon addChannel;
+	
+	private AddChannel addChannelOverlay;
 
 	public ChannelGroupEntry(SessionPage session, ChannelGroup group) {
+		group.setChannelGroupEntry(this);
+		
 		setPadding(new Insets(16, 0, 0, 0));
 
 		header = new HBox();
@@ -43,6 +48,14 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 				group.nameProperty()));
 
 		addChannel = new ActionIcon(session.getWindow(), "plus", 12, 24, "create_channel");
+		
+		addChannel.setAction(()-> {
+			if(addChannelOverlay == null) {
+				addChannelOverlay = new AddChannel(session, group);
+			}
+			
+			addChannelOverlay.show();
+		});
 
 		header.getChildren().addAll(expand, nameDisp, new ExpandingHSpace());
 
@@ -85,6 +98,22 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 	@Override
 	public void applyStyle(ObjectProperty<Style> style) {
 		Styleable.bindStyle(this, style);
+	}
+
+	public boolean removeChannel(int channelId) {
+		for(Node n : getChildren()) {
+			if(n instanceof ChannelEntry channelEntry && channelEntry.getChannel().getId().intValue() == channelId) {
+				if(channelEntry.isSelected()) {
+					channelEntry.getChannel().getServerContent().removeSelectedChannel();
+				}
+				
+				getChildren().remove(channelEntry);
+				
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 }

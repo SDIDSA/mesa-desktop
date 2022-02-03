@@ -31,7 +31,7 @@ public class Settings extends StackPane implements Styleable {
 	private ExpandingHSpace rightBack;
 
 	private StackPane content;
-	private SettingsMenu sideBar;
+	protected SettingsMenu sideBar;
 
 	private ScrollBar sideSb;
 	private ScrollBar mainSb;
@@ -89,9 +89,13 @@ public class Settings extends StackPane implements Styleable {
 		
 		addEventFilter(KeyEvent.KEY_PRESSED, e-> {
 			if(e.getCode().equals(KeyCode.ESCAPE)) {
-				session.hideSettings();
+				session.hideSettings(this);
 			}
 		});
+
+		setOpacity(0);
+		root.setScaleX(1.1);
+		root.setScaleY(1.1);
 		
 		applyStyle(session.getWindow().getStyl());
 	}

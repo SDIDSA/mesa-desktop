@@ -1,6 +1,7 @@
 package mesa.gui.controls.image;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -10,10 +11,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import mesa.gui.NodeUtils;
+import mesa.gui.style.ColorItem;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class ColorIcon extends StackPane implements Styleable {
+public class ColorIcon extends StackPane implements ColorItem, Styleable {
 	private ImageView view;
 	private Rectangle overlay;
 
@@ -27,7 +29,11 @@ public class ColorIcon extends StackPane implements Styleable {
 		overlay = new Rectangle();
 		overlay.setClip(view);
 
-		setImage(name, size);
+		if(name == null) {
+			//IGNORE
+		}else {
+			setImage(name, size);
+		}
 
 		if (focusable) {
 			setFocusTraversable(true);
@@ -98,6 +104,16 @@ public class ColorIcon extends StackPane implements Styleable {
 
 	public void setFill(Paint fill) {
 		overlay.setFill(fill);
+	}
+	
+	@Override
+	public double getBaselineOffset() {
+		return size * .85;
+	}
+
+	@Override
+	public Node getNode() {
+		return this;
 	}
 
 	@Override

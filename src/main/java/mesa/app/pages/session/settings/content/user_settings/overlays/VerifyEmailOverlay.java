@@ -2,6 +2,7 @@ package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import mesa.app.component.input.ConfCode;
 import mesa.app.pages.session.SessionPage;
+import mesa.gui.controls.alert.BasicOverlay;
 
 public class VerifyEmailOverlay extends BasicOverlay {
 	private SessionPage session;

@@ -127,10 +127,39 @@ public class ServerBar extends VBox implements Styleable {
 			Server server = serverContent.getServer();
 			Channel ch = server.hasChannel(msg.getChannel());
 			if (ch != null) {
-				boolean handled = ChannelEntry.handleMessage(msg, server) && session.isLoaded(serverContent);
+				boolean handled = serverContent.handleMessage(msg) && session.isLoaded(serverContent);
 				if (!handled) {
 					ch.setUnread(true);
 				}
+				break;
+			}
+		}
+	}
+
+	public void removeChannel(int serverId, int channelId) {
+		for (ServerContent serverContent : servers) {
+			Server server = serverContent.getServer();
+			if (server.getId().intValue() == serverId) {
+				server.removeChannel(channelId);
+				serverContent.removeChannel(channelId);
+
+				break;
+			}
+		}
+	}
+
+	public void addChannel(int serverId, int groupId, Channel channel) {
+		for (ServerContent serverContent : servers) {
+			Server server = serverContent.getServer();
+			if (server.getId().intValue() == serverId) {
+				server.addChannel(groupId, channel);
+				
+				channel.getChannelGroupEntry().addChannel(session, channel);
+				
+				if(ChannelEntry.getSelected(server.getId()) == null) {
+					serverContent.loadFirst();
+				}
+				
 				break;
 			}
 		}

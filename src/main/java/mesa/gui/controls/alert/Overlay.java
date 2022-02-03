@@ -140,7 +140,9 @@ public class Overlay extends StackPane {
 		hide.setOnFinished(e -> {
 			owner.getChildren().remove(this);
 			last().setDisable(false);
-
+			
+			owner.requestFocus();
+			
 			onHidden.forEach(Runnable::run);
 		});
 		hide.playFromStart();

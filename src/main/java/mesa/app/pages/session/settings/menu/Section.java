@@ -3,8 +3,9 @@ package mesa.app.pages.session.settings.menu;
 import mesa.app.pages.session.settings.Settings;
 import mesa.gui.NodeUtils;
 import mesa.gui.controls.Font;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
-import mesa.gui.controls.label.keyed.Label;
+import mesa.gui.style.ColorItem;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +17,7 @@ import javafx.scene.text.FontWeight;
 
 public class Section extends VBox implements Styleable {
 
-	private Label title;
+	private MultiText title;
 	private VBox items;
 
 	public Section(Settings settings, String titleKey, boolean first) {
@@ -25,7 +26,7 @@ public class Section extends VBox implements Styleable {
 		NodeUtils.nestedFocus(items);
 
 		if (titleKey != null) {
-			title = new Label(settings.getWindow(), titleKey, new Font(12, FontWeight.BOLD));
+			title = new MultiText(settings.getWindow(), titleKey, new Font(12.5, FontWeight.BOLD));
 			title.setTransform(TextTransform.UPPERCASE);
 			StackPane titCont = new StackPane(title);
 			titCont.setAlignment(Pos.CENTER_LEFT);
@@ -38,6 +39,10 @@ public class Section extends VBox implements Styleable {
 		getChildren().add(items);
 
 		applyStyle(settings.getWindow().getStyl());
+	}
+	
+	public void addPreTitle(ColorItem node) {
+		title.addNode(0, node);
 	}
 	
 	public Section(Settings settings) {

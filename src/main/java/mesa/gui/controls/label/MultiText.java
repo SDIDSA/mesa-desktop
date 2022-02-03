@@ -10,49 +10,55 @@ import mesa.gui.controls.label.keyed.KeyedLink;
 import mesa.gui.controls.label.keyed.KeyedTextNode;
 import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.controls.label.unkeyed.Link;
-import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.controls.label.unkeyed.TextNode;
+import mesa.gui.style.ColorItem;
 import mesa.gui.window.Window;
 
 public class MultiText extends TextFlow {
 	private Window window;
 
-	private ArrayList<TextNode> nodes;
+	private ArrayList<TextNode> textNodes;
+	private ArrayList<ColorItem> nodes;
 
 	private Color fill;
-	
+
 	public MultiText(Window window) {
 		this.window = window;
+		textNodes = new ArrayList<>();
 		nodes = new ArrayList<>();
 	}
 
 	public MultiText(Window window, String key, Font font) {
 		this(window);
-		
+
 		addLabel(key, font);
 	}
-	
+
 	public void setFill(Color fill) {
 		this.fill = fill;
-		nodes.forEach(node -> {
-			if(node instanceof Text label) {
-				label.setFill(fill);
-			}
-		});
+		nodes.forEach(node -> node.setFill(fill));
 	}
 
 	public void setKey(int index, String key) {
-		if(nodes.get(index) instanceof KeyedTextNode node) {
+		if (textNodes.get(index)instanceof KeyedTextNode node) {
 			node.setKey(key);
-		}else {
+		} else {
 			throw new IllegalArgumentException("the TextNode at " + index + " is not a KeyedTextNode");
 		}
 	}
 
+	public void setTransform(int index, TextTransform transform) {
+		textNodes.get(index).setTransform(transform);
+	}
+
+	public void setTransform(TextTransform transform) {
+		setTransform(0, transform);
+	}
+
 	public void setAction(int index, Runnable action) {
-		if(nodes.get(index) instanceof Link link) {
+		if (textNodes.get(index)instanceof Link link) {
 			link.setAction(action);
-		}else {
+		} else {
 			throw new IllegalArgumentException("the TextNode at " + index + " is not a Link");
 		}
 	}
@@ -62,34 +68,50 @@ public class MultiText extends TextFlow {
 	}
 
 	public void addLabel(String key, Font font) {
-		Label lab = new Label(window, key, font);
-		if(fill != null) {
-			lab.setFill(fill);
-		}
-		addNode(lab);
+		addTextNode(new Label(window, key, font));
 	}
 
 	public void addLabel(String key) {
 		addLabel(key, Font.DEFAULT);
 	}
 
-	public void addLink(String key, Font font) {
-		addNode(new Link(window, key, font));
+	public void addKeyedLink(String key, Font font) {
+		addTextNode(new KeyedLink(window, key, font));
 	}
 
-	public void addKeyedLink(String key, Font font) {
-		addNode(new KeyedLink(window, key, font));
+	public void addKeyedLink(String key) {
+		addKeyedLink(key, Font.DEFAULT);
+	}
+
+	public void addLink(String key, Font font) {
+		addTextNode(new Link(window, key, font));
 	}
 
 	public void addLink(String key) {
-		addLabel(key, Font.DEFAULT);
+		addLink(key, Font.DEFAULT);
 	}
 
-	private void addNode(TextNode node) {
+	private void addTextNode(TextNode node) {
+		textNodes.add(node);
+		addNode(node);
+	}
+
+	private void addNode(ColorItem node) {
 		nodes.add(node);
+		if (fill != null) {
+			node.setFill(fill);
+		}
 		getChildren().add(node.getNode());
 	}
-	
+
+	public void addNode(int index, ColorItem node) {
+		nodes.add(node);
+		if (fill != null) {
+			node.setFill(fill);
+		}
+		getChildren().add(index, node.getNode());
+	}
+
 	public void center() {
 		setTextAlignment(TextAlignment.CENTER);
 	}

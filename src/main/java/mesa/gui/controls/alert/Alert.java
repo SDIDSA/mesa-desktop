@@ -1,6 +1,7 @@
 package mesa.gui.controls.alert;
 
 import java.util.EnumMap;
+import java.util.function.Function;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
@@ -13,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import mesa.app.pages.Page;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ColorIcon;
@@ -33,6 +35,8 @@ public class Alert extends Overlay implements Styleable {
 
 	private Label head;
 	private MultiText body;
+	
+	private Function<Style, Color> bodyFill;
 
 	private EnumMap<ButtonType, Runnable> actions;
 	private EnumMap<ButtonType, AlertButton> buttons;
@@ -88,6 +92,8 @@ public class Alert extends Overlay implements Styleable {
 			buttons.put(buttonType, button);
 		}
 
+		bodyFill = Style::getTextNormal;
+		
 		setContent(preRoot, bottom);
 		applyStyle(window.getStyl());
 	}
@@ -135,7 +141,11 @@ public class Alert extends Overlay implements Styleable {
 	}
 
 	public void addLabel(String key) {
-		body.addLabel(key, new Font(15));
+		addLabel(key, new Font(15));
+	}
+
+	public void addLabel(String key, Font font) {
+		body.addLabel(key, font);
 	}
 	
 	public void addLink(String key) {
@@ -149,6 +159,11 @@ public class Alert extends Overlay implements Styleable {
 	public void centerBody() {
 		body.center();
 	}
+	
+	public void setBodyFill(Function<Style, Color> bodyFill, Style style) {
+		this.bodyFill = bodyFill;
+		body.setFill(bodyFill.apply(style));
+	}
 
 	@Override
 	public void applyStyle(Style style) {
@@ -159,7 +174,7 @@ public class Alert extends Overlay implements Styleable {
 				.otherwise(style.getHeaderSecondary()));
 
 		head.setFill(style.getHeaderPrimary());
-		body.setFill(style.getTextNormal());
+		body.setFill(bodyFill.apply(style));
 	}
 
 	@Override

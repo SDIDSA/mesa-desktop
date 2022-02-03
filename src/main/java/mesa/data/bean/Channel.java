@@ -7,14 +7,21 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import mesa.app.pages.session.types.server.ServerContent;
+import mesa.app.pages.session.types.server.left.ChannelEntry;
+import mesa.app.pages.session.types.server.left.ChannelGroupEntry;
 
 public class Channel extends Bean {
+	private static final String TEXT_TYPE = "text";
+	
 	private IntegerProperty id;
 	private StringProperty name;
 	private StringProperty type;
 	private BooleanProperty unread;
 	
 	private ChannelGroup group;
+	
+	private ChannelEntry channelEntry;
 
 	public Channel(JSONObject obj) {
 		id = new SimpleIntegerProperty();
@@ -22,6 +29,22 @@ public class Channel extends Bean {
 		type = new SimpleStringProperty();
 		unread = new SimpleBooleanProperty();
 		init(obj);
+	}
+	
+	public void setChannelEntry(ChannelEntry channelEntry) {
+		this.channelEntry = channelEntry;
+	}
+	
+	public ChannelEntry getChannelEntry() {
+		return channelEntry;
+	}
+	
+	public ChannelGroupEntry getChannelGroupEntry() {
+		return group.getChannelGroupEntry();
+	}
+	
+	public ServerContent getServerContent() {
+		return group.getServerContent();
 	}
 	
 	public void setGroup(ChannelGroup group) {
@@ -80,6 +103,10 @@ public class Channel extends Bean {
 		unread.set(val);
 	}
 
+	public String getTypeChar() {
+		return isTextChannel() ? "# " : "";
+	}
+	
 	@Override
 	public String toString() {
 		return "{"
@@ -87,5 +114,9 @@ public class Channel extends Bean {
 				+ "\n\t\t\tname : " + name.get() 
 				+ "\n\t\t\ttype : " + type.get() 
 			+ "\n\t\t}";
+	}
+
+	public boolean isTextChannel() {
+		return type.get().equals(TEXT_TYPE);
 	}
 }

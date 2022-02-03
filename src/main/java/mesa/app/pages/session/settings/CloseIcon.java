@@ -23,7 +23,7 @@ public class CloseIcon extends StackPane implements Styleable {
 		
 		getChildren().add(icon);
 		
-		setOnMouseClicked(e-> settings.getSession().hideSettings());
+		setOnMouseClicked(e-> settings.getSession().hideSettings(settings));
 		
 		applyStyle(settings.getWindow().getStyl());
 	}
