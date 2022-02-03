@@ -29,7 +29,11 @@ public class ColorIcon extends StackPane implements ColorItem, Styleable {
 		overlay = new Rectangle();
 		overlay.setClip(view);
 
-		setImage(name, size);
+		if(name == null) {
+			//IGNORE
+		}else {
+			setImage(name, size);
+		}
 
 		if (focusable) {
 			setFocusTraversable(true);

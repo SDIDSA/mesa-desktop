@@ -25,7 +25,7 @@ public class Text extends javafx.scene.text.Text implements TextNode {
 
 	public void setTransform(TextTransform transform) {
 		this.transform = transform;
-		setText(transform.apply(getText()));
+		set(getText());
 	}
 	
 	@Override

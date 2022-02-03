@@ -22,12 +22,12 @@ public class Server extends Bean {
 
 	private BooleanBinding unreadBinding;
 	private BooleanProperty unread;
-	
+
 	private ObservableList<ChannelGroup> groups;
 	private ObservableList<String> members;
-	
+
 	private int order;
-	
+
 	private ServerContent serverContent;
 
 	public Server(JSONObject obj, int order) {
@@ -37,48 +37,57 @@ public class Server extends Bean {
 		icon = new SimpleStringProperty();
 
 		unread = new SimpleBooleanProperty();
-		
+
 		groups = FXCollections.observableArrayList();
 		members = FXCollections.observableArrayList();
-		
+
 		init(obj);
-		
+
 		this.order = order;
 	}
-	
+
 	public void setServerContent(ServerContent serverContent) {
 		this.serverContent = serverContent;
 	}
-	
+
 	public ServerContent getServerContent() {
 		return serverContent;
 	}
-	
+
 	public int getOrder() {
 		return order;
 	}
-	
+
 	public ObservableList<ChannelGroup> getGroups() {
 		return groups;
 	}
-	
+
 	public void addGroup(ChannelGroup group) {
 		group.setServer(this);
 		groups.add(group);
-		
-		if(unreadBinding == null) {
+
+		if (unreadBinding == null) {
 			unreadBinding = Bindings.when(group.unreadProperty()).then(true).otherwise(false);
-		}else {
+		} else {
 			unreadBinding = unreadBinding.or(group.unreadProperty());
 		}
-		
+
 		unread.unbind();
 		unread.bind(unreadBinding);
 	}
-	
+
 	public void removeChannel(int channel) {
-		for(ChannelGroup group : groups) {
-			if(group.removeChannel(channel)) {
+		for (ChannelGroup group : groups) {
+			if (group.removeChannel(channel)) {
+				break;
+			}
+		}
+	}
+
+	public void addChannel(int groupId, Channel channel) {
+		for (ChannelGroup group : groups) {
+			if (group.getId().intValue() == groupId) {
+				group.addChannel(channel);
 				break;
 			}
 		}
@@ -87,11 +96,11 @@ public class Server extends Bean {
 	public boolean isUnread() {
 		return unread.get();
 	}
-	
+
 	public BooleanProperty unreadProperty() {
 		return unread;
 	}
-	
+
 	public void addMember(String member) {
 		members.add(member);
 	}
@@ -99,11 +108,11 @@ public class Server extends Bean {
 	public IntegerProperty idProperty() {
 		return id;
 	}
-	
+
 	public void setMembers(JSONArray arr) {
 		arr.forEach(obj -> addMember((String) obj));
 	}
-	
+
 	public void setGroups(JSONArray arr) {
 		arr.forEach(obj -> addGroup(new ChannelGroup((JSONObject) obj)));
 	}
@@ -153,37 +162,32 @@ public class Server extends Bean {
 	}
 
 	public Channel hasChannel(Integer channel) {
-		for(ChannelGroup group : groups) {
+		for (ChannelGroup group : groups) {
 			Channel ch = group.hasChannel(channel);
-			if(ch != null) {
+			if (ch != null) {
 				return ch;
 			}
 		}
-		
+
 		return null;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " {"
-			+ "\n\tid : " + id.get()
-			+ "\n\towner : " + owner.get()
-			+ "\n\tname : " + name.get()
-			+ "\n\ticon : " + icon.get()
-			+ "\n\tgroups : " + stringifyGroups()
-		+ "\n}";
+		return getClass().getSimpleName() + " {" + "\n\tid : " + id.get() + "\n\towner : " + owner.get() + "\n\tname : "
+				+ name.get() + "\n\ticon : " + icon.get() + "\n\tgroups : " + stringifyGroups() + "\n}";
 	}
-	
+
 	private String stringifyGroups() {
 		StringBuilder sb = new StringBuilder();
-		
-		for(int i = 0;i<groups.size();i++) {
-			if(i != 0) {
+
+		for (int i = 0; i < groups.size(); i++) {
+			if (i != 0) {
 				sb.append(", ");
 			}
 			sb.append(groups.get(i).toString());
 		}
-		
+
 		return sb.toString();
 	}
 }

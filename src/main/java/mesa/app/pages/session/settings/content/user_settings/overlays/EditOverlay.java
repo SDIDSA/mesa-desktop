@@ -1,6 +1,7 @@
 package mesa.app.pages.session.settings.content.user_settings.overlays;
 
 import mesa.app.pages.session.SessionPage;
+import mesa.gui.controls.alert.BasicOverlay;
 
 public abstract class EditOverlay extends BasicOverlay {
 

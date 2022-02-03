@@ -163,6 +163,10 @@ public class ChannelEntry extends HBox implements Styleable {
 	public static ChannelEntry getSelected(int server) {
 		return selectedChannels.get(server);
 	}
+	
+	public static ChannelEntry clearSelected(int server) {
+		return selectedChannels.remove(server);
+	}
 
 	public ServerContent getServerContent() {
 		return channel.getServerContent();

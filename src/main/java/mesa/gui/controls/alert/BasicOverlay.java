@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays;
+package mesa.gui.controls.alert;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.geometry.Insets;
@@ -6,7 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
-import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.Page;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.keyed.Label;
@@ -18,7 +18,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 	protected Label head;
 	protected Label subHead;
 
-	protected BasicOverlay(SessionPage session, double width) {
+	protected BasicOverlay(Page session, double width) {
 		super(session, width);
 
 		StackPane.setMargin(closeIcon, new Insets(16));
@@ -41,7 +41,7 @@ public abstract class BasicOverlay extends AbstractOverlay {
 		applyStyle(session.getWindow().getStyl());
 	}
 
-	protected BasicOverlay(SessionPage session) {
+	protected BasicOverlay(Page session) {
 		this(session, 440);
 	}
 

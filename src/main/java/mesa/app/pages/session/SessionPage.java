@@ -33,6 +33,7 @@ import mesa.app.pages.session.types.server.center.ChannelDisplayMain;
 import mesa.app.pages.session.types.server.left.ChannelEntry;
 import mesa.app.utils.Threaded;
 import mesa.data.SessionManager;
+import mesa.data.bean.Channel;
 import mesa.data.bean.Message;
 import mesa.data.bean.Server;
 import mesa.data.bean.User;
@@ -146,6 +147,16 @@ public class SessionPage extends Page {
 			int channel = obj.getInt("channel");
 
 			Platform.runLater(() -> servers.removeChannel(server, channel));
+		});
+
+		socket.on("create_channel", data -> {
+			JSONObject obj = new JSONObject(data[0].toString());
+
+			int server = obj.getInt("server");
+			int group = obj.getInt("group");
+			Channel channel = new Channel(obj.getJSONObject("channel"));
+
+			Platform.runLater(() -> servers.addChannel(server, group, channel));
 		});
 	}
 

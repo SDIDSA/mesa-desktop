@@ -78,6 +78,8 @@ public class API {
 
 		public static final String DELETE_CHANNEL = PREFIX + "deleteChannel";
 
+		public static final String CREATE_CHANNEL = PREFIX + "createChannel";
+
 		private Session() {
 
 		}

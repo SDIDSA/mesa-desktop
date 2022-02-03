@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.types.server.add_channel.AddChannel;
 import mesa.data.bean.Channel;
 import mesa.data.bean.ChannelGroup;
 import mesa.gui.controls.Font;
@@ -27,6 +28,8 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 	private Text nameDisp;
 
 	private ActionIcon addChannel;
+	
+	private AddChannel addChannelOverlay;
 
 	public ChannelGroupEntry(SessionPage session, ChannelGroup group) {
 		group.setChannelGroupEntry(this);
@@ -45,6 +48,14 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 				group.nameProperty()));
 
 		addChannel = new ActionIcon(session.getWindow(), "plus", 12, 24, "create_channel");
+		
+		addChannel.setAction(()-> {
+			if(addChannelOverlay == null) {
+				addChannelOverlay = new AddChannel(session, group);
+			}
+			
+			addChannelOverlay.show();
+		});
 
 		header.getChildren().addAll(expand, nameDisp, new ExpandingHSpace());
 

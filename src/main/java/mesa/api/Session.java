@@ -85,4 +85,8 @@ public class Session {
 				new Param("channel", channel),
 				new Param("server", server));
 	}
+	
+	public static void createChannel(int server, int group, String name, String type, Consumer<JSONObject> onResult) {
+		call(API.Session.CREATE_CHANNEL, "create channel", onResult, new Param("server", server), new Param("group", group), new Param("name", name), new Param("type", type));
+	}
 }

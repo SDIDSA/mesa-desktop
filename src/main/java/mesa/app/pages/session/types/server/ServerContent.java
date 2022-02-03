@@ -65,9 +65,8 @@ public class ServerContent extends Content {
 				}
 			}
 		}
-		
+		ChannelEntry.clearSelected(server.getId());
 		getMain().setCenter(noTextChannel);
-		System.out.println("can't find any");
 	}
 
 	public ChannelDisplay getChannelDisplay() {

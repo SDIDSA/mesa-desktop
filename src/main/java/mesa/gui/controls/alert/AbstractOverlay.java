@@ -1,4 +1,4 @@
-package mesa.app.pages.session.settings.content.user_settings.overlays;
+package mesa.gui.controls.alert;
 
 import org.json.JSONArray;
 
@@ -14,9 +14,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontWeight;
 import mesa.app.component.Form;
-import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.Page;
 import mesa.gui.controls.Font;
-import mesa.gui.controls.alert.Overlay;
 import mesa.gui.controls.button.Button;
 import mesa.gui.controls.image.ColorIcon;
 import mesa.gui.controls.space.ExpandingHSpace;
@@ -36,7 +35,7 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 
 	protected Form form;
 
-	protected AbstractOverlay(SessionPage session, double width) {
+	protected AbstractOverlay(Page session, double width) {
 		super(session);
 
 		root = new VBox();
@@ -82,7 +81,7 @@ public abstract class AbstractOverlay extends Overlay implements Styleable {
 		form.setDefaultButton(done);
 	}
 
-	protected AbstractOverlay(SessionPage session) {
+	protected AbstractOverlay(Page session) {
 		this(session, 440);
 	}
 
