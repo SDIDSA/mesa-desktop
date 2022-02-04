@@ -6,8 +6,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import mesa.app.pages.session.SessionPage;
+import mesa.app.pages.session.types.server.center.right.MemberList;
 import mesa.data.bean.Channel;
 import mesa.data.bean.Message;
+import mesa.data.bean.Server;
 
 public class ChannelDisplayCenter extends HBox {
 	private BooleanProperty membersShown;
@@ -15,15 +17,17 @@ public class ChannelDisplayCenter extends HBox {
 	private ChannelDisplayMain main;
 	private MemberList members;
 
-	public ChannelDisplayCenter(SessionPage session) {
+	public ChannelDisplayCenter(SessionPage session, Server server) {
 		main = new ChannelDisplayMain(session);
-		members = new MemberList(session);
+		members = new MemberList(session, server);
 
 		setHgrow(main, Priority.ALWAYS);
 		
 		membersShown = new SimpleBooleanProperty(false);
 		
 		members.minWidthProperty().bind(Bindings.when(membersShown).then(240).otherwise(0));
+		members.maxWidthProperty().bind(members.minWidthProperty());
+		members.visibleProperty().bind(membersShown);
 
 		getChildren().addAll(main, members);
 	}

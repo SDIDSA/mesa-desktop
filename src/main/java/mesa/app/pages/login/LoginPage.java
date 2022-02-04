@@ -224,11 +224,12 @@ public class LoginPage extends Page {
 			Session.getUser(result -> {
 				if (result.has("user")) {
 					Session.getServers(servers -> {
+						JSONObject userJson = result.getJSONObject("user");
 						JSONArray servarr = servers.getJSONArray("servers");
 						window.putServers(servarr);
-						window.putData("user", result.getJSONObject("user"));
+						window.putData("user", userJson);
 						window.loadPage(SessionPage.class);
-						SessionManager.registerSocket(window.getMainSocket(), token);
+						SessionManager.registerSocket(window.getMainSocket(), token, userJson.getString("id"));
 						loading.stop();
 					});
 				}else {

@@ -25,22 +25,23 @@ public class SessionManager {
 		return data.get(key);
 	}
 
-	public static void registerSocket(Socket socket, String token) {
-		Runnable register = () -> socket.emit("register", JsonUtils.make("socket", socket.id(), "token", token));
+	public static void registerSocket(Socket socket, String token, String uid) {
+		Runnable register = () -> socket.emit("register", JsonUtils.make("socket", socket.id(), "token", token, "user_id", uid));
 
 		System.out.println("listening for reconnect...");
 		socket.io().on("reconnect", data -> 
 			new Thread(() -> {
 				Threaded.waitWhile(() -> socket.id() == null);
+				System.out.println("reconnecting");
 				register.run();
 			}
 		).start());
 		register.run();
 	}
 
-	public static void storeSession(String token, Window window) {
+	public static void storeSession(String token, Window window, String uid) {
 		put(ACCESS_TOKEN, token);
-		registerSocket(window.getMainSocket(), token);
+		registerSocket(window.getMainSocket(), token, uid);
 	}
 
 	public static String getSession() {

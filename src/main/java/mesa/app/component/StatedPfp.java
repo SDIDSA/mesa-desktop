@@ -58,7 +58,7 @@ public class StatedPfp extends StackPane {
 
 		status.addListener((obs, ov, nv) -> {
 			statusPane.getChildren().clear();
-			if (nv == null) {
+			if (nv == PfpStatus.OFFLINE) {
 				pfp.setClip(null);
 			} else {
 				statusPane.getChildren().add(nv.getDisplay(session.getWindow(), size));
@@ -74,6 +74,10 @@ public class StatedPfp extends StackPane {
 		ca.brightnessProperty().bind(Bindings.when(hoverProperty()).then(-.2).otherwise(0));
 
 		getChildren().addAll(pfp, statusPane);
+	}
+	
+	public ObjectProperty<PfpStatus> statusProperty() {
+		return status;
 	}
 
 	public void setStatus(PfpStatus status) {
@@ -93,7 +97,7 @@ public class StatedPfp extends StackPane {
 			ColorIcon res = new ColorIcon("invisible", s.status);
 			res.setFill(Colors.INVISIBLE);
 			return res;
-		});
+		}), OFFLINE((w,s) -> null);
 
 		private BiFunction<Window, PfpSize, Node> display;
 

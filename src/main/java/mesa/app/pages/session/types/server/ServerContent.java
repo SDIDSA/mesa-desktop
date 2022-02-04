@@ -41,7 +41,7 @@ public class ServerContent extends Content {
 		sideCenter = new ServerSideCenter(session, server);
 		UserBar sideBot = new UserBar(session);
 
-		channelDisplay = new ChannelDisplay(session);
+		channelDisplay = new ChannelDisplay(session, server);
 
 		getSide().setTop(sideTop);
 		getSide().setCenter(sideCenter);

@@ -42,6 +42,8 @@ public class User extends Bean {
 	private StringProperty avatar;
 	private StringProperty birthDate;
 	private BooleanProperty emailConfirmed;
+	
+	private BooleanProperty online;
 
 	public User(JSONObject obj) {
 		id = new SimpleStringProperty();
@@ -52,6 +54,9 @@ public class User extends Bean {
 		avatar = new SimpleStringProperty();
 		birthDate = new SimpleStringProperty();
 		emailConfirmed = new SimpleBooleanProperty();
+		
+		online = new SimpleBooleanProperty();
+		
 		init(obj);
 
 		if(id.get() != null && !id.get().isEmpty()) {
@@ -159,6 +164,18 @@ public class User extends Bean {
 
 	public void setEmailConfirmed(Boolean val) {
 		emailConfirmed.set(val);
+	}
+	
+	public BooleanProperty onlineProperty() {
+		return online;
+	}
+	
+	public void setOnline(Boolean val) {
+		online.set(val);
+	}
+	
+	public boolean isOnline() {
+		return online.get();
 	}
 
 	@Override

@@ -112,6 +112,10 @@ public class Server extends Bean {
 	public void setMembers(JSONArray arr) {
 		arr.forEach(obj -> addMember((String) obj));
 	}
+	
+	public ObservableList<String> getMembers() {
+		return members;
+	}
 
 	public void setGroups(JSONArray arr) {
 		arr.forEach(obj -> addGroup(new ChannelGroup((JSONObject) obj)));

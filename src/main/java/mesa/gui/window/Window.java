@@ -213,6 +213,7 @@ public class Window extends Stage {
 	}
 
 	public void putLoggedUser(User user) {
+		user.setOnline(true);
 		putData(LOGGED, user);
 	}
 	
