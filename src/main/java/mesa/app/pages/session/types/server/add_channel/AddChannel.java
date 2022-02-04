@@ -73,31 +73,32 @@ public class AddChannel extends AbstractOverlay {
 
 		typeRadio.valueProperty().addListener((obs, ov, nv) -> {
 			Parent parent = nv.getParent();
-			if(parent != null && parent instanceof ChannelTypeOption typeOption) {
+			if (parent != null && parent instanceof ChannelTypeOption typeOption) {
 				typeIcon.setImage("channel_type_" + typeOption.getType(), 12);
 				head.setKey("Create " + typeOption.getHead());
 			}
 		});
-		
+
 		channelName.addPreField(typeIcon);
 
 		text.getRadio().flip();
-		
+
 		root.getChildren().addAll(top, typeOptions, channelName);
 
 		form.addAll(channelName);
-		
+
 		done.setKey("Create Channel");
 		done.disableProperty().bind(channelName.valueProperty().isEmpty());
-		done.setAction(()-> {
+		done.setAction(() -> {
 			done.startLoading();
-			Session.createChannel(group.getServer().getId(), group.getId(), channelName.getValue(), ((ChannelTypeOption) typeRadio.getValue().getParent()).getType(), result-> {
-				hide();
-				done.stopLoading();
-			});
+			Session.createChannel(group.getServer().getId(), group.getId(), channelName.getValue(),
+					((ChannelTypeOption) typeRadio.getValue().getParent()).getType(), result -> {
+						hide();
+						done.stopLoading();
+					});
 		});
-		
-		addOnShowing(()-> {
+
+		addOnShowing(() -> {
 			text.getRadio().flip();
 			channelName.clear();
 		});
@@ -115,9 +116,9 @@ public class AddChannel extends AbstractOverlay {
 		subHead.setFill(style.getHeaderSecondary());
 
 		typeHead.setFill(style.getHeaderSecondary());
-		
+
 		typeIcon.setFill(style.getTextNormal());
-		
+
 		super.applyStyle(style);
 	}
 

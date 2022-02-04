@@ -104,7 +104,7 @@ public class Login extends LoginSubPage {
 					} else {
 						JSONObject user = result.getJSONObject("user");
 						
-						SessionManager.storeSession(result.getString("token"), window);
+						SessionManager.storeSession(result.getString("token"), window, user.getString("id"));
 						
 						if (user.getBoolean("email_confirmed")) {
 							onSuccess.accept(user);
