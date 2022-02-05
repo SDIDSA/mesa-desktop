@@ -114,15 +114,12 @@ public class SessionPage extends Page {
 		addSocketEventHandler("user_sync", obj -> obj.keySet().forEach(key -> user.set(key, obj.get(key))));
 		addSocketEventHandler("user_change", obj -> {
 			String uid = (String) obj.remove(User.USER_ID);
-			User.getForId(uid, foundUser -> obj.keySet()
-					.forEach(key -> foundUser.set(key, obj.get(key))));
+			User.getForId(uid, foundUser -> obj.keySet().forEach(key -> foundUser.set(key, obj.get(key))));
 		});
-		addSocketEventHandler("join_server", obj -> Session.getServer(obj.getInt("id"), result -> {
-			Server server = new Server(result.getJSONObject("server"), obj.getInt("order"));
-			ServerContent sc = new ServerContent(this, server);
-			servers.addServer(sc);
-		}));
-		addSocketEventHandler("user_joined", obj -> servers.addMember(obj.getInt("server"), obj.getString(User.USER_ID)));
+		addSocketEventHandler("join_server", obj -> Session.getServer(obj.getInt("id"), result -> servers
+				.addServer(new ServerContent(this, new Server(result.getJSONObject("server"), obj.getInt("order"))))));
+		addSocketEventHandler("user_joined",
+				obj -> servers.addMember(obj.getInt("server"), obj.getString(User.USER_ID)));
 		addSocketEventHandler("message", obj -> servers.handleMessage(Message.get(obj)));
 		addSocketEventHandler("delete_channel",
 				obj -> servers.removeChannel(obj.getInt("server"), obj.getInt("channel")));
@@ -132,11 +129,7 @@ public class SessionPage extends Page {
 
 	private void addSocketEventHandler(String event, Consumer<JSONObject> handler) {
 		window.getMainSocket().on(event,
-				data -> Platform.runLater(() -> {
-					JSONObject obj = new JSONObject(data[0].toString());
-					System.out.println(obj.toString());
-					handler.accept(obj);
-				}));
+				data -> Platform.runLater(() -> handler.accept(new JSONObject(data[0].toString()))));
 	}
 
 	public void showSettings() {

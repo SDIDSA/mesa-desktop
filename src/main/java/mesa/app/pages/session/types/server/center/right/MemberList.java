@@ -36,7 +36,6 @@ public class MemberList extends StackPane implements Styleable {
 	}
 	
 	private void updateUser(User user) {
-		System.out.println("updating User " + user.getUsername() + " to " + user.isOnline());
 		MemberDisplay disp = displayMember(user);
 		
 		groups.forEach((key, value) -> value.removeUser(disp));

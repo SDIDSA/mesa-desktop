@@ -1,8 +1,8 @@
 package mesa.app.pages.session.types.server.center.right;
 
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
@@ -18,7 +18,7 @@ public class MemberGroup extends VBox implements Styleable{
 	private MultiText head;
 	private Text count;
 	
-	private StringProperty listSize;
+	private IntegerProperty listSize;
 	
 	public MemberGroup(SessionPage session, String name) {
 		head = new MultiText(session.getWindow(), name, new Font(12, FontWeight.BOLD));
@@ -27,12 +27,15 @@ public class MemberGroup extends VBox implements Styleable{
 		
 		head.addLabel(" – ");
 		
-		listSize = new SimpleStringProperty();
+		listSize = new SimpleIntegerProperty();
 		
 		count = new Text("", new Font(12, FontWeight.BOLD));
-		count.textProperty().bind(listSize);
+		count.textProperty().bind(listSize.asString());
 		
 		head.getChildren().add(count);
+		
+		visibleProperty().bind(listSize.isNotEqualTo(0));
+		managedProperty().bind(visibleProperty());
 		
 		getChildren().add(head);
 		applyStyle(session.getWindow().getStyl());
@@ -40,12 +43,12 @@ public class MemberGroup extends VBox implements Styleable{
 
 	public void addUser(MemberDisplay user) {
 		getChildren().add(user);
-		listSize.set(Integer.toString(getChildren().size() - 1));
+		listSize.set(getChildren().size() - 1);
 	}
 	
 	public void removeUser(MemberDisplay user) {
 		getChildren().remove(user);
-		listSize.set(Integer.toString(getChildren().size() - 1));
+		listSize.set(getChildren().size() - 1);
 	}
 	
 	@Override
