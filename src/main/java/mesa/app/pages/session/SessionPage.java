@@ -2,10 +2,10 @@ package mesa.app.pages.session;
 
 import java.awt.Dimension;
 import java.util.HashMap;
+import java.util.function.Consumer;
 
 import org.json.JSONObject;
 
-import io.socket.client.Socket;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -69,7 +69,7 @@ public class SessionPage extends Page {
 		user = new User(window.getJsonData("user"));
 		window.putLoggedUser(user);
 
-		registerSocket(window);
+		registerSocket();
 
 		root = new HBox();
 		root.setMinHeight(0);
@@ -110,54 +110,26 @@ public class SessionPage extends Page {
 		applyStyle(window.getStyl());
 	}
 
-	private void registerSocket(Window window) {
-		Socket socket = window.getMainSocket();
-
-		socket.on("user_sync", data -> {
-			JSONObject obj = new JSONObject(data[0].toString());
-
-			obj.keySet().forEach(key -> Platform.runLater(() -> user.set(key, obj.get(key))));
+	private void registerSocket() {
+		addSocketEventHandler("user_sync", obj -> obj.keySet().forEach(key -> user.set(key, obj.get(key))));
+		addSocketEventHandler("user_change", obj -> {
+			String uid = (String) obj.remove(User.USER_ID);
+			User.getForId(uid, foundUser -> obj.keySet().forEach(key -> foundUser.set(key, obj.get(key))));
 		});
+		addSocketEventHandler("join_server", obj -> Session.getServer(obj.getInt("id"), result -> servers
+				.addServer(new ServerContent(this, new Server(result.getJSONObject("server"), obj.getInt("order"))))));
+		addSocketEventHandler("user_joined",
+				obj -> servers.addMember(obj.getInt("server"), obj.getString(User.USER_ID)));
+		addSocketEventHandler("message", obj -> servers.handleMessage(Message.get(obj)));
+		addSocketEventHandler("delete_channel",
+				obj -> servers.removeChannel(obj.getInt("server"), obj.getInt("channel")));
+		addSocketEventHandler("create_channel", obj -> servers.addChannel(obj.getInt("server"), obj.getInt("group"),
+				new Channel(obj.getJSONObject("channel"))));
+	}
 
-		socket.on("join_server", data -> {
-			JSONObject obj = new JSONObject(data[0].toString());
-
-			int id = obj.getInt("id");
-			int order = obj.getInt("order");
-
-			Session.getServer(id, result -> {
-				Server server = new Server(result.getJSONObject("server"), order);
-
-				ServerContent sc = new ServerContent(this, server);
-
-				servers.addServer(sc);
-			});
-		});
-
-		socket.on("message", data -> {
-			JSONObject obj = new JSONObject(data[0].toString());
-
-			Platform.runLater(() -> servers.handleMessage(Message.get(obj)));
-		});
-
-		socket.on("delete_channel", data -> {
-			JSONObject obj = new JSONObject(data[0].toString());
-
-			int server = obj.getInt("server");
-			int channel = obj.getInt("channel");
-
-			Platform.runLater(() -> servers.removeChannel(server, channel));
-		});
-
-		socket.on("create_channel", data -> {
-			JSONObject obj = new JSONObject(data[0].toString());
-
-			int server = obj.getInt("server");
-			int group = obj.getInt("group");
-			Channel channel = new Channel(obj.getJSONObject("channel"));
-
-			Platform.runLater(() -> servers.addChannel(server, group, channel));
-		});
+	private void addSocketEventHandler(String event, Consumer<JSONObject> handler) {
+		window.getMainSocket().on(event,
+				data -> Platform.runLater(() -> handler.accept(new JSONObject(data[0].toString()))));
 	}
 
 	public void showSettings() {
@@ -225,13 +197,16 @@ public class SessionPage extends Page {
 		Session.logout(e -> {
 			window.getMainSocket().off("user_sync");
 			window.getMainSocket().io().off("reconnect");
+
 			SessionManager.clearSession();
 			SectionItem.clearCache();
 			ChannelDisplayMain.clearCache();
 			ChannelEntry.clearCache();
+			User.clear();
+			Tooltip.clear();
+
 			transitionCache.clear();
 			BarItem.clear();
-			Tooltip.clear();
 			window.clearLoggedUser();
 			window.loadPage(LoginPage.class);
 			if (onDone != null) {

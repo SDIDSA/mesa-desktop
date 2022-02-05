@@ -14,6 +14,8 @@ import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
 public class MemberList extends StackPane implements Styleable {
+	private HashMap<User, MemberDisplay> displayCache = new HashMap<>();
+	
 	private SessionPage session;
 
 	private VBox list;
@@ -27,13 +29,17 @@ public class MemberList extends StackPane implements Styleable {
 		list = new VBox();
 		list.setPadding(new Insets(0, 8, 0, 8));
 
-		server.getMembers().forEach(userId -> User.getForId(userId, this::addUser));
+		server.getMembers().forEach(userId -> User.getForId(userId, this::preAddUser));
 		
 		getChildren().add(list);
 		applyStyle(session.getWindow().getStyl());
 	}
-
-	public void addUser(User user) {
+	
+	private void updateUser(User user) {
+		MemberDisplay disp = displayMember(user);
+		
+		groups.forEach((key, value) -> value.removeUser(disp));
+		
 		String state = user.isOnline() ? "online" : "offline";
 
 		MemberGroup group = groups.get(state);
@@ -44,8 +50,23 @@ public class MemberList extends StackPane implements Styleable {
 			groups.put(state, group);
 		}
 		
-		group.addUser(user);
-
+		group.addUser(disp);
+	}
+	
+	public void preAddUser(User user) {
+		user.onlineProperty().addListener(e -> updateUser(user));
+		updateUser(user);
+	}
+	
+	private MemberDisplay displayMember(User user) {
+		MemberDisplay found = displayCache.get(user);
+		
+		if(found == null) {
+			found = new MemberDisplay(session, user);
+			displayCache.put(user, found);
+		}
+		
+		return found;
 	}
 
 	@Override

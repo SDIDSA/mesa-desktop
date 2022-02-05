@@ -12,6 +12,7 @@ import mesa.api.multipart.FilePart;
 import mesa.api.multipart.Part;
 import mesa.api.multipart.TextPart;
 import mesa.data.SessionManager;
+import mesa.data.bean.User;
 
 public class Session {
 	private static final String SERVER_ID = "server_id";
@@ -73,7 +74,7 @@ public class Session {
 	}
 
 	public static void getUserForId(String id, Consumer<JSONObject> onResult) {
-		call(API.Session.GET_USER_FOR_ID, "get user data for id : " + id, onResult, new Param("user_id", id));
+		call(API.Session.GET_USER_FOR_ID, "get user data for id : " + id, onResult, new Param(User.USER_ID, id));
 	}
 
 	public static void getMessages(int channel, Consumer<JSONObject> onResult) {

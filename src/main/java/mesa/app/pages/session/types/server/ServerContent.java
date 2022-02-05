@@ -49,7 +49,7 @@ public class ServerContent extends Content {
 		
 		noTextChannel = new NoTextChannel(session);
 		
-		addOnLoad(()-> {
+		addOnLoad(()-> {		
 			if(ChannelEntry.getSelected(server.getId()) == null) {
 				loadFirst();
 			}
@@ -86,6 +86,10 @@ public class ServerContent extends Content {
 
 	public void removeChannel(int channelId) {
 		sideCenter.removeChannel(channelId);
+	}
+
+	public void addMember(String userId) {
+		channelDisplay.addMember(userId);
 	}
 
 	public void removeSelectedChannel() {

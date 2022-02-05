@@ -126,6 +126,10 @@ public class ItemPill extends Rectangle implements Styleable {
 		unread.playFromStart();
 	}
 
+	public void read() {
+		exit();
+	}
+
 	@Override
 	public void applyStyle(Style style) {
 		setFill(style.getHeaderPrimary());

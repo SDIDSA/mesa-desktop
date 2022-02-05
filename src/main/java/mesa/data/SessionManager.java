@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import io.socket.client.Socket;
 import mesa.app.utils.Threaded;
+import mesa.data.bean.User;
 import mesa.gui.window.Window;
 
 public class SessionManager {
@@ -26,7 +27,7 @@ public class SessionManager {
 	}
 
 	public static void registerSocket(Socket socket, String token, String uid) {
-		Runnable register = () -> socket.emit("register", JsonUtils.make("socket", socket.id(), "token", token, "user_id", uid));
+		Runnable register = () -> socket.emit("register", JsonUtils.make("socket", socket.id(), "token", token, User.USER_ID, uid));
 
 		System.out.println("listening for reconnect...");
 		socket.io().on("reconnect", data -> 

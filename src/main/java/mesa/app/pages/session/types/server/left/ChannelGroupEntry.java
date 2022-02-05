@@ -102,7 +102,7 @@ public class ChannelGroupEntry extends VBox implements Styleable {
 
 	public boolean removeChannel(int channelId) {
 		for(Node n : getChildren()) {
-			if(n instanceof ChannelEntry channelEntry && channelEntry.getChannel().getId().intValue() == channelId) {
+			if(n instanceof ChannelEntry channelEntry && channelEntry.getChannel().getId().equals(channelId)) {
 				if(channelEntry.isSelected()) {
 					channelEntry.getChannel().getServerContent().removeSelectedChannel();
 				}

@@ -86,7 +86,7 @@ public class Server extends Bean {
 
 	public void addChannel(int groupId, Channel channel) {
 		for (ChannelGroup group : groups) {
-			if (group.getId().intValue() == groupId) {
+			if (group.getId().equals(groupId)) {
 				group.addChannel(channel);
 				break;
 			}
@@ -165,15 +165,25 @@ public class Server extends Bean {
 		icon.set(val);
 	}
 
-	public Channel hasChannel(Integer channel) {
+	public Channel getChannel(Integer channel) {
 		for (ChannelGroup group : groups) {
-			Channel ch = group.hasChannel(channel);
+			Channel ch = group.getChannel(channel);
 			if (ch != null) {
 				return ch;
 			}
 		}
 
 		return null;
+	}
+
+	public boolean hasChannel(Integer channel) {
+		for (ChannelGroup group : groups) {
+			if (group.hasChannel(channel)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	@Override
