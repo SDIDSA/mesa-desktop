@@ -49,7 +49,11 @@ public abstract class BarItem extends HBox {
 		this.unread = unread;
 
 		if (!icon.isSelected() && !icon.isHover()) {
-			pill.unread();
+			if(unread) {
+				pill.unread();
+			}else {
+				pill.read();
+			}
 		}
 	}
 

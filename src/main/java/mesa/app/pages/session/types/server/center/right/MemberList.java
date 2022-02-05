@@ -35,7 +35,8 @@ public class MemberList extends StackPane implements Styleable {
 		applyStyle(session.getWindow().getStyl());
 	}
 	
-	private void addUser(User user) {
+	private void updateUser(User user) {
+		System.out.println("updating User " + user.getUsername() + " to " + user.isOnline());
 		MemberDisplay disp = displayMember(user);
 		
 		groups.forEach((key, value) -> value.removeUser(disp));
@@ -54,8 +55,8 @@ public class MemberList extends StackPane implements Styleable {
 	}
 	
 	public void preAddUser(User user) {
-		user.onlineProperty().addListener(e -> addUser(user));
-		addUser(user);
+		user.onlineProperty().addListener(e -> updateUser(user));
+		updateUser(user);
 	}
 	
 	private MemberDisplay displayMember(User user) {

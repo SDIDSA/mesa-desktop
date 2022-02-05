@@ -35,4 +35,8 @@ public class ChannelDisplay {
 	public boolean handleMessage(Message msg) {
 		return center.handleMessage(msg);
 	}
+
+	public void addMember(String userId) {
+		center.addMember(userId);
+	}
 }

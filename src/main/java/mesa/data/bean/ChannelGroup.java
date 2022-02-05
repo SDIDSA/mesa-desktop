@@ -113,7 +113,7 @@ public class ChannelGroup extends Bean {
 		name.set(val);
 	}
 
-	public Channel hasChannel(Integer chid) {
+	public Channel getChannel(Integer chid) {
 		for(Channel channel : channels) {
 			if(channel.getId().equals(chid)) {
 				return channel;
@@ -121,6 +121,16 @@ public class ChannelGroup extends Bean {
 		}
 		
 		return null;
+	}
+	
+	public boolean hasChannel(Integer chid) {
+		for(Channel channel : channels) {
+			if(channel.getId().equals(chid)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	@Override
@@ -146,6 +156,25 @@ public class ChannelGroup extends Bean {
 	}
 
 	public boolean removeChannel(int channel) {
-		return channels.removeIf(ch -> ch.getId().intValue() == channel);
+		boolean removed = channels.removeIf(ch -> ch.getId().equals(channel));
+		if(removed) {
+			if(!channels.isEmpty()) {
+				unreadBinding = Bindings.when(channels.get(0).unreadProperty()).then(true).otherwise(false);
+				
+				for(int i = 1; i < channels.size(); i++) {
+					unreadBinding = unreadBinding.or(channels.get(i).unreadProperty());
+				}
+				
+				unread.unbind();
+				unread.bind(unreadBinding);
+			}else {
+				unreadBinding = null;
+				
+				unread.unbind();
+				unread.set(false);
+			}
+			return true;
+		}
+		return false;
 	}
 }

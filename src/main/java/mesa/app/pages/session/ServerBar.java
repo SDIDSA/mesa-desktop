@@ -1,6 +1,7 @@
 package mesa.app.pages.session;
 
 import java.util.ArrayList;
+import java.util.function.Predicate;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -123,46 +124,53 @@ public class ServerBar extends VBox implements Styleable {
 	}
 
 	public void handleMessage(Message msg) {
-		for (ServerContent serverContent : servers) {
-			Server server = serverContent.getServer();
-			Channel ch = server.hasChannel(msg.getChannel());
-			if (ch != null) {
-				boolean handled = serverContent.handleMessage(msg) && session.isLoaded(serverContent);
-				if (!handled) {
-					ch.setUnread(true);
-				}
-				break;
-			}
+		ServerContent found = findServerContent(content -> content.getServer().hasChannel(msg.getChannel()));
+		Channel ch = found.getServer().getChannel(msg.getChannel());
+		boolean handled = found.handleMessage(msg) && session.isLoaded(found);
+		if (!handled && !msg.getSender().equals(session.getUser().getId())) {
+			ch.setUnread(true);
 		}
 	}
 
 	public void removeChannel(int serverId, int channelId) {
-		for (ServerContent serverContent : servers) {
-			Server server = serverContent.getServer();
-			if (server.getId().intValue() == serverId) {
-				server.removeChannel(channelId);
-				serverContent.removeChannel(channelId);
-
-				break;
-			}
-		}
+		ServerContent found = findServerContent(serverId);
+		Server server = found.getServer();
+		server.removeChannel(channelId);
+		found.removeChannel(channelId);
 	}
 
 	public void addChannel(int serverId, int groupId, Channel channel) {
+		ServerContent found = findServerContent(serverId);
+		Server server = found.getServer();
+		server.addChannel(groupId, channel);
+		channel.getChannelGroupEntry().addChannel(session, channel);
+		if (ChannelEntry.getSelected(server.getId()) == null) {
+			found.loadFirst();
+		}
+	}
+
+	public void addMember(int serverId, String userId) {
+		if(session.getUser().getId().equals(userId)) {
+			return;
+		}
+		
+		ServerContent found = findServerContent(serverId);
+		Server server = found.getServer();
+		server.addMember(userId);
+		found.addMember(userId);
+	}
+
+	private ServerContent findServerContent(int serverId) {
+		return findServerContent(content -> content.getServer().getId().equals(serverId));
+	}
+
+	private ServerContent findServerContent(Predicate<ServerContent> condition) {
 		for (ServerContent serverContent : servers) {
-			Server server = serverContent.getServer();
-			if (server.getId().intValue() == serverId) {
-				server.addChannel(groupId, channel);
-				
-				channel.getChannelGroupEntry().addChannel(session, channel);
-				
-				if(ChannelEntry.getSelected(server.getId()) == null) {
-					serverContent.loadFirst();
-				}
-				
-				break;
+			if (condition.test(serverContent)) {
+				return serverContent;
 			}
 		}
+		throw new IllegalStateException("Can't find a server that meets condition");
 	}
 
 	@Override

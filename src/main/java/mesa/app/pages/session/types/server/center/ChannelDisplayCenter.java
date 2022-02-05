@@ -10,6 +10,7 @@ import mesa.app.pages.session.types.server.center.right.MemberList;
 import mesa.data.bean.Channel;
 import mesa.data.bean.Message;
 import mesa.data.bean.Server;
+import mesa.data.bean.User;
 
 public class ChannelDisplayCenter extends HBox {
 	private BooleanProperty membersShown;
@@ -42,5 +43,9 @@ public class ChannelDisplayCenter extends HBox {
 
 	public boolean handleMessage(Message msg) {
 		return main.handleMessage(msg);
+	}
+
+	public void addMember(String userId) {
+		User.getForId(userId, members::preAddUser);
 	}
 }

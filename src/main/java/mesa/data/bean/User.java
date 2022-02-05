@@ -13,6 +13,8 @@ import javafx.beans.property.StringProperty;
 import mesa.api.Session;
 
 public class User extends Bean {
+	public static final String USER_ID = "user_id";
+	
 	private static HashMap<String, User> cache = new HashMap<>();
 	private static HashMap<String, ArrayList<Consumer<User>>> waiting = new HashMap<>();
 
@@ -26,12 +28,17 @@ public class User extends Bean {
 				Session.getUserForId(id, result -> {
 					User u = new User(result.getJSONObject("user"), id);
 					waiting.get(id).forEach(consumer -> consumer.accept(u));
+					waiting.remove(id);
 				});
 			}
 			pending.add(onUser);
 		} else {
 			onUser.accept(res);
 		}
+	}
+	
+	public static void clear() {
+		cache.clear();
 	}
 
 	private StringProperty id;
