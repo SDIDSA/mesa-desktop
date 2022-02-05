@@ -118,6 +118,18 @@ public class SessionPage extends Page {
 
 			obj.keySet().forEach(key -> Platform.runLater(() -> user.set(key, obj.get(key))));
 		});
+		
+		socket.on("user_change", data -> {
+			JSONObject obj = new JSONObject(data[0].toString());
+			String uid = obj.getString("user_id");
+			
+			obj.remove("user_id");
+			
+			User.getForId(uid, foundUser -> 
+									obj.keySet().forEach(key -> 
+											Platform.runLater(() -> 
+												foundUser.set(key, obj.get(key)))));
+		});
 
 		socket.on("join_server", data -> {
 			JSONObject obj = new JSONObject(data[0].toString());

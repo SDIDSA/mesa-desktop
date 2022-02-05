@@ -7,7 +7,6 @@ import javafx.geometry.Insets;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.FontWeight;
 import mesa.app.pages.session.SessionPage;
-import mesa.data.bean.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
@@ -15,17 +14,13 @@ import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.style.Style;
 import mesa.gui.style.Styleable;
 
-public class MemberGroup extends VBox implements Styleable{
-	private SessionPage session;
-	
+public class MemberGroup extends VBox implements Styleable{	
 	private MultiText head;
 	private Text count;
 	
 	private StringProperty listSize;
 	
 	public MemberGroup(SessionPage session, String name) {
-		this.session = session;
-		
 		head = new MultiText(session.getWindow(), name, new Font(12, FontWeight.BOLD));
 		head.setTransform(TextTransform.UPPERCASE);
 		head.setPadding(new Insets(24, 8, 4, 8));
@@ -43,8 +38,13 @@ public class MemberGroup extends VBox implements Styleable{
 		applyStyle(session.getWindow().getStyl());
 	}
 
-	public void addUser(User user) {
-		getChildren().add(new MemberDisplay(session, user));
+	public void addUser(MemberDisplay user) {
+		getChildren().add(user);
+		listSize.set(Integer.toString(getChildren().size() - 1));
+	}
+	
+	public void removeUser(MemberDisplay user) {
+		getChildren().remove(user);
 		listSize.set(Integer.toString(getChildren().size() - 1));
 	}
 	
