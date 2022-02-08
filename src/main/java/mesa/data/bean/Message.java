@@ -53,10 +53,12 @@ public class Message extends Bean implements Comparable<Message> {
 	public Message(JSONObject obj) {
 		this();
 		init(obj);
-		try {
-			setContent(URLDecoder.decode(getContent(), "utf-8"));
-		} catch (UnsupportedEncodingException e) {
-			ErrorHandler.handle(e, "url-decode message content");
+		if(!getContent().isEmpty()) {
+			try {
+				setContent(URLDecoder.decode(getContent(), "utf-8"));
+			} catch (UnsupportedEncodingException e) {
+				ErrorHandler.handle(e, "url-decode message content");
+			}
 		}
 	}
 

@@ -15,6 +15,9 @@ import javafx.collections.ObservableList;
 import mesa.app.pages.session.types.server.ServerContent;
 
 public class Server extends Bean {
+	public static final String SERVER = "server";
+	public static final String SERVER_ID = "server_id";
+	
 	private IntegerProperty id;
 	private StringProperty owner;
 	private StringProperty name;

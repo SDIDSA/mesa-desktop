@@ -1,8 +1,5 @@
 package mesa.gui.controls;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -11,7 +8,7 @@ import javafx.scene.text.FontWeight;
 import mesa.gui.exception.ErrorHandler;
 
 public class Font {
-	public static final String DEFAULT_FAMILY = "Ubuntu";// Ubuntu
+	public static final String DEFAULT_FAMILY = "Roboto";// Ubuntu
 	public static final String DEFAULT_FAMILY_MEDIUM = DEFAULT_FAMILY + " Medium";
 	public static final FontWeight DEFAULT_WEIGHT = FontWeight.NORMAL;
 	public static final FontPosture DEFAULT_POSTURE = FontPosture.REGULAR;
@@ -136,13 +133,14 @@ public class Font {
 		loadFont(DEFAULT_FAMILY);
 	}
 
+	private static String[] fontStyles;
 	private static void loadFont(String name) {
+		if(fontStyles == null) {
+			fontStyles = new String[] {"Regular", "Bold", "BoldItalic", "Italic", "Light", "LightItalic", "Medium", "MediumItalic"};
+		}
 		try {
-			File parent = new File(URLDecoder.decode(Font.class
-					.getResource(String.join("/", "/fonts", DEFAULT_FAMILY, DEFAULT_FAMILY + "-Regular.ttf")).getFile(),
-					"utf-8")).getParentFile();
-			for (File font : parent.listFiles()) {
-				javafx.scene.text.Font.loadFont(new FileInputStream(font), 14);
+			for(String style : fontStyles) {
+				javafx.scene.text.Font.loadFont(Font.class.getResourceAsStream(String.join("/", "/fonts", DEFAULT_FAMILY, DEFAULT_FAMILY + "-" +style + ".ttf")), DEFAULT_SIZE);
 			}
 		} catch (Exception x) {
 			ErrorHandler.handle(x, "load font [" + name + "]");

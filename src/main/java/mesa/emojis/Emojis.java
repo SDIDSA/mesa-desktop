@@ -1,6 +1,6 @@
 package mesa.emojis;
 
-import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,12 +21,6 @@ public class Emojis {
 		emojiList = new ArrayList<>();
 		groups = new ArrayList<>();
 
-		File folder = new File(Emojis.class.getResource("/images/emojis/72x72").getFile());
-
-		for (File file : folder.listFiles()) {
-			emojiList.add(new Emoji(file));
-		}
-
 		String[] emojiDataLines = FileUtils.readFile("/emojis.txt").split("\n");
 
 		EmojiGroup categ = null;
@@ -41,11 +35,12 @@ public class Emojis {
 				name = name.substring(name.indexOf(" ") + 1).trim();
 
 				Emoji found = null;
-				for (Emoji emo : emojiList) {
-					if (emo.getValue().equals(value)) {
-						found = emo;
-						break;
-					}
+				
+				URL url = Emojis.class.getResource("/images/emojis/72x72/" + Emoji.readableValue(value, '-') + ".png");
+				
+				if(url != null) {
+					found = new Emoji(url, value);
+					emojiList.add(found);
 				}
 
 				if (found != null) {

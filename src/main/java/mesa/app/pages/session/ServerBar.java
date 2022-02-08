@@ -126,10 +126,15 @@ public class ServerBar extends VBox implements Styleable {
 	public void handleMessage(Message msg) {
 		ServerContent found = findServerContent(content -> content.getServer().hasChannel(msg.getChannel()));
 		Channel ch = found.getServer().getChannel(msg.getChannel());
-		boolean handled = found.handleMessage(msg) && session.isLoaded(found);
-		if (!handled && !msg.getSender().equals(session.getUser().getId())) {
-			ch.setUnread(true);
+		if(msg.getSender().equals(session.getUser().getId())) {
+			ch.setUnread(false);
+		}else {
+			boolean handled = found.handleMessage(msg) && session.isLoaded(found);
+			if (!handled) {
+				ch.setUnread(true);
+			}
 		}
+		
 	}
 
 	public void removeChannel(int serverId, int channelId) {
@@ -150,10 +155,10 @@ public class ServerBar extends VBox implements Styleable {
 	}
 
 	public void addMember(int serverId, String userId) {
-		if(session.getUser().getId().equals(userId)) {
+		if (session.getUser().getId().equals(userId)) {
 			return;
 		}
-		
+
 		ServerContent found = findServerContent(serverId);
 		Server server = found.getServer();
 		server.addMember(userId);

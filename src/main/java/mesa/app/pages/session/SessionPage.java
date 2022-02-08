@@ -1,11 +1,13 @@
 package mesa.app.pages.session;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.Consumer;
 
 import org.json.JSONObject;
 
+import io.socket.client.Socket;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -31,7 +33,6 @@ import mesa.app.pages.session.settings.menu.SectionItem;
 import mesa.app.pages.session.types.server.ServerContent;
 import mesa.app.pages.session.types.server.center.ChannelDisplayMain;
 import mesa.app.pages.session.types.server.left.ChannelEntry;
-import mesa.app.utils.Threaded;
 import mesa.data.SessionManager;
 import mesa.data.bean.Channel;
 import mesa.data.bean.Message;
@@ -91,15 +92,15 @@ public class SessionPage extends Page {
 
 		try {
 			window.getServers().forEach(obj -> {
-				int serId = ((JSONObject) obj).getInt("server");
+				int serId = ((JSONObject) obj).getInt(Server.SERVER);
 				int order = ((JSONObject) obj).getInt("order");
 
 				Session.getServer(serId, result -> {
-					Server server = new Server(result.getJSONObject("server"), order);
+					Server server = new Server(result.getJSONObject(Server.SERVER), order);
 
 					ServerContent sc = new ServerContent(this, server);
 
-					Threaded.runAfter(500, () -> servers.addServer(sc));
+					servers.addServer(sc);
 				});
 			});
 		} catch (Exception x) {
@@ -117,19 +118,24 @@ public class SessionPage extends Page {
 			User.getForId(uid, foundUser -> obj.keySet().forEach(key -> foundUser.set(key, obj.get(key))));
 		});
 		addSocketEventHandler("join_server", obj -> Session.getServer(obj.getInt("id"), result -> servers
-				.addServer(new ServerContent(this, new Server(result.getJSONObject("server"), obj.getInt("order"))))));
+				.addServer(new ServerContent(this, new Server(result.getJSONObject(Server.SERVER), obj.getInt("order"))))));
 		addSocketEventHandler("user_joined",
-				obj -> servers.addMember(obj.getInt("server"), obj.getString(User.USER_ID)));
+				obj -> servers.addMember(obj.getInt(Server.SERVER), obj.getString(User.USER_ID)));
 		addSocketEventHandler("message", obj -> servers.handleMessage(Message.get(obj)));
 		addSocketEventHandler("delete_channel",
-				obj -> servers.removeChannel(obj.getInt("server"), obj.getInt("channel")));
-		addSocketEventHandler("create_channel", obj -> servers.addChannel(obj.getInt("server"), obj.getInt("group"),
-				new Channel(obj.getJSONObject("channel"))));
+				obj -> servers.removeChannel(obj.getInt(Server.SERVER), obj.getInt(Channel.CHANNEL)));
+		addSocketEventHandler("create_channel", obj -> servers.addChannel(obj.getInt(Server.SERVER), obj.getInt("group"),
+				new Channel(obj.getJSONObject(Channel.CHANNEL))));
 	}
 
+	private ArrayList<String> registeredListeners = new ArrayList<>();
 	private void addSocketEventHandler(String event, Consumer<JSONObject> handler) {
+		registeredListeners.add(event);
 		window.getMainSocket().on(event,
-				data -> Platform.runLater(() -> handler.accept(new JSONObject(data[0].toString()))));
+				data -> Platform.runLater(() -> {
+//					System.out.println(event + " : " + data[0].toString());
+					handler.accept(new JSONObject(data[0].toString()));
+				}));
 	}
 
 	public void showSettings() {
@@ -195,7 +201,9 @@ public class SessionPage extends Page {
 
 	public void logout(Runnable onDone) {
 		Session.logout(e -> {
-			window.getMainSocket().off("user_sync");
+			Socket socket = window.getMainSocket();
+			registeredListeners.forEach(socket::off);
+			registeredListeners.clear();
 			window.getMainSocket().io().off("reconnect");
 
 			SessionManager.clearSession();

@@ -1,6 +1,6 @@
 package mesa.emojis;
 
-import java.io.File;
+import java.net.URL;
 
 import javafx.scene.image.Image;
 import mesa.gui.controls.image.ImageProxy;
@@ -8,11 +8,15 @@ import mesa.gui.controls.image.ImageProxy;
 public class Emoji implements Comparable<Emoji>{
 	private String value;
 	private String name;
-	private File file;
+	private URL url;
 
-	public Emoji(File file) {
-		this.file = file;
-		this.value = prepareValue(file.getName().replace(".png", ""), "-");
+	public Emoji(URL url, String value) {
+		this.url = url;
+		this.value = value;
+	}
+	
+	public URL getUrl() {
+		return url;
 	}
 	
 	public void setName(String name) {
@@ -28,7 +32,7 @@ public class Emoji implements Comparable<Emoji>{
 	}
 
 	public Image getImage(double size) {
-		return ImageProxy.load(file.getAbsolutePath(), size, true);
+		return ImageProxy.load(url, size);
 	}
 
 	public static String prepareValue(String name, String delimiter) {
@@ -42,6 +46,14 @@ public class Emoji implements Comparable<Emoji>{
 
 		return sb.toString();
 	}
+
+	public static String readableValue(String value, char delimiter) {
+		StringBuilder sb = new StringBuilder();
+
+		value.codePoints().forEach(codePoint -> sb.append(Integer.toHexString(codePoint)).append(" "));
+
+		return sb.toString().trim().replace(' ', delimiter);
+	}
 	
 	public static String addi() {
 		StringBuilder sb = new StringBuilder();
@@ -53,7 +65,7 @@ public class Emoji implements Comparable<Emoji>{
 
 	@Override
 	public String toString() {
-		return "Emoji [value=" + value + ", name=" + name + ", file=" + file + "]";
+		return "Emoji [value=" + value + ", name=" + name + ", url=" + url + "]";
 	}
 
 	@Override
