@@ -12,10 +12,11 @@ import mesa.api.multipart.FilePart;
 import mesa.api.multipart.Part;
 import mesa.api.multipart.TextPart;
 import mesa.data.SessionManager;
+import mesa.data.bean.Channel;
+import mesa.data.bean.Server;
 import mesa.data.bean.User;
 
 public class Session {
-	private static final String SERVER_ID = "server_id";
 
 	private Session() {
 
@@ -44,11 +45,11 @@ public class Session {
 	}
 
 	public static void getServer(int id, Consumer<JSONObject> onResult) {
-		call(API.Session.GET_SERVER, "get server data", onResult, new Param(SERVER_ID, id));
+		call(API.Session.GET_SERVER, "get server data", onResult, new Param(Server.SERVER_ID, id));
 	}
 
 	public static void generateInvite(int server, Consumer<JSONObject> onResult) {
-		call(API.Session.CREATE_INVITE, "create invite", onResult, new Param(SERVER_ID, server));
+		call(API.Session.CREATE_INVITE, "create invite", onResult, new Param(Server.SERVER_ID, server));
 	}
 
 	public static void joinWithInvite(String inviteCode, Consumer<JSONObject> onResult) {
@@ -59,14 +60,14 @@ public class Session {
 		try {
 			String val = URLEncoder.encode(content, "utf-8");
 			call(API.Session.SEND_MESSAGE, "send message", onResult, new Param("content", val),
-					new Param("channel", channel), new Param("server", server));
+					new Param(Channel.CHANNEL, channel), new Param(Server.SERVER, server));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void seen(int channel, Consumer<JSONObject> onResult) {
-		call(API.Session.SEEN, "mark a channel as seen", onResult, new Param("channel", channel));
+		call(API.Session.SEEN, "mark a channel as seen", onResult, new Param(Channel.CHANNEL, channel));
 	}
 
 	public static void getUser(Consumer<JSONObject> onResult) {
@@ -78,16 +79,16 @@ public class Session {
 	}
 
 	public static void getMessages(int channel, Consumer<JSONObject> onResult) {
-		call(API.Session.GET_MESSAGES, "get messasges for channel " + channel, onResult, new Param("channel", channel));
+		call(API.Session.GET_MESSAGES, "get messasges for channel " + channel, onResult, new Param(Channel.CHANNEL, channel));
 	}
 
 	public static void deleteChannel(int channel, int server, Consumer<JSONObject> onResult) {
 		call(API.Session.DELETE_CHANNEL, "delete channel" + channel, onResult,
-				new Param("channel", channel),
-				new Param("server", server));
+				new Param(Channel.CHANNEL, channel),
+				new Param(Server.SERVER, server));
 	}
 	
 	public static void createChannel(int server, int group, String name, String type, Consumer<JSONObject> onResult) {
-		call(API.Session.CREATE_CHANNEL, "create channel", onResult, new Param("server", server), new Param("group", group), new Param("name", name), new Param("type", type));
+		call(API.Session.CREATE_CHANNEL, "create channel", onResult, new Param(Server.SERVER, server), new Param("group", group), new Param("name", name), new Param("type", type));
 	}
 }

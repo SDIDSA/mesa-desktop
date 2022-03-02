@@ -12,6 +12,8 @@ import mesa.app.pages.session.types.server.left.ChannelEntry;
 import mesa.app.pages.session.types.server.left.ChannelGroupEntry;
 
 public class Channel extends Bean {
+	public static final String CHANNEL = "channel";
+	
 	private static final String TEXT_TYPE = "text";
 	
 	private IntegerProperty id;

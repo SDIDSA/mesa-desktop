@@ -25,7 +25,7 @@ public class MemberGroup extends VBox implements Styleable{
 		head.setTransform(TextTransform.UPPERCASE);
 		head.setPadding(new Insets(24, 8, 4, 8));
 		
-		head.addLabel(" – ");
+		head.addText(" – ");
 		
 		listSize = new SimpleIntegerProperty();
 		

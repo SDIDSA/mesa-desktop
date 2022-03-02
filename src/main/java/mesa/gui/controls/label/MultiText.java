@@ -10,6 +10,7 @@ import mesa.gui.controls.label.keyed.KeyedLink;
 import mesa.gui.controls.label.keyed.KeyedTextNode;
 import mesa.gui.controls.label.keyed.Label;
 import mesa.gui.controls.label.unkeyed.Link;
+import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.controls.label.unkeyed.TextNode;
 import mesa.gui.style.ColorItem;
 import mesa.gui.window.Window;
@@ -36,6 +37,7 @@ public class MultiText extends TextFlow {
 
 	public void setFill(Color fill) {
 		this.fill = fill;
+		getChildren().forEach(null);
 		nodes.forEach(node -> node.setFill(fill));
 	}
 
@@ -73,6 +75,14 @@ public class MultiText extends TextFlow {
 
 	public void addLabel(String key) {
 		addLabel(key, Font.DEFAULT);
+	}
+
+	public void addText(String value, Font font) {
+		addTextNode(new Text(value, font));
+	}
+
+	public void addText(String key) {
+		addText(key, Font.DEFAULT);
 	}
 
 	public void addKeyedLink(String key, Font font) {

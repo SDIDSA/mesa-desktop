@@ -13,9 +13,15 @@ import mesa.gui.exception.ErrorHandler;
 import mesa.gui.exception.LogHandler;
 
 public class API {
+	public static final String VERSION = "1.0.0";
+	
 	public static final JSONObject netErr = new JSONObject("{\"err\":[{\"key\":\"global\",\"value\":\"net_err\"}]}");
 
-	public static final String BASE = "http://localhost:4000/";
+	public static final String DEV_BASE = "http://localhost:4000/";
+	public static final String REL_BASE = "https://mesa69.herokuapp.com/";
+	
+	
+	public static final String BASE = REL_BASE;
 
 	public static final String INVITE_BASE = "https://mesa-invite.tk/";
 
@@ -106,6 +112,7 @@ public class API {
 							onResult.accept(result);
 					}, session);
 				} catch (Exception x) {
+					x.printStackTrace();
 					ErrorHandler.handle(x, action);
 					Platform.runLater(() -> onResult.accept(netErr));
 				}

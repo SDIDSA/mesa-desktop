@@ -115,7 +115,7 @@ public class ChannelDisplayMain extends BorderPane implements Styleable {
 
 		ChannelMessages found = displayCache.get(channel.getId());
 		if (found == null) {
-			final ChannelMessages created = new ChannelMessages(session);
+			final ChannelMessages created = new ChannelMessages(session, channel);
 			displayCache.put(channel.getId(), created);
 			Session.getMessages(channel.getId(), result -> {
 				ArrayList<Message> msgs = new ArrayList<>();
@@ -128,7 +128,9 @@ public class ChannelDisplayMain extends BorderPane implements Styleable {
 			found = created;
 			found.sceneProperty().addListener((obs, ov, nv) -> {
 				if (nv != null && channel.isUnread()) {
-					Session.seen(channel.getId(), result -> channel.setUnread(false));
+					channel.setUnread(false);
+					Session.seen(channel.getId(), result -> {
+					});
 				}
 			});
 
@@ -175,10 +177,13 @@ public class ChannelDisplayMain extends BorderPane implements Styleable {
 	}
 
 	private static class ChannelMessages extends StackPane implements Styleable {
+		private Channel channel;
+
 		private VBox list;
 		private ScrollBar sb;
 
-		public ChannelMessages(SessionPage session) {
+		public ChannelMessages(SessionPage session, Channel channel) {
+			this.channel = channel;
 			setAlignment(Pos.TOP_CENTER);
 			setMinHeight(0);
 			setMaxHeight(-1);
@@ -205,8 +210,8 @@ public class ChannelDisplayMain extends BorderPane implements Styleable {
 
 			if (msg.getType().equals("text") && !list.getChildren().contains(disp)) {
 				list.getChildren().add(disp);
-				if(!msg.getSender().equals(session.getUser().getId())) {
-					Session.seen(msg.getChannel(), null);
+				if (channel.isUnread() && !msg.getSender().equals(session.getUser().getId()) && getScene() != null) {
+					Session.seen(channel.getId(), null);
 				}
 			}
 		}
