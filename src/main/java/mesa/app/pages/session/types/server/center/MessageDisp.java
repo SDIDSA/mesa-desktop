@@ -11,6 +11,8 @@ import mesa.data.bean.Message;
 import mesa.data.bean.User;
 import mesa.gui.controls.Font;
 import mesa.gui.controls.image.ImageProxy;
+import mesa.gui.controls.input.RichText;
+import mesa.gui.controls.label.MultiText;
 import mesa.gui.controls.label.TextTransform;
 import mesa.gui.controls.label.unkeyed.Text;
 import mesa.gui.style.Style;
@@ -22,7 +24,7 @@ public class MessageDisp extends HBox implements Styleable {
 	private ImageView pfp;
 	private Text senderName;
 	private Text time;
-	private Text messageContent;
+	private MultiText messageContent;
 
 	public MessageDisp(SessionPage session, Message message) {
 		super(16);
@@ -36,8 +38,8 @@ public class MessageDisp extends HBox implements Styleable {
 
 		time = new Text("", new Font(Font.DEFAULT_FAMILY_MEDIUM, 12));
 
-		messageContent = new Text("", new Font(15));
-		messageContent.textProperty().bind(message.contentProperty());
+		messageContent = new MultiText(session.getWindow(), "", new Font(15));
+		RichText.applyText(messageContent, message.getContent(), new Font(15));
 
 		HBox header = new HBox(8);
 		header.setAlignment(Pos.BOTTOM_LEFT);

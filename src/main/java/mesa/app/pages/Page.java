@@ -74,6 +74,8 @@ public abstract class Page extends StackPane implements Styleable {
 
 	public void setup() {
 		window.setMinSize(minSize);
+		window.setHeight(minSize.height);
+		window.setWidth(minSize.width);
 		
 		window.paddedProperty().addListener(onPaddingChange);
 	}

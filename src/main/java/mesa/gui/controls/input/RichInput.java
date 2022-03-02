@@ -1,7 +1,6 @@
 package mesa.gui.controls.input;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -34,14 +33,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.HitInfo;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
-import mesa.emojis.EmojiIndex;
-import mesa.emojis.Emojis;
 import mesa.gui.controls.Font;
 
 public class RichInput extends StackPane {
@@ -541,74 +536,6 @@ public class RichInput extends StackPane {
 		hideCaret.playFromStart();
 	}
 
-	private void applyText() {
-		String txt = text.toString();
-
-		textProperty.set(txt);
-
-		List<EmojiIndex> indexes = Emojis.find(txt);
-
-		textDisp.getChildren().clear();
-
-		if (indexes.isEmpty()) {
-			addText(text.toString());
-		} else {
-			int p = 0;
-			for (EmojiIndex index : indexes) {
-				String t = text.substring(p, index.getStart());
-				addText(t);
-				p += t.length();
-
-				textDisp.getChildren()
-						.add(new InputEmojiElement(Emojis.getEmoji(index.getValue()), defaultFont.getSize()));
-
-				p += index.getValue().length();
-			}
-			addText(text.substring(p));
-		}
-	}
-
-	private void addText(String text) {
-		List<StyleRange> styles = StyleRange.getStyles(text);
-		for (int i = 0; i < text.length(); i++) {
-			String t = Character.toString(text.charAt(i));
-			if (!t.isEmpty()) {
-				InputTextElement td = new InputTextElement(t);
-				Font font = checkForStyle(styles, i, td);
-				td.setFont(font.getFont());
-				textDisp.getChildren().add(td);
-			}
-		}
-	}
-	
-	private Font checkForStyle(List<StyleRange> styles, int i, InputTextElement td) {
-		StyleRange res = null;
-		for(StyleRange sr : styles) {
-			if (sr.inRange(i) || sr.isBorder(i)) {
-				if (sr.inRange(i)) {
-					res = sr;
-				} else if (sr.isBorder(i)) {
-					td.setOpacity(.5);
-				}
-				break;
-			}
-		}
-		return applyStyle(defaultFont, res);
-	}
-	
-	private static Font applyStyle(Font font, StyleRange style) {
-		Font res = font;
-		if (style != null && style.italic) {
-			res = res.copy().setPosture(FontPosture.ITALIC);
-		}
-		
-		if(style != null && style.bold) {
-			res = res.copy().setWeight(FontWeight.BOLD);
-		}
-		
-		return res;
-	}
-
 	private int posToPos(int index) {
 		int p = 0;
 		int res = 0;
@@ -658,92 +585,12 @@ public class RichInput extends StackPane {
 			return text;
 		}
 	}
-
-	private static class StyleRange {
-		int start;
-		int end;
-		int count;
-		boolean bold;
-		boolean italic;
-
-		public StyleRange(int start, int end, int count, boolean bold, boolean italic) {
-			this.start = start;
-			this.end = end;
-			this.bold = bold;
-			this.italic = italic;
-			this.count = count;
-		}
-
-		private boolean inRange(int ind) {
-			return ind >= start + count && ind <= end - count;
-		}
-
-		private boolean outRange(int ind) {
-			return ind >= start && ind <= end;
-		}
-
-		private boolean isBorder(int ind) {
-			return outRange(ind) && !inRange(ind);
-		}
-
-		@Override
-		public String toString() {
-			return "StyleRange [start=" + start + ", end=" + end + ", bold=" + bold + ", italic=" + italic + "]";
-		}
-
-		public static List<StyleRange> getStyles(String text) {
-			ArrayList<StyleRange> res = new ArrayList<>();
-			int start = -1;
-			int count = 0;
-			int maxCount = 0;
-			boolean closed = false;
-			boolean cut = false;
-			for (int i = 0; i < text.length(); i++) {
-				char c = text.charAt(i);
-				if (c == '*') {
-					if (start == -1) {
-						start = i;
-						count = 1;
-						cut = false;
-					} else {
-						if (count > maxCount) {
-							maxCount = count;
-						}
-						if (cut) {
-							closed = true;
-							count -= 1;
-						} else {
-							count += 1;
-						}
-						if (count == 0) {
-							res.add(new StyleRange(start, i, maxCount, maxCount >= 2, maxCount == 1 || maxCount == 3));
-							start = -1;
-							count = 0;
-							maxCount = 0;
-							closed = false;
-						}
-					}
-				} else {
-					if (!closed) {
-						cut = true;
-					} else {
-						maxCount -= count;
-						res.add(new StyleRange(start + count, i - 1, maxCount, maxCount >= 2,
-								maxCount == 1 || maxCount == 3));
-						start = -1;
-						count = 0;
-						maxCount = 0;
-						closed = false;
-					}
-				}
-			}
-			if (start != -1) {
-				maxCount -= count;
-				if (maxCount > 0)
-					res.add(new StyleRange(start + count, text.length() - 1, maxCount, maxCount >= 2,
-							maxCount == 1 || maxCount == 3));
-			}
-			return res;
-		}
+	
+	private void applyText() {
+		String txt = text.toString();
+		
+		textProperty.set(txt);
+		
+		RichText.applyText(textDisp, txt, defaultFont);
 	}
 }

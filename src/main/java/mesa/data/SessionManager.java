@@ -27,16 +27,15 @@ public class SessionManager {
 	}
 
 	public static void registerSocket(Socket socket, String token, String uid) {
-		Runnable register = () -> socket.emit("register", JsonUtils.make("socket", socket.id(), "token", token, User.USER_ID, uid));
+		Runnable register = () -> socket.emit("register",
+				JsonUtils.make("socket", socket.id(), "token", token, User.USER_ID, uid));
 
 		System.out.println("listening for reconnect...");
-		socket.io().on("reconnect", data -> 
-			new Thread(() -> {
-				Threaded.waitWhile(() -> socket.id() == null);
-				System.out.println("reconnecting");
-				register.run();
-			}
-		).start());
+		socket.io().on("reconnect", data -> new Thread(() -> {
+			Threaded.waitWhile(() -> socket.id() == null);
+			System.out.println("reconnecting");
+			register.run();
+		}).start());
 		register.run();
 	}
 

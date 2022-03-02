@@ -18,20 +18,13 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
-			<version>18-ea+7</version>
+			<version>17.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-swing</artifactId>
-			<version>18-ea+7</version>
+			<version>17.0.2</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.fxmisc.richtext</groupId>
-			<artifactId>richtextfx</artifactId>
-			<version>0.10.7</version>
-		</dependency>
-
 
 		<!-- Connectivity -->
 		<dependency>
@@ -49,7 +42,6 @@
 			<artifactId>httpmime</artifactId>
 			<version>4.5.13</version>
 		</dependency>
-
 
 		<!-- Data -->
 		<dependency>
@@ -72,7 +64,7 @@
 		<dependency>
 			<groupId>net.coobird</groupId>
 			<artifactId>thumbnailator</artifactId>
-			<version>0.4.14</version>
+			<version>0.4.17</version>
 		</dependency>
 		<dependency>
 			<groupId>com.googlecode.libphonenumber</groupId>
@@ -84,20 +76,7 @@
 			<artifactId>prettytime</artifactId>
 			<version>5.0.2.Final</version>
 		</dependency>
-
-		<!-- TEST -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.5.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit5</artifactId>
-			<version>4.0.16-alpha</version>
-			<scope>test</scope>
-		</dependency>
+		
 	</dependencies>
 
 	<build>
